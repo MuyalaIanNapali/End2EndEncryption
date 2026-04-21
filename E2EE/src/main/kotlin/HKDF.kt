@@ -21,6 +21,9 @@ object HKDF {
     }
 
     fun expand(pseudoRandomKey: ByteArray,info:ByteArray ,outputLength :Int): ByteArray {
+        require(outputLength > 0 && outputLength <= 255 * HASH_LENGTH){
+            "outputLength must be greater than zero and less than $outputLength "
+        }
         val numberOfIterations = (outputLength + HASH_LENGTH - 1) / HASH_LENGTH
 
         var numberOfOutputBlocks = ByteArray(0)
@@ -28,7 +31,7 @@ object HKDF {
         var offset = 0
 
         for (i in 1..numberOfIterations) {
-            val input = numberOfOutputBlocks + info + byteArrayOf(i.toByte())
+            val input = numberOfOutputBlocks + info + byteArrayOf((i and 0xFF).toByte())
             numberOfOutputBlocks = hmac(pseudoRandomKey, input)
 
             val remaining = outputLength - offset
@@ -40,13 +43,26 @@ object HKDF {
         return result
     }
 
-    fun deriveKey(
+    fun rootHKDF(
         inputKeyMaterial: ByteArray,
         salt: ByteArray?,
         info: ByteArray,
         outputLength: Int,
-    ): ByteArray {
+    ): Pair<ByteArray, ByteArray> {
         val pseudoRandomKey = extract(salt, inputKeyMaterial)
-        return expand(pseudoRandomKey, info, outputLength)
+        val output= expand(pseudoRandomKey, info, outputLength)
+
+        val rootKey = output.copyOfRange(0,32)
+        val chainKey = output.copyOfRange(32,64)
+
+        return Pair(rootKey,chainKey)
+    }
+
+    fun chainHKDF(ck: ByteArray): Pair<ByteArray, ByteArray>{
+
+        val chainKey = hmac(ck, byteArrayOf(0x01))
+        val mk    = hmac(ck, byteArrayOf(0x02))
+        return Pair(chainKey, mk)
+
     }
 }

@@ -5,9 +5,11 @@ import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import java.nio.ByteBuffer
+import java.security.PublicKey
 
 data class HEADER(
-    var DHs: KeyPair,
+    var dhPublic: PublicKey,
     var PN: Int,
     var Ns: Int
 )
@@ -32,5 +34,29 @@ class EncryptionAndDecryption {
         val ciphertext = cipher.doFinal(plaintext)
 
         return nonce + ciphertext
+    }
+    fun ratchetSendKey(ratchetState: RatchetState): Pair<Int, ByteArray>{
+        val (newChainKey,messageKey)= KDFChain().kdfChainKey(requireNotNull(ratchetState.CKs))
+
+        ratchetState.CKs=newChainKey
+
+        val Ns = ratchetState.Ns
+        ratchetState.Ns +=1
+
+        return Pair(Ns,messageKey)
+
+
+    }
+    fun ratchetEncrypt(ratchetState: RatchetState,plainText : String ,AD : ByteArray): Pair<HEADER, ByteArray> {
+        val(Ns,messageKey) = ratchetSendKey(ratchetState)
+
+        val header = HEADER(ratchetState.DHs.public, ratchetState.PN,Ns)
+
+
+
+        return Pair(
+            header,
+            encrypt(messageKey,plainText.toByteArray(), EncryptionAndDecryptionUtility().concat(AD,header))
+        )
     }
 }

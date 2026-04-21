@@ -15,5 +15,7 @@ data class RatchetState(
     var Nr: Int,
     var PN: Int,
 
-    val MKSKIPPED: MutableMap<Pair<ByteArray, Int>, ByteArray> = mutableMapOf()
+    val MKSKIPPED: MutableMap<Pair<PublicKey, Int>, ByteArray> = mutableMapOf(),
+
+    val MAX_SKIP: Int = 10
 )

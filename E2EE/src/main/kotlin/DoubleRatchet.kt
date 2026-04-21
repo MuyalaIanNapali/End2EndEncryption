@@ -15,7 +15,7 @@ class DoubleRatchet(
 
         val DHs = ecdh.generateEllipticCurveKeyPair()
 
-        val dhOutput = ecdh.performDH(DHs.private, bobPublicKey)
+        val dhOutput = ecdh.performDH(DHs, bobPublicKey)
 
         val (RK, CKs) = kdfChain.kdfRootKey(SK, dhOutput)
 

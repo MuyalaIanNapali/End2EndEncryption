@@ -3,10 +3,8 @@ package org.example
 import java.nio.ByteBuffer
 
 class EncryptionAndDecryptionUtility {
-    fun concat(ad: ByteArray, header: HEADER): ByteArray {
+    fun concat(ad: ByteArray, header: ByteArray): ByteArray {
         val adLength = ad.size
-
-        val header = encodeHeader(header)
 
         // 4 bytes to store length (Int)
         val result = ByteArray(4 + adLength + header.size)
@@ -37,8 +35,70 @@ class EncryptionAndDecryptionUtility {
         buffer.putInt(publicKeyBytes.size)
         buffer.put(publicKeyBytes)
         buffer.putInt(header.PN)
-        buffer.putInt(header.Ns)
+        buffer.putInt(header.N)
 
         return buffer.array()
+    }
+
+
+    fun trySkippedMessageKeys(
+        ratchetState: RatchetState,
+        header: HEADER
+    ): ByteArray? {
+
+        val key = Pair(header.dhPublic,header.N)
+
+        return ratchetState.MKSKIPPED.remove(key)
+    }
+
+    fun skippedMessageKeys(ratchetState: RatchetState,until: Int){
+        require(ratchetState.Nr+ ratchetState.MAX_SKIP >= until){
+            "Error"
+        }
+
+        if(ratchetState.CKr != null){
+            while (ratchetState.Nr < until){
+                val (CKr,messageKey) = KDFChain().kdfChainKey(requireNotNull(ratchetState.CKr))
+
+                ratchetState.CKr=CKr
+
+                val key = Pair(ratchetState.DHr!!, ratchetState.Nr)
+                ratchetState.MKSKIPPED[key] = messageKey
+
+                ratchetState.Nr +=1
+            }
+        }
+    }
+
+
+    fun DHRatchet(ratchetState: RatchetState,header: HEADER){
+        ratchetState.PN = ratchetState.Ns
+        ratchetState.Ns = 0
+        ratchetState.Nr = 0
+        ratchetState.DHr=header.dhPublic
+
+        val (rK,cKr)=KDFChain().kdfRootKey(
+            ratchetState.RK,
+            EllipticCurveDiffieHellman().performDH(
+                ratchetState.DHs,
+                requireNotNull(ratchetState.DHr
+                )
+            )
+        )
+        ratchetState.RK=rK
+        ratchetState.CKr=cKr
+        ratchetState.DHs= EllipticCurveDiffieHellman().generateEllipticCurveKeyPair()
+
+        val (rK2,cKs)=KDFChain().kdfRootKey(
+            ratchetState.RK,
+            EllipticCurveDiffieHellman().performDH(
+                ratchetState.DHs,
+                requireNotNull(ratchetState.DHr
+                )
+            )
+        )
+        ratchetState.RK=rK2
+        ratchetState.CKs=cKs
+
     }
 }

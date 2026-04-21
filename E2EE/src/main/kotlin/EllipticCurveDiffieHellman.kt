@@ -16,9 +16,10 @@ class EllipticCurveDiffieHellman {
     }
 
     fun performDH(
-        privateKey: PrivateKey,
+        dhPair: KeyPair,
         publicKey: PublicKey
     ): ByteArray {
+        val privateKey = dhPair.private
         val keyAgreement = KeyAgreement.getInstance("ECDH")
         keyAgreement.init(privateKey)
         keyAgreement.doPhase(publicKey, true)

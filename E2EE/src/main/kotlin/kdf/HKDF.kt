@@ -1,4 +1,4 @@
-package org.example
+package org.example.kdf
 
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec

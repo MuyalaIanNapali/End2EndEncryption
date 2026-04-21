@@ -1,5 +1,7 @@
-package org.example
+package org.example.doubleRatchet
 
+import org.example.encryptDecrypt.EllipticCurveDiffieHellman
+import org.example.kdf.KDFChain
 import java.security.KeyPair
 import java.security.PublicKey
 

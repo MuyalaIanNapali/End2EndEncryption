@@ -1,4 +1,4 @@
-package org.example
+package org.example.doubleRatchet
 
 import java.security.KeyPair
 import java.security.PublicKey

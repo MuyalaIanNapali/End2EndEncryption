@@ -1,5 +1,7 @@
-package org.example
+package org.example.encryptDecrypt
 
+import org.example.doubleRatchet.RatchetState
+import org.example.kdf.KDFChain
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
@@ -57,7 +59,7 @@ class EncryptionAndDecryption {
 
 
     }
-    fun ratchetEncrypt(ratchetState: RatchetState,plainText : String ,AD : ByteArray): Pair<HEADER, ByteArray> {
+    fun ratchetEncrypt(ratchetState: RatchetState, plainText : String, AD : ByteArray): Pair<HEADER, ByteArray> {
         val(Ns,messageKey) = ratchetSendKey(ratchetState)
 
         val header = HEADER(ratchetState.DHs.public, ratchetState.PN,Ns)
@@ -129,7 +131,7 @@ class EncryptionAndDecryption {
         return mk
     }
 
-    fun ratchetDecrypt(ratchetState: RatchetState,header: HEADER,ciphertext: ByteArray,AD: ByteArray): ByteArray{
+    fun ratchetDecrypt(ratchetState: RatchetState, header: HEADER, ciphertext: ByteArray, AD: ByteArray): ByteArray{
         val messageKey = ratchetReceiveKey(ratchetState,header)
 
         val headerByte = EncryptionAndDecryptionUtility().encodeHeader(header)

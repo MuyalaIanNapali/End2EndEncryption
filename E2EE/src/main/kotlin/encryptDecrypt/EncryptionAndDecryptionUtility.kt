@@ -1,5 +1,7 @@
-package org.example
+package org.example.encryptDecrypt
 
+import org.example.doubleRatchet.RatchetState
+import org.example.kdf.KDFChain
 import java.nio.ByteBuffer
 
 class EncryptionAndDecryptionUtility {
@@ -51,7 +53,7 @@ class EncryptionAndDecryptionUtility {
         return ratchetState.MKSKIPPED.remove(key)
     }
 
-    fun skippedMessageKeys(ratchetState: RatchetState,until: Int){
+    fun skippedMessageKeys(ratchetState: RatchetState, until: Int){
         require(ratchetState.Nr+ ratchetState.MAX_SKIP >= until){
             "Error"
         }
@@ -71,13 +73,13 @@ class EncryptionAndDecryptionUtility {
     }
 
 
-    fun DHRatchet(ratchetState: RatchetState,header: HEADER){
+    fun DHRatchet(ratchetState: RatchetState, header: HEADER){
         ratchetState.PN = ratchetState.Ns
         ratchetState.Ns = 0
         ratchetState.Nr = 0
         ratchetState.DHr=header.dhPublic
 
-        val (rK,cKr)=KDFChain().kdfRootKey(
+        val (rK,cKr)= KDFChain().kdfRootKey(
             ratchetState.RK,
             EllipticCurveDiffieHellman().performDH(
                 ratchetState.DHs,
@@ -89,7 +91,7 @@ class EncryptionAndDecryptionUtility {
         ratchetState.CKr=cKr
         ratchetState.DHs= EllipticCurveDiffieHellman().generateEllipticCurveKeyPair()
 
-        val (rK2,cKs)=KDFChain().kdfRootKey(
+        val (rK2,cKs)= KDFChain().kdfRootKey(
             ratchetState.RK,
             EllipticCurveDiffieHellman().performDH(
                 ratchetState.DHs,

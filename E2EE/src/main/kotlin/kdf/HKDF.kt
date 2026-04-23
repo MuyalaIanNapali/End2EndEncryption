@@ -7,7 +7,11 @@ object HKDF {
     private const val HASH_ALGORITHM = "HmacSHA256"
     private const val HASH_LENGTH = 32
 
-    private fun hmac(key: ByteArray, data: ByteArray): ByteArray {
+    private fun hmac(
+        key: ByteArray,
+        data: ByteArray
+    ): ByteArray {
+
         val mac = Mac.getInstance(HASH_ALGORITHM)
         val keySpec = SecretKeySpec(key, HASH_ALGORITHM)
 
@@ -15,12 +19,22 @@ object HKDF {
         return mac.doFinal(data)
     }
 
-    fun extract(salt: ByteArray?,inputKeyMaterial : ByteArray): ByteArray {
+    fun extract(
+        salt: ByteArray?,
+        inputKeyMaterial : ByteArray
+    ): ByteArray {
+
         val actualSalt = salt ?: ByteArray(HASH_LENGTH){0}
         return hmac(actualSalt, inputKeyMaterial)
+
     }
 
-    fun expand(pseudoRandomKey: ByteArray,info:ByteArray ,outputLength :Int): ByteArray {
+    fun expand(
+        pseudoRandomKey: ByteArray,
+        info:ByteArray ,
+        outputLength :Int
+    ): ByteArray {
+
         require(outputLength > 0 && outputLength <= 255 * HASH_LENGTH){
             "outputLength must be greater than zero and less than $outputLength "
         }
@@ -37,18 +51,29 @@ object HKDF {
             val remaining = outputLength - offset
             val copyLen = minOf(HASH_LENGTH, remaining)
 
-            System.arraycopy(numberOfOutputBlocks, 0, result, offset, copyLen)
+            System.arraycopy(
+                numberOfOutputBlocks,
+                0,
+                result,
+                offset,
+                copyLen
+            )
+
             offset += copyLen
+
         }
+
         return result
+
     }
 
     fun rootHKDF(
         inputKeyMaterial: ByteArray,
         salt: ByteArray?,
         info: ByteArray,
-        outputLength: Int,
+        outputLength: Int
     ): Pair<ByteArray, ByteArray> {
+
         val pseudoRandomKey = extract(salt, inputKeyMaterial)
         val output= expand(pseudoRandomKey, info, outputLength)
 
@@ -56,6 +81,7 @@ object HKDF {
         val chainKey = output.copyOfRange(32,64)
 
         return Pair(rootKey,chainKey)
+
     }
 
     fun chainHKDF(ck: ByteArray): Pair<ByteArray, ByteArray>{
@@ -63,6 +89,24 @@ object HKDF {
         val chainKey = hmac(ck, byteArrayOf(0x01))
         val mk    = hmac(ck, byteArrayOf(0x02))
         return Pair(chainKey, mk)
+
+    }
+
+    fun rootHEHKDF(
+        inputKeyMaterial: ByteArray,
+        salt: ByteArray?,
+        info: ByteArray,
+        outputLength: Int
+    ): Triple<ByteArray, ByteArray, ByteArray> {
+        val pseudoRandomKey = extract(salt, inputKeyMaterial)
+        val output= expand(pseudoRandomKey, info, outputLength)
+
+
+        val rootKey = output.copyOfRange(0,32)
+        val chainKey = output.copyOfRange(32,64)
+        val headerKey = output.copyOfRange(64,96)
+
+        return Triple(rootKey, chainKey, headerKey)
 
     }
 }

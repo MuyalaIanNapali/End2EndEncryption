@@ -1,8 +1,11 @@
 package org.example.encryptDecrypt
 
 import org.example.doubleRatchet.RatchetState
+import org.example.doubleRatchet.RatchetStateHE
 import org.example.kdf.KDFChain
 import java.nio.ByteBuffer
+import java.security.KeyFactory
+import java.security.spec.X509EncodedKeySpec
 
 class EncryptionAndDecryptionUtility {
     fun concat(ad: ByteArray, header: ByteArray): ByteArray {
@@ -43,10 +46,35 @@ class EncryptionAndDecryptionUtility {
     }
 
 
+
+    fun decodeHeader(bytes: ByteArray): HEADER {
+        val buffer = ByteBuffer.wrap(bytes)
+
+        val keyLen = buffer.getInt()
+        require(keyLen > 0 && keyLen <= bytes.size - 12) { "Invalid public key length" }
+
+        val publicKeyBytes = ByteArray(keyLen)
+        buffer.get(publicKeyBytes)
+
+        val pn = buffer.getInt()
+        val n = buffer.getInt()
+
+        val keyFactory = KeyFactory.getInstance("EC")
+        val publicKey = keyFactory.generatePublic(X509EncodedKeySpec(publicKeyBytes))
+
+        return HEADER(
+            publicKey,
+            pn,
+            n
+        )
+    }
+
+
     fun trySkippedMessageKeys(
         ratchetState: RatchetState,
         header: HEADER
     ): ByteArray? {
+
 
         val key = Pair(header.dhPublic,header.N)
 
@@ -103,4 +131,86 @@ class EncryptionAndDecryptionUtility {
         ratchetState.CKs=cKs
 
     }
+
+    fun trySkippedMessageKeysHE(
+        state: RatchetStateHE,
+        encryptedHeader: ByteArray,
+        ciphertext: ByteArray,
+        associatedData: ByteArray
+    ): ByteArray? {
+
+        for ((key, mk) in state.MKSKIPPED.toMap()) {
+            val (hk, n) = key
+
+            try {
+                // decrypt header bytes
+                val header = EncryptionAndDecryption().headerDecryption(
+                    hk,
+                    encryptedHeader
+                )
+
+
+                if (header.N == n) {
+                    state.MKSKIPPED.remove(key)
+
+                    val fullAD = EncryptionAndDecryptionUtility().concat(
+                        associatedData,
+                        encryptedHeader
+                    )
+
+                    return EncryptionAndDecryption().plainTextDecryption(
+                        mk,
+                        ciphertext,
+                        fullAD
+                    )
+                }
+            } catch (e: Exception) {
+                // wrong key -> ignore and continue trying others
+                continue
+            }
+        }
+
+        return null
+    }
+
+
+    fun DHRatchetHE(
+        state: RatchetStateHE,
+        header: HEADER
+    ){
+        state.PN = state.Ns
+        state.Ns = 0
+        state.Nr = 0
+        state.HKs = state.NHKs
+        state.HKr = state.NHKr
+        state.DHr=header.dhPublic
+
+        val(RK,CKr,NHKr)= KDFChain().kdfRootKeyHeaderEncryption(
+            state.RK,
+            EllipticCurveDiffieHellman().performDH(
+                state.DHs,
+                requireNotNull(state.DHr)
+            )
+        )
+        state.RK=RK
+        state.CKr= CKr
+        state.NHKr= NHKr
+
+        state.DHs= EllipticCurveDiffieHellman().generateEllipticCurveKeyPair()
+
+        val(RK2,CKs,NHKs)= KDFChain().kdfRootKeyHeaderEncryption(
+            state.RK,
+            EllipticCurveDiffieHellman().performDH(
+                state.DHs,
+                requireNotNull(state.DHr)
+            )
+        )
+
+        state.RK=RK2
+        state.CKs= CKs
+        state.NHKs= NHKs
+
+    }
+
+
 }

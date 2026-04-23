@@ -144,7 +144,7 @@ class EncryptionAndDecryptionUtility {
 
             try {
                 // decrypt header bytes
-                val header = EncryptionAndDecryption().headerDecryption(
+                val header =    HeaderDecryption().headerDecryption(
                     hk,
                     encryptedHeader
                 )
@@ -158,7 +158,7 @@ class EncryptionAndDecryptionUtility {
                         encryptedHeader
                     )
 
-                    return EncryptionAndDecryption().plainTextDecryption(
+                    return Decryption().plainTextDecryption(
                         mk,
                         ciphertext,
                         fullAD

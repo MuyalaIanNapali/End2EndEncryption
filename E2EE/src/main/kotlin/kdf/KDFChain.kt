@@ -1,4 +1,4 @@
-package org.example.kdf
+package kdf
 
 
 class KDFChain: KDF{

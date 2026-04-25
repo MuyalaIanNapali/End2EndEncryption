@@ -1,7 +1,8 @@
-package org.example.encryptDecrypt
+package encryptDecrypt
 
-import org.example.doubleRatchet.RatchetStateHE
-import org.example.kdf.KDFChain
+import doubleRatchet.RatchetStateHE
+import doubleRatchet.deepCopy
+import kdf.KDFChain
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -32,10 +33,11 @@ class HeaderEncryption {
 
 
     fun ratchetEncryptHE(
-        state: RatchetStateHE,
+        ratchetState: RatchetStateHE,
         plainText: String,
         associatedData: ByteArray
-    ): Pair<ByteArray, ByteArray> {
+    ): Triple<RatchetStateHE,ByteArray, ByteArray> {
+        val state = ratchetState.deepCopy()
         val(CKs,mk) = KDFChain().kdfChainKey(requireNotNull(state.CKs))
         state.CKs=CKs
 
@@ -50,9 +52,10 @@ class HeaderEncryption {
             EncryptionAndDecryptionUtility().encodeHeader(header)
         )
 
-        state.Ns +=1
-
-        return Pair(
+        return Triple(
+            state.copy(
+                Ns = state.Ns + 1
+            ),
             encryptedHeader,
             Encryption().plainTextEncryption(
                 mk,

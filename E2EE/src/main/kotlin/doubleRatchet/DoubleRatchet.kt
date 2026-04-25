@@ -1,7 +1,7 @@
-package org.example.doubleRatchet
+package doubleRatchet
 
-import org.example.encryptDecrypt.EllipticCurveDiffieHellman
-import org.example.kdf.KDFChain
+import kdf.KDFChain
+import encryptDecrypt.EllipticCurveDiffieHellman
 import java.security.KeyPair
 import java.security.PublicKey
 
@@ -52,7 +52,7 @@ class DoubleRatchet(
         bobPublicKey: PublicKey,
         sharedHKa: ByteArray,
         sharedNHKb: ByteArray
-    ): RatchetStateHE{
+    ): RatchetStateHE {
         val DHs = ecdh.generateEllipticCurveKeyPair()
 
         val(RK,CKs,NHKs)=kdfChain.kdfRootKeyHeaderEncryption(

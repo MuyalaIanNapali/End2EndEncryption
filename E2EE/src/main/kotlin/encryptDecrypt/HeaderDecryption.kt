@@ -1,12 +1,14 @@
-package org.example.encryptDecrypt
+package encryptDecrypt
 
-import org.example.doubleRatchet.RatchetStateHE
-import org.example.kdf.KDFChain
+import doubleRatchet.RatchetStateHE
+import kdf.KDFChain
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 class HeaderDecryption {
+    private val util = EncryptionAndDecryptionUtility()
+
     fun headerDecryption(
         headerKey: ByteArray,
         ciphertext: ByteArray
@@ -25,7 +27,7 @@ class HeaderDecryption {
         val spec = GCMParameterSpec(128, nonce)
         cipher.init(Cipher.DECRYPT_MODE, aesKey, spec)
 
-        return EncryptionAndDecryptionUtility().decodeHeader(
+        return util.decodeHeader(
             cipher.doFinal(actualCiphertext)
         )
     }
@@ -38,7 +40,7 @@ class HeaderDecryption {
         ciphertext: ByteArray,
         associatedData: ByteArray
     ): String {
-        val plaintext= EncryptionAndDecryptionUtility().trySkippedMessageKeysHE(
+        val plaintext= util.trySkippedMessageKeysHE(
             state,encryptedHeader,
             ciphertext,
             associatedData
@@ -66,7 +68,7 @@ class HeaderDecryption {
             Decryption().plainTextDecryption(
                 mk,
                 ciphertext,
-                EncryptionAndDecryptionUtility().concat(
+                util.concat(
                     associatedData,
                     encryptedHeader
                 )

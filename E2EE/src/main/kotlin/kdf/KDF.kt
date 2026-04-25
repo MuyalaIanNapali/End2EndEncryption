@@ -1,4 +1,4 @@
-package org.example.kdf
+package kdf
 
 interface KDF {
     fun kdfRootKey(rootKey: ByteArray, dhOutputKey: ByteArray): Pair<ByteArray,ByteArray>

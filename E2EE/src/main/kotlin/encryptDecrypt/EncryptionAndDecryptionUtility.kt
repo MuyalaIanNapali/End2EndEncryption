@@ -1,8 +1,8 @@
-package org.example.encryptDecrypt
+package encryptDecrypt
 
-import org.example.doubleRatchet.RatchetState
-import org.example.doubleRatchet.RatchetStateHE
-import org.example.kdf.KDFChain
+import doubleRatchet.RatchetState
+import doubleRatchet.RatchetStateHE
+import kdf.KDFChain
 import java.nio.ByteBuffer
 import java.security.KeyFactory
 import java.security.spec.X509EncodedKeySpec

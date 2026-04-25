@@ -1,7 +1,7 @@
-package org.example.encryptDecrypt
+package encryptDecrypt
 
-import org.example.doubleRatchet.RatchetState
-import org.example.kdf.KDFChain
+import doubleRatchet.RatchetState
+import kdf.KDFChain
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec

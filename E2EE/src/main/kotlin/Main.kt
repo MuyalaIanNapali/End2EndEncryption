@@ -1,12 +1,13 @@
 package org.example
 
-import org.example.doubleRatchet.DoubleRatchet
-import org.example.encryptDecrypt.Decryption
-import org.example.encryptDecrypt.EllipticCurveDiffieHellman
-import org.example.encryptDecrypt.Encryption
-import org.example.encryptDecrypt.HeaderDecryption
-import org.example.encryptDecrypt.HeaderEncryption
-import org.example.kdf.KDFChain
+
+import doubleRatchet.DoubleRatchet
+import encryptDecrypt.Decryption
+import encryptDecrypt.EllipticCurveDiffieHellman
+import encryptDecrypt.Encryption
+import encryptDecrypt.HeaderDecryption
+import encryptDecrypt.HeaderEncryption
+import kdf.KDFChain
 import java.util.*
 
 object CryptoUtils {
@@ -145,27 +146,27 @@ fun main() {
 
     // Initialize ratchet states
     val (rkA, ckA, hkA) = kdf.kdfRootKeyHeaderEncryption(
-            SK_alice,
-            ecdh.performDH(
-                handshakeAliceKeyPair,
-                bobKeyPair.public)
+        SK_alice,
+        ecdh.performDH(
+            handshakeAliceKeyPair,
+            bobKeyPair.public)
     )
 
     val (rkB, ckB, nhkB) = kdf.kdfRootKeyHeaderEncryption(
-            SK_bob,
-            ecdh.performDH(
-                bobKeyPair,
-                handshakeAliceKeyPair.public)
+        SK_bob,
+        ecdh.performDH(
+            bobKeyPair,
+            handshakeAliceKeyPair.public)
     )
 
-    val aliceState = doubleRatchet.ratchetInitAliceHE(
+    var aliceState= doubleRatchet.ratchetInitAliceHE(
         SK_alice,
         bobKeyPair.public,
         hkA,
         nhkB // or NHK depending on your design
     )
 
-    val bobState = doubleRatchet.ratchetInitBobHE(
+    var bobState = doubleRatchet.ratchetInitBobHE(
         SK_bob,
         bobKeyPair,
         hkA,
@@ -181,7 +182,8 @@ fun main() {
     // ---------------------------
     // Alice sends first message
     // ---------------------------
-    val (header1, ct1) = enc_HE.ratchetEncryptHE(aliceState, "Hello Bob (msg1)", AD)
+    val (newState1,header1, ct1) = enc_HE.ratchetEncryptHE(aliceState, "Hello Bob (msg1)", AD)
+    aliceState = newState1
 
     println("\n=== ALICE -> BOB msg1 ===")
     println("Header1 PN=${header1.contentToString()}")
@@ -193,7 +195,8 @@ fun main() {
     // ---------------------------
     // Alice sends second message
     // ---------------------------
-    val (header2, ct2) = enc_HE.ratchetEncryptHE(aliceState, "Hello Bob (msg2)", AD)
+    val (newState2,header2, ct2) = enc_HE.ratchetEncryptHE(aliceState, "Hello Bob (msg2)", AD)
+    aliceState = newState2
 
     println("\n=== ALICE -> BOB msg2 ===")
     println("Header2 PN=${header2.contentToString()}")
@@ -205,7 +208,8 @@ fun main() {
     // ---------------------------
     // Bob replies (this triggers DH ratchet on Bob side)
     // ---------------------------
-    val (header3, ct3) = enc_HE.ratchetEncryptHE(bobState, "Hi Alice (reply1)", AD)
+    val (newState3,header3, ct3) = enc_HE.ratchetEncryptHE(bobState, "Hi Alice (reply1)", AD)
+    bobState = newState3
 
     println("\n=== BOB -> ALICE reply1 ===")
     println("Header3 PN=${header3.contentToString()}")
@@ -218,8 +222,17 @@ fun main() {
     // Out-of-order test:
     // Alice sends 2 messages, Bob receives second first
     // ---------------------------
-    val (header4, ct4) = enc_HE.ratchetEncryptHE(aliceState, "Out-of-order msgA", AD)
-    val (header5, ct5) = enc_HE.ratchetEncryptHE(aliceState, "Out-of-order msgB", AD)
+    val (newState4,header4, ct4) = enc_HE.ratchetEncryptHE(
+        aliceState,
+        "Out-of-order msgA",
+        AD)
+    aliceState = newState4
+
+    val (newState5,header5, ct5) = enc_HE.ratchetEncryptHE(
+        aliceState,
+        "Out-of-order msgB",
+        AD)
+    aliceState = newState5
 
     println("\n=== OUT OF ORDER TEST ===")
     println("Sending msgA (N=${header4.contentToString()})")
@@ -236,10 +249,14 @@ fun main() {
 
     try {
         // force Bob to skip beyond MAX_SKIP
-        val many = mutableListOf<Pair<ByteArray, ByteArray>>()
+        val many = mutableListOf<Pair<ByteArray, ByteArray>>() // only store messages
 
         for (i in 0..20) {
-            many.add(enc_HE.ratchetEncryptHE(aliceState, "skip-test-$i", AD))
+            val (newState, header, ct) =
+                enc_HE.ratchetEncryptHE(aliceState, "skip-test-$i", AD)
+
+            aliceState = newState
+            many.add(header to ct)
         }
 
         // deliver only the last message, skipping a lot

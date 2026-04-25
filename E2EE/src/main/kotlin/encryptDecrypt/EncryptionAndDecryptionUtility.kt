@@ -2,6 +2,7 @@ package encryptDecrypt
 
 import doubleRatchet.RatchetState
 import doubleRatchet.RatchetStateHE
+import doubleRatchet.deepCopy
 import kdf.KDFChain
 import java.nio.ByteBuffer
 import java.security.KeyFactory
@@ -133,11 +134,12 @@ class EncryptionAndDecryptionUtility {
     }
 
     fun trySkippedMessageKeysHE(
-        state: RatchetStateHE,
+        ratchetState: RatchetStateHE,
         encryptedHeader: ByteArray,
         ciphertext: ByteArray,
         associatedData: ByteArray
-    ): ByteArray? {
+    ): Pair<RatchetStateHE,ByteArray?> {
+        val state = ratchetState.deepCopy()
 
         for ((key, mk) in state.MKSKIPPED.toMap()) {
             val (hk, n) = key
@@ -151,18 +153,25 @@ class EncryptionAndDecryptionUtility {
 
 
                 if (header.N == n) {
-                    state.MKSKIPPED.remove(key)
+                    val newSkipped = state.MKSKIPPED.toMutableMap()
+                    newSkipped.remove(key)
 
                     val fullAD = EncryptionAndDecryptionUtility().concat(
                         associatedData,
                         encryptedHeader
                     )
 
-                    return Decryption().plainTextDecryption(
-                        mk,
-                        ciphertext,
-                        fullAD
+                    return Pair(
+                        state.copy(
+                            MKSKIPPED = newSkipped
+                        ),
+                        Decryption().plainTextDecryption(
+                            mk,
+                            ciphertext,
+                            fullAD
+                        )
                     )
+
                 }
             } catch (e: Exception) {
                 // wrong key -> ignore and continue trying others
@@ -170,14 +179,16 @@ class EncryptionAndDecryptionUtility {
             }
         }
 
-        return null
+        return Pair(state,null)
     }
 
 
     fun DHRatchetHE(
-        state: RatchetStateHE,
+        ratchetState: RatchetStateHE,
         header: HEADER
-    ){
+    ):RatchetStateHE {
+        val state =ratchetState.deepCopy()
+
         state.PN = state.Ns
         state.Ns = 0
         state.Nr = 0
@@ -209,6 +220,8 @@ class EncryptionAndDecryptionUtility {
         state.RK=RK2
         state.CKs= CKs
         state.NHKs= NHKs
+
+        return state
 
     }
 

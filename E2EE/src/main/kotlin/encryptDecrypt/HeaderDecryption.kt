@@ -1,7 +1,9 @@
 package encryptDecrypt
 
 import doubleRatchet.RatchetStateHE
+import doubleRatchet.deepCopy
 import kdf.KDFChain
+import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -35,44 +37,59 @@ class HeaderDecryption {
 
 
     fun ratchetDecryptHE(
-        state: RatchetStateHE,
+        ratchetState: RatchetStateHE,
         encryptedHeader: ByteArray,
         ciphertext: ByteArray,
         associatedData: ByteArray
-    ): String {
-        val plaintext= util.trySkippedMessageKeysHE(
-            state,encryptedHeader,
+    ): Pair<RatchetStateHE, String> {
+        var state = ratchetState.deepCopy()
+
+        val (newSkippedState,plaintext)= util.trySkippedMessageKeysHE(
+            state,
+            encryptedHeader,
             ciphertext,
             associatedData
         )
 
+        state = newSkippedState
+
+
         if (plaintext != null) {
-            return String(plaintext)
+            return Pair(
+                state,
+                String(plaintext)
+            )
         }
 
         val (header,dhRatchet)= decryptHeader(state,encryptedHeader)
 
         if (dhRatchet){
-            skippedMessageKeysHE(state,header.PN)
-            EncryptionAndDecryptionUtility().DHRatchetHE(state,header)
+            val newSkippedState = skippedMessageKeysHE(state,header.PN)
+            state = newSkippedState
+
+            val dhRatchetState = EncryptionAndDecryptionUtility().DHRatchetHE(state,header)
+            state = dhRatchetState
         }
 
-        skippedMessageKeysHE(state,header.N)
+        val newSkippedState2 = skippedMessageKeysHE(state,header.N)
+        state = newSkippedState2
 
         val(CKr,mk) = KDFChain().kdfChainKey(requireNotNull(state.CKr))
 
-        state.CKr=CKr
-        state.Nr +=1
 
-        return String(
-            Decryption().plainTextDecryption(
+        return Pair(
+            state.copy(
+                CKr = CKr,
+                Nr = state.Nr + 1
+            ),
+            String(Decryption().plainTextDecryption(
                 mk,
                 ciphertext,
                 util.concat(
                     associatedData,
                     encryptedHeader
                 )
-            )
+            ))
         )
     }
 
@@ -97,7 +114,7 @@ class HeaderDecryption {
             try {
                 val header = headerDecryption(nhk, encryptedHeader)
                 return Pair(header, true)
-            } catch (e: Exception) {
+            } catch (e : AEADBadTagException) {
                 // authentication failed
             }
         }
@@ -108,23 +125,39 @@ class HeaderDecryption {
     fun skippedMessageKeysHE(
         state: RatchetStateHE,
         until : Int
-    ){
-        require(state.Nr+ state.MAX_SKIP >= until){
-            "Error"
+    ): RatchetStateHE {
+
+        require(until <= state.Nr + state.MAX_SKIP){
+            "Too many skipped messages"
         }
 
-        if(state.CKr != null){
-            while (state.Nr < until){
-                val (CKr,messageKey) = KDFChain().kdfChainKey(requireNotNull(state.CKr))
+        var CKr = state.CKr
+        var Nr = state.Nr
+        val newSkipped = state.MKSKIPPED.toMutableMap()
 
-                state.CKr=CKr
+        if(CKr != null){
 
-                val key = Pair(state.HKr!!, state.Nr)
-                state.MKSKIPPED[key] = messageKey
+            val HKr = requireNotNull(state.HKr) {
+                "HKr must not be null when skipping keys"
+            }
 
-                state.Nr +=1
+            while (Nr < until){
+                val (chainKey,messageKey) = KDFChain().kdfChainKey(requireNotNull(CKr))
+
+                CKr = chainKey
+
+                val key = Pair(HKr, Nr)
+                newSkipped[key] = messageKey
+
+                Nr +=1
             }
         }
+
+        return state.copy(
+            CKr = CKr,
+            Nr = Nr,
+            MKSKIPPED = newSkipped
+        )
     }
 
 

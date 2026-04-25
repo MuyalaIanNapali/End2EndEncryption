@@ -182,67 +182,116 @@ fun main() {
     // ---------------------------
     // Alice sends first message
     // ---------------------------
-    val (newState1,header1, ct1) = enc_HE.ratchetEncryptHE(aliceState, "Hello Bob (msg1)", AD)
+    val (newState1,header1, ct1) = enc_HE.ratchetEncryptHE(
+        aliceState,
+        "Hello Bob (msg1)",
+        AD)
+
     aliceState = newState1
 
     println("\n=== ALICE -> BOB msg1 ===")
     println("Header1 PN=${header1.contentToString()}")
     println("Ciphertext1 = ${CryptoUtils.b64(ct1)}")
 
-    val pt1 = dec_HE.ratchetDecryptHE(bobState, header1, ct1, AD)
+    val (bobNewState,pt1) = dec_HE.ratchetDecryptHE(
+        bobState,
+        header1,
+        ct1,
+        AD)
+
+    bobState = bobNewState
+
     println("Bob decrypted msg1: ${pt1}")
 
     // ---------------------------
     // Alice sends second message
     // ---------------------------
-    val (newState2,header2, ct2) = enc_HE.ratchetEncryptHE(aliceState, "Hello Bob (msg2)", AD)
+    val (newState2,header2, ct2) = enc_HE.ratchetEncryptHE(
+        aliceState,
+        "Hello Bob (msg2)",
+        AD)
+
     aliceState = newState2
 
     println("\n=== ALICE -> BOB msg2 ===")
     println("Header2 PN=${header2.contentToString()}")
     println("Ciphertext2 = ${CryptoUtils.b64(ct2)}")
 
-    val pt2 = dec_HE.ratchetDecryptHE(bobState, header2, ct2, AD)
+    val (bobNewState2,pt2) = dec_HE.ratchetDecryptHE(
+        bobState,
+        header2,
+        ct2,
+        AD)
+
+    bobState = bobNewState2
+
     println("Bob decrypted msg2: ${pt2}")
 
     // ---------------------------
     // Bob replies (this triggers DH ratchet on Bob side)
     // ---------------------------
-    val (newState3,header3, ct3) = enc_HE.ratchetEncryptHE(bobState, "Hi Alice (reply1)", AD)
-    bobState = newState3
+    val (bobState3,header3, ct3) = enc_HE.ratchetEncryptHE(
+        bobState,
+        "Hi Alice (reply1)",
+        AD)
+
+    bobState = bobState3
 
     println("\n=== BOB -> ALICE reply1 ===")
     println("Header3 PN=${header3.contentToString()}")
     println("Ciphertext3 = ${CryptoUtils.b64(ct3)}")
 
-    val pt3 = dec_HE.ratchetDecryptHE(aliceState, header3, ct3, AD)
+    val (aliceState3,pt3) = dec_HE.ratchetDecryptHE(
+        aliceState,
+        header3,
+        ct3,
+        AD)
+
+    aliceState = aliceState3
+
     println("Alice decrypted reply1: ${pt3}")
 
     // ---------------------------
     // Out-of-order test:
     // Alice sends 2 messages, Bob receives second first
     // ---------------------------
-    val (newState4,header4, ct4) = enc_HE.ratchetEncryptHE(
+    val (aliceState4,header4, ct4) = enc_HE.ratchetEncryptHE(
         aliceState,
         "Out-of-order msgA",
         AD)
-    aliceState = newState4
 
-    val (newState5,header5, ct5) = enc_HE.ratchetEncryptHE(
+    aliceState = aliceState4
+
+    val (aliceState5,header5, ct5) = enc_HE.ratchetEncryptHE(
         aliceState,
         "Out-of-order msgB",
         AD)
-    aliceState = newState5
+
+    aliceState = aliceState5
 
     println("\n=== OUT OF ORDER TEST ===")
     println("Sending msgA (N=${header4.contentToString()})")
 
     // Deliver msgB first
-    val pt5 = dec_HE.ratchetDecryptHE(bobState, header5, ct5, AD)
+    val (bobState4,pt5) = dec_HE.ratchetDecryptHE(
+        bobState,
+        header5,
+        ct5,
+        AD)
+
+    bobState = bobState4
+
     println("Bob decrypted msgB first: ${pt5}")
 
     // Deliver msgA later
-    val pt4 = dec_HE.ratchetDecryptHE(bobState, header4, ct4, AD)
+    val (bobState5,pt4) = dec_HE.ratchetDecryptHE(
+        bobState,
+        header4,
+        ct4,
+        AD)
+
+    bobState = bobState5
+
     println("Bob decrypted msgA later: ${pt4}")
 
     println("\n=== MAX_SKIP TEST ===")
@@ -261,7 +310,13 @@ fun main() {
 
         // deliver only the last message, skipping a lot
         val (hLast, cLast) = many.last()
-        val ptLast = dec_HE.ratchetDecryptHE(bobState, hLast, cLast, AD)
+        val (bobState6,ptLast) = dec_HE.ratchetDecryptHE(
+            bobState,
+            hLast,
+            cLast,
+            AD)
+
+        bobState = bobState6
 
         println("Bob decrypted last skipped message: ${ptLast}")
     } catch (e: Exception) {

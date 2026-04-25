@@ -39,7 +39,7 @@ class HeaderEncryption {
     ): Triple<RatchetStateHE,ByteArray, ByteArray> {
         val state = ratchetState.deepCopy()
         val(CKs,mk) = KDFChain().kdfChainKey(requireNotNull(state.CKs))
-        state.CKs=CKs
+
 
         val header = HEADER(
             state.DHs.public,
@@ -54,6 +54,7 @@ class HeaderEncryption {
 
         return Triple(
             state.copy(
+                CKs = CKs,
                 Ns = state.Ns + 1
             ),
             encryptedHeader,

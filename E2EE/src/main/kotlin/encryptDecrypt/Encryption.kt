@@ -39,42 +39,4 @@ class Encryption {
         return nonce + ciphertext
     }
 
-
-    fun ratchetSendKey(ratchetState: RatchetState): Pair<Int, ByteArray>{
-        val (newChainKey,messageKey)= KDFChain().kdfChainKey(requireNotNull(ratchetState.CKs))
-
-        ratchetState.CKs=newChainKey
-
-        val Ns = ratchetState.Ns
-        ratchetState.Ns +=1
-
-        return Pair(Ns,messageKey)
-
-
-    }
-    fun ratchetEncrypt(
-        ratchetState: RatchetState,
-        plainText : String,
-        AD : ByteArray
-    ): Pair<ByteArray, ByteArray> {
-
-        val(Ns,messageKey) = ratchetSendKey(ratchetState)
-
-        val header = HEADER(ratchetState.DHs.public, ratchetState.PN,Ns)
-
-        val headerBytes = util.encodeHeader(header)
-
-        return Pair(
-            headerBytes,
-            plainTextEncryption(
-                messageKey,plainText.toByteArray(),
-                util.concat(
-                    AD,
-                    headerBytes
-                )
-            )
-        )
-    }
-
-
 }

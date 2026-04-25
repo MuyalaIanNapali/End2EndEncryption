@@ -71,68 +71,6 @@ class EncryptionAndDecryptionUtility {
     }
 
 
-    fun trySkippedMessageKeys(
-        ratchetState: RatchetState,
-        header: HEADER
-    ): ByteArray? {
-
-
-        val key = Pair(header.dhPublic,header.N)
-
-        return ratchetState.MKSKIPPED.remove(key)
-    }
-
-    fun skippedMessageKeys(ratchetState: RatchetState, until: Int){
-        require(ratchetState.Nr+ ratchetState.MAX_SKIP >= until){
-            "Error"
-        }
-
-        if(ratchetState.CKr != null){
-            while (ratchetState.Nr < until){
-                val (CKr,messageKey) = KDFChain().kdfChainKey(requireNotNull(ratchetState.CKr))
-
-                ratchetState.CKr=CKr
-
-                val key = Pair(ratchetState.DHr!!, ratchetState.Nr)
-                ratchetState.MKSKIPPED[key] = messageKey
-
-                ratchetState.Nr +=1
-            }
-        }
-    }
-
-
-    fun DHRatchet(ratchetState: RatchetState, header: HEADER){
-        ratchetState.PN = ratchetState.Ns
-        ratchetState.Ns = 0
-        ratchetState.Nr = 0
-        ratchetState.DHr=header.dhPublic
-
-        val (rK,cKr)= KDFChain().kdfRootKey(
-            ratchetState.RK,
-            EllipticCurveDiffieHellman().performDH(
-                ratchetState.DHs,
-                requireNotNull(ratchetState.DHr
-                )
-            )
-        )
-        ratchetState.RK=rK
-        ratchetState.CKr=cKr
-        ratchetState.DHs= EllipticCurveDiffieHellman().generateEllipticCurveKeyPair()
-
-        val (rK2,cKs)= KDFChain().kdfRootKey(
-            ratchetState.RK,
-            EllipticCurveDiffieHellman().performDH(
-                ratchetState.DHs,
-                requireNotNull(ratchetState.DHr
-                )
-            )
-        )
-        ratchetState.RK=rK2
-        ratchetState.CKs=cKs
-
-    }
-
     fun trySkippedMessageKeysHE(
         ratchetState: RatchetStateHE,
         encryptedHeader: ByteArray,
@@ -196,7 +134,7 @@ class EncryptionAndDecryptionUtility {
         state.HKr = state.NHKr
         state.DHr=header.dhPublic
 
-        val(RK,CKr,NHKr)= KDFChain().kdfRootKeyHeaderEncryption(
+        val(RK,CKr,NHKr)= KDFChain().kdfRootKey(
             state.RK,
             EllipticCurveDiffieHellman().performDH(
                 state.DHs,
@@ -209,7 +147,7 @@ class EncryptionAndDecryptionUtility {
 
         state.DHs= EllipticCurveDiffieHellman().generateEllipticCurveKeyPair()
 
-        val(RK2,CKs,NHKs)= KDFChain().kdfRootKeyHeaderEncryption(
+        val(RK2,CKs,NHKs)= KDFChain().kdfRootKey(
             state.RK,
             EllipticCurveDiffieHellman().performDH(
                 state.DHs,

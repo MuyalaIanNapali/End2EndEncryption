@@ -67,23 +67,6 @@ object HKDF {
 
     }
 
-    fun rootHKDF(
-        inputKeyMaterial: ByteArray,
-        salt: ByteArray?,
-        info: ByteArray,
-        outputLength: Int
-    ): Pair<ByteArray, ByteArray> {
-
-        val pseudoRandomKey = extract(salt, inputKeyMaterial)
-        val output= expand(pseudoRandomKey, info, outputLength)
-
-        val rootKey = output.copyOfRange(0,32)
-        val chainKey = output.copyOfRange(32,64)
-
-        return Pair(rootKey,chainKey)
-
-    }
-
     fun chainHKDF(ck: ByteArray): Pair<ByteArray, ByteArray>{
 
         val chainKey = hmac(ck, byteArrayOf(0x01))
@@ -92,7 +75,7 @@ object HKDF {
 
     }
 
-    fun rootHEHKDF(
+    fun rootHKDF(
         inputKeyMaterial: ByteArray,
         salt: ByteArray?,
         info: ByteArray,

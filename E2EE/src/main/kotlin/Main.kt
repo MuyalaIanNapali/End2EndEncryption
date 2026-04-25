@@ -145,14 +145,14 @@ fun main() {
     println("SK match? ${SK_alice.contentEquals(SK_bob)}")
 
     // Initialize ratchet states
-    val (rkA, ckA, hkA) = kdf.kdfRootKeyHeaderEncryption(
+    val (rkA, ckA, hkA) = kdf.kdfRootKey(
         SK_alice,
         ecdh.performDH(
             handshakeAliceKeyPair,
             bobKeyPair.public)
     )
 
-    val (rkB, ckB, nhkB) = kdf.kdfRootKeyHeaderEncryption(
+    val (rkB, ckB, nhkB) = kdf.kdfRootKey(
         SK_bob,
         ecdh.performDH(
             bobKeyPair,

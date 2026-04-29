@@ -3,14 +3,12 @@ package encryptDecrypt
 import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.PublicKey
-import java.security.spec.ECGenParameterSpec
 import javax.crypto.KeyAgreement
 
 class EllipticCurveDiffieHellman {
 
     fun generateEllipticCurveKeyPair(): KeyPair {
-        val keyGen = KeyPairGenerator.getInstance("EC")
-        keyGen.initialize(ECGenParameterSpec("secp256r1"))
+        val keyGen = KeyPairGenerator.getInstance("X25519")
         return keyGen.generateKeyPair()
     }
 
@@ -18,11 +16,12 @@ class EllipticCurveDiffieHellman {
         dhPair: KeyPair,
         publicKey: PublicKey
     ): ByteArray {
-        val privateKey = dhPair.private
-        val keyAgreement = KeyAgreement.getInstance("ECDH")
-        keyAgreement.init(privateKey)
+
+        val keyAgreement = KeyAgreement.getInstance("X25519")
+
+        keyAgreement.init(dhPair.private)
         keyAgreement.doPhase(publicKey, true)
+
         return keyAgreement.generateSecret()
     }
-
 }

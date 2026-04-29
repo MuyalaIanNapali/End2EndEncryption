@@ -60,7 +60,7 @@ class EncryptionAndDecryptionUtility {
         val pn = buffer.getInt()
         val n = buffer.getInt()
 
-        val keyFactory = KeyFactory.getInstance("EC")
+        val keyFactory = KeyFactory.getInstance("X25519")
         val publicKey = keyFactory.generatePublic(X509EncodedKeySpec(publicKeyBytes))
 
         return HEADER(

@@ -93,6 +93,24 @@ object HKDF {
 
     }
 
+    fun initHkHKDF(
+        inputKeyMaterial: ByteArray,
+        salt: ByteArray?,
+        info: ByteArray,
+        outputLength: Int
+    ): Pair<ByteArray, ByteArray> {
+        val pseudoRandomKey = extract(salt, inputKeyMaterial)
+        val output= expand(pseudoRandomKey, info, outputLength)
+
+
+        val hk = output.copyOfRange(0,32)
+        val nhk = output.copyOfRange(32,64)
+
+        return Pair(hk,nhk)
+
+    }
+
+
     fun X3dhHKDF(
         inputKeyMaterial: ByteArray,
         salt: ByteArray?,

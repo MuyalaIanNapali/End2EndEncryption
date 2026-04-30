@@ -52,62 +52,44 @@ fun main() {
 
     val AD = "associated-data".toByteArray()
 
+    //Step 1 create account and publish keys
     val alicePreKeyBundle = aliceX3dh.publishKeys()
     val bobPreKeyBundle = bobX3dh.publishKeys()
 
-    // Bob has a long-term ratchet keypair (initial public key Alice knows)
-
-    val (SK_alice,EKs,opkId) = aliceX3dh.initSender(
+    //step 2 initialize sender
+    val (SK_alice,EKPair,opkId) = aliceX3dh.initSender(
         aliceKeyManager,
         bobPreKeyBundle
     )
 
+    val EKs = EKPair.public.encoded
+
     val aliceIK=alicePreKeyBundle.IKpub
 
-    val SK_bob = bobX3dh.initReciever(
-        bobKeyManager,
-        util.decodePublicKey(aliceIK),
-        util.decodePublicKey(EKs),
-        opkId
-    )
 
-    println("SK match? ${SK_alice.contentEquals(SK_bob)}")
 
-    /*
-    // Initialize ratchet states
-    val (rkA, ckA, hkA) = kdf.kdfRootKey(
+    // Initialize alice ratchet states
+    val (hks, nhkr) = kdf.initHeaderKeyKDF(
         SK_alice,
         ecdh.performDH(
-            handshakeAliceKeyPair,
-            bobKeyPair.public)
+            EKPair.private,
+            util.decodePublicKey(bobPreKeyBundle.SPKpub))
     )
 
-    val (rkB, ckB, nhkB) = kdf.kdfRootKey(
-        SK_bob,
-        ecdh.performDH(
-            bobKeyPair,
-            handshakeAliceKeyPair.public)
-    )
+
 
     var aliceState= doubleRatchet.ratchetInitAliceHE(
         SK_alice,
-        bobKeyPair.public,
-        hkA,
-        nhkB // or NHK depending on your design
-    )
-
-    var bobState = doubleRatchet.ratchetInitBobHE(
-        SK_bob,
-        bobKeyPair,
-        hkA,
-        nhkB
+        util.decodePublicKey(bobPreKeyBundle.SPKpub),
+        hks,
+        nhkr
     )
 
 
 
-    println("\n=== INIT DONE ===")
+
+    println("\n=== INIT ALICE DONE ===")
     println("Alice: $aliceState")
-    println("Bob:   $bobState")
 
     // ---------------------------
     // Alice sends first message
@@ -122,6 +104,30 @@ fun main() {
     println("\n=== ALICE -> BOB msg1 ===")
     println("Header1 PN=${header1.contentToString()}")
     println("Ciphertext1 = ${CryptoUtils.b64(ct1)}")
+
+    val SK_bob = bobX3dh.initReciever(
+        bobKeyManager,
+        util.decodePublicKey(aliceIK),
+        util.decodePublicKey(EKs),
+        opkId
+    )
+
+    println("SK match? ${SK_alice.contentEquals(SK_bob)}")
+
+    val (hkr, nhks) = kdf.initHeaderKeyKDF(
+
+        SK_bob,
+        ecdh.performDH(
+            bobKeyManager.signedPreKeyPair.private,
+            util.decodePublicKey(EKs))
+    )
+
+    var bobState = doubleRatchet.ratchetInitBobHE(
+        SK_bob,
+        bobKeyManager.signedPreKeyPair,
+        hkr,
+        nhks
+    )
 
     val (bobNewState,pt1) = dec_HE.ratchetDecryptHE(
         bobState,
@@ -257,5 +263,5 @@ fun main() {
     println("Alice: $aliceState")
     println("Bob:   $bobState")
 
-     */
+
 }

@@ -6,4 +6,6 @@ interface KDF {
     fun kdfChainKey(kdfChainKey: ByteArray): Pair<ByteArray, ByteArray>
 
     fun kdfX3DH(inputKey: ByteArray,info : ByteArray) : ByteArray
+
+    fun initHeaderKeyKDF(secretKey: ByteArray, dhOutputKey: ByteArray): Pair<ByteArray, ByteArray>
 }

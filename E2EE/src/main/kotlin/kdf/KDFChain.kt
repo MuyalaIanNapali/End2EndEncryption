@@ -24,6 +24,20 @@ class KDFChain: KDF{
         )
     }
 
+    override fun initHeaderKeyKDF(
+        secretKey: ByteArray,
+        dhOutputKey: ByteArray
+    ): Pair<ByteArray, ByteArray> {
+
+        return HKDF.initHkHKDF(
+            dhOutputKey,
+            secretKey,
+            "diffie-hellman ratchet".toByteArray(),
+            64
+        )
+
+    }
+
     override fun kdfX3DH(
         inputKey: ByteArray,
         info: ByteArray

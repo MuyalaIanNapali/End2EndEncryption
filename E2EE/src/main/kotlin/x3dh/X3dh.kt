@@ -44,7 +44,7 @@ class X3dh(
     fun initSender(
         keyManager: X3DHKeyManager,
         preKeyBundle: PreKeyBundle
-    ) : Triple<ByteArray, ByteArray,String ?> {
+    ) : Triple<ByteArray, KeyPair,String ?> {
         val IKpub = util.decodePublicKey(preKeyBundle.IKpub)
         val SPKpub = util.decodePublicKey(preKeyBundle.SPKpub)
 
@@ -61,7 +61,6 @@ class X3dh(
         val OPKpub : Map<String, ByteArray>  = preKeyBundle.OPKpub ?: emptyMap()
 
         val senderEphemeralKP = ecc.generateEllipticCurveKeyPair()
-        val EKs = senderEphemeralKP.public.encoded
 
 
         // Perform the X3DH key agreement
@@ -92,7 +91,7 @@ class X3dh(
 
 
 
-            return Triple(secretKey,EKs,opkId)
+            return Triple(secretKey,senderEphemeralKP,opkId)
         }else{
 
             val secretKey =KDFChain().kdfX3DH(concat(dh1, dh2, dh3),info)
@@ -103,7 +102,7 @@ class X3dh(
             clear(dh2)
             clear(dh3)
 
-            return Triple(secretKey,EKs,null)
+            return Triple(secretKey,senderEphemeralKP,null)
         }
 
     }

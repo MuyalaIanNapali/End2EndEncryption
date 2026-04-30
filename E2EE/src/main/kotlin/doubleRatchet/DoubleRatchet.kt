@@ -14,7 +14,7 @@ class DoubleRatchet(
         SK: ByteArray,
         bobPublicKey: PublicKey,
         sharedHKa: ByteArray,
-        sharedNHKb: ByteArray
+        sharedNHKb: ByteArray?
     ): RatchetStateHE {
         val DHs = ecdh.generateEllipticCurveKeyPair()
 

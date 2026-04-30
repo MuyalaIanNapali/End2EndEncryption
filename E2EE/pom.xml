@@ -84,11 +84,6 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.muquit.libsodiumjna</groupId>
-            <artifactId>libsodium-jna</artifactId>
-            <version>1.0.5</version>
-        </dependency>
     </dependencies>
 
 </project>

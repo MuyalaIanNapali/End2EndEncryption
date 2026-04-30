@@ -15,7 +15,7 @@ class X3dh(
 
     private val util = EncryptionAndDecryptionUtility()
 
-    fun publishKeys(): Pair<PreKeyBundle, X3DHKeyManager> {
+    fun publishKeys(): PreKeyBundle{
 
         keyManager.initIdentityKeys()
         keyManager.generateSignedPreKey()
@@ -32,15 +32,13 @@ class X3dh(
             keyManager.opkStore
         )
 
-        return Pair(PreKeyBundle(
+        return PreKeyBundle(
                 IKpub = keyManager.identityKeyPair.public.encoded,
                 SPKpub = keyManager.signedPreKeyPair.public.encoded,
                 OPKpub = opkMap,
                 signature = signature,
                 IKsigPub = identitySigningKey.public.encoded
-            ),
-            keyManager
-        )
+            )
     }
 
     fun initSender(

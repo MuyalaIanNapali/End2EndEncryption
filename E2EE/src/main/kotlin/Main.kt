@@ -30,31 +30,41 @@ fun main() {
     val enc_HE = HeaderEncryption()
     val dec_HE = HeaderDecryption()
     val sig = SignatureHelper()
-    val keyManager = X3DHKeyManager(
+    val aliceKeyManager = X3DHKeyManager(
         ecdh,
         sig
     )
-    val x3dh = X3dh(
+    val bobKeyManager = X3DHKeyManager(
+        ecdh,
+        sig
+    )
+    val aliceX3dh = X3dh(
         ecdh,
         sig,
-        keyManager
+        aliceKeyManager
+    )
+
+    val bobX3dh = X3dh(
+        ecdh,
+        sig,
+        bobKeyManager
     )
 
     val AD = "associated-data".toByteArray()
 
-    val (alicePreKeyBundle,aliceKeyManager) = x3dh.publishKeys()
-    val (bobPreKeyBundle,bobKeyManager) = x3dh.publishKeys()
+    val alicePreKeyBundle = aliceX3dh.publishKeys()
+    val bobPreKeyBundle = bobX3dh.publishKeys()
 
     // Bob has a long-term ratchet keypair (initial public key Alice knows)
 
-    val (SK_alice,EKs,opkId) = x3dh.initSender(
+    val (SK_alice,EKs,opkId) = aliceX3dh.initSender(
         aliceKeyManager,
         bobPreKeyBundle
     )
 
     val aliceIK=alicePreKeyBundle.IKpub
 
-    val SK_bob = x3dh.initReciever(
+    val SK_bob = bobX3dh.initReciever(
         bobKeyManager,
         util.decodePublicKey(aliceIK),
         util.decodePublicKey(EKs),

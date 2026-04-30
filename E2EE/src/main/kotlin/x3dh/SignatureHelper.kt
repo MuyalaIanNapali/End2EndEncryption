@@ -1,4 +1,4 @@
-package org.example.x3dh
+package x3dh
 
 import java.security.KeyFactory
 import java.security.KeyPair

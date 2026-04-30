@@ -9,9 +9,9 @@ import encryptDecrypt.EncryptionAndDecryptionUtility
 import encryptDecrypt.HeaderDecryption
 import encryptDecrypt.HeaderEncryption
 import kdf.KDFChain
-import org.example.x3dh.SignatureHelper
-import org.example.x3dh.X3DHKeyManager
-import org.example.x3dh.X3dh
+import x3dh.SignatureHelper
+import x3dh.X3DHKeyManager
+import x3dh.X3dh
 import java.util.*
 
 object CryptoUtils {

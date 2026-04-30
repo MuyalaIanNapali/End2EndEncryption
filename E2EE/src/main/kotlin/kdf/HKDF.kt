@@ -92,4 +92,14 @@ object HKDF {
         return Triple(rootKey, chainKey, headerKey)
 
     }
+
+    fun X3dhHKDF(
+        inputKeyMaterial: ByteArray,
+        salt: ByteArray?,
+        info: ByteArray,
+        outputLength: Int
+    ): ByteArray {
+        val pseudoRandomKey = extract(salt, inputKeyMaterial)
+        return expand(pseudoRandomKey, info, outputLength)
+    }
 }

@@ -15,7 +15,13 @@ data class HEADER(
 )
 
 class Encryption {
-    private val util = EncryptionAndDecryptionUtility()
+    private val sha256 = MessageDigest.getInstance("SHA-256")
+
+
+    fun hashPlaintextNonce(mk: ByteArray): ByteArray {
+        val domain = "PLAINTEXT_NONCE_DERIVATION".toByteArray()
+        return sha256.digest(domain+mk)
+    }
 
     fun plainTextEncryption(
         messageKey: ByteArray,
@@ -24,7 +30,7 @@ class Encryption {
     ): ByteArray {
 
         val aesKeyEncrypt = SecretKeySpec(messageKey, "AES")
-        val nonceFull = MessageDigest.getInstance("SHA-256").digest(messageKey)
+        val nonceFull = hashPlaintextNonce(messageKey)
 
         val nonce = nonceFull.copyOfRange(0,12)
 

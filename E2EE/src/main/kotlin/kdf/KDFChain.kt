@@ -1,5 +1,6 @@
 package kdf
 
+import org.example.x3dh.X3dh
 
 
 class KDFChain: KDF{
@@ -22,6 +23,22 @@ class KDFChain: KDF{
             rootKey,
             "diffie-hellman ratchet".toByteArray(),
             96
+        )
+    }
+
+    override fun kdfX3DH(
+        inputKey: ByteArray,
+        info: ByteArray
+    ) : ByteArray {
+        val F = ByteArray(32) {0xFF.toByte()}
+        val salt = ByteArray(32) { 0x00 }
+        val ikm = F + inputKey
+
+        return HKDF.X3dhHKDF(
+            ikm,
+            salt,
+            info,
+            32
         )
     }
 

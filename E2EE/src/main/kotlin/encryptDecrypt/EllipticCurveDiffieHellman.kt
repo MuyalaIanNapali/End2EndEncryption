@@ -2,6 +2,7 @@ package encryptDecrypt
 
 import java.security.KeyPair
 import java.security.KeyPairGenerator
+import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.KeyAgreement
 
@@ -13,13 +14,13 @@ class EllipticCurveDiffieHellman {
     }
 
     fun performDH(
-        dhPair: KeyPair,
+        privateKey: PrivateKey,
         publicKey: PublicKey
     ): ByteArray {
 
         val keyAgreement = KeyAgreement.getInstance("X25519")
 
-        keyAgreement.init(dhPair.private)
+        keyAgreement.init(privateKey)
         keyAgreement.doPhase(publicKey, true)
 
         return keyAgreement.generateSecret()

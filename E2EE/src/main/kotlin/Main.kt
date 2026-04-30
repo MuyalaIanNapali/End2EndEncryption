@@ -5,9 +5,13 @@ import doubleRatchet.DoubleRatchet
 import encryptDecrypt.Decryption
 import encryptDecrypt.EllipticCurveDiffieHellman
 import encryptDecrypt.Encryption
+import encryptDecrypt.EncryptionAndDecryptionUtility
 import encryptDecrypt.HeaderDecryption
 import encryptDecrypt.HeaderEncryption
 import kdf.KDFChain
+import org.example.x3dh.SignatureHelper
+import org.example.x3dh.X3DHKeyManager
+import org.example.x3dh.X3dh
 import java.util.*
 
 object CryptoUtils {
@@ -15,28 +19,51 @@ object CryptoUtils {
         Base64.getEncoder().encodeToString(data)
 }
 
+
 fun main() {
     val ecdh = EllipticCurveDiffieHellman()
     val kdf = KDFChain()
     val doubleRatchet = DoubleRatchet(kdf, ecdh)
+    val util = EncryptionAndDecryptionUtility()
     val enc = Encryption()
     val dec = Decryption()
     val enc_HE = HeaderEncryption()
     val dec_HE = HeaderDecryption()
+    val sig = SignatureHelper()
+    val keyManager = X3DHKeyManager(
+        ecdh,
+        sig
+    )
+    val x3dh = X3dh(
+        ecdh,
+        sig,
+        keyManager
+    )
 
     val AD = "associated-data".toByteArray()
 
-    // Bob has a long-term ratchet keypair (initial public key Alice knows)
-    val bobKeyPair = ecdh.generateEllipticCurveKeyPair()
+    val (alicePreKeyBundle,aliceKeyManager) = x3dh.publishKeys()
+    val (bobPreKeyBundle,bobKeyManager) = x3dh.publishKeys()
 
-    // SK must be a shared secret from some handshake (simulate using ECDH here)
-    val handshakeAliceKeyPair = ecdh.generateEllipticCurveKeyPair()
-    val handshakeBobKeyPair = ecdh.generateEllipticCurveKeyPair()
-    val SK_alice = ecdh.performDH(handshakeAliceKeyPair, handshakeBobKeyPair.public)
-    val SK_bob = ecdh.performDH(handshakeBobKeyPair, handshakeAliceKeyPair.public)
+    // Bob has a long-term ratchet keypair (initial public key Alice knows)
+
+    val (SK_alice,EKs,opkId) = x3dh.initSender(
+        aliceKeyManager,
+        bobPreKeyBundle
+    )
+
+    val aliceIK=alicePreKeyBundle.IKpub
+
+    val SK_bob = x3dh.initReciever(
+        bobKeyManager,
+        util.decodePublicKey(aliceIK),
+        util.decodePublicKey(EKs),
+        opkId
+    )
 
     println("SK match? ${SK_alice.contentEquals(SK_bob)}")
 
+    /*
     // Initialize ratchet states
     val (rkA, ckA, hkA) = kdf.kdfRootKey(
         SK_alice,
@@ -219,4 +246,6 @@ fun main() {
     println("\n=== FINAL STATES ===")
     println("Alice: $aliceState")
     println("Bob:   $bobState")
+
+     */
 }

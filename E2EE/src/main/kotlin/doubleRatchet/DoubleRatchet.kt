@@ -21,7 +21,7 @@ class DoubleRatchet(
         val(RK,CKs,NHKs)=kdfChain.kdfRootKey(
             SK,
             ecdh.performDH(
-                DHs,
+                DHs.private,
                 bobPublicKey
             )
         )

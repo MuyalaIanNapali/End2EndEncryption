@@ -6,6 +6,7 @@ import doubleRatchet.deepCopy
 import kdf.KDFChain
 import java.nio.ByteBuffer
 import java.security.KeyFactory
+import java.security.PublicKey
 import java.security.spec.X509EncodedKeySpec
 
 class EncryptionAndDecryptionUtility {
@@ -46,7 +47,10 @@ class EncryptionAndDecryptionUtility {
         return buffer.array()
     }
 
-
+    fun decodePublicKey(publicKeyBytes: ByteArray): PublicKey {
+        val keyFactory = KeyFactory.getInstance("X25519")
+        return keyFactory.generatePublic(X509EncodedKeySpec(publicKeyBytes))
+    }
 
     fun decodeHeader(bytes: ByteArray): HEADER {
         val buffer = ByteBuffer.wrap(bytes)
@@ -60,8 +64,7 @@ class EncryptionAndDecryptionUtility {
         val pn = buffer.getInt()
         val n = buffer.getInt()
 
-        val keyFactory = KeyFactory.getInstance("X25519")
-        val publicKey = keyFactory.generatePublic(X509EncodedKeySpec(publicKeyBytes))
+        val publicKey = decodePublicKey(publicKeyBytes)
 
         return HEADER(
             publicKey,
@@ -137,7 +140,7 @@ class EncryptionAndDecryptionUtility {
         val(RK,CKr,NHKr)= KDFChain().kdfRootKey(
             state.RK,
             EllipticCurveDiffieHellman().performDH(
-                state.DHs,
+                state.DHs.private,
                 requireNotNull(state.DHr)
             )
         )
@@ -150,7 +153,7 @@ class EncryptionAndDecryptionUtility {
         val(RK2,CKs,NHKs)= KDFChain().kdfRootKey(
             state.RK,
             EllipticCurveDiffieHellman().performDH(
-                state.DHs,
+                state.DHs.private,
                 requireNotNull(state.DHr)
             )
         )

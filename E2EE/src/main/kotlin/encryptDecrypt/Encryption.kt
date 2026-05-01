@@ -1,6 +1,8 @@
 package encryptDecrypt
 
 import doubleRatchet.RatchetState
+import doubleRatchet.RatchetStateHE
+import doubleRatchet.deepCopy
 import kdf.KDFChain
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -16,6 +18,7 @@ data class HEADER(
 
 class Encryption {
     private val sha256 = MessageDigest.getInstance("SHA-256")
+    private val util = EncryptionAndDecryptionUtility()
 
 
     fun hashPlaintextNonce(mk: ByteArray): ByteArray {
@@ -43,6 +46,43 @@ class Encryption {
         val ciphertext = cipher.doFinal(plaintext)
 
         return nonce + ciphertext
+    }
+
+    fun ratchetSendKey(state: RatchetStateHE): Pair<RatchetStateHE, ByteArray>{
+        var ratchetState = state.deepCopy()
+        val (newChainKey,messageKey)= KDFChain().kdfChainKey(requireNotNull(ratchetState.CKs))
+
+        return Pair(state.copy(
+            CKs = newChainKey,
+            Ns = ratchetState.Ns + 1
+        ),messageKey)
+
+
+    }
+    fun encryptPreKeyMessage(
+        state: RatchetStateHE,
+        plainText : String,
+        AD : ByteArray
+    ): Pair<RatchetStateHE, ByteArray> {
+        var newState = state.deepCopy()
+
+        val(state1,messageKey) = ratchetSendKey(newState)
+        newState = state1
+
+         //val header = HEADER(state.DHs.public, state.PN, state.Ns)
+
+        //val header = HEADER(state.DHs.public, state.PN,Ns,)
+
+        //val headerBytes = util.encodeHeader(header)
+
+        return Pair(
+            newState,
+            plainTextEncryption(
+                messageKey,
+                plainText.toByteArray(),
+                AD
+            )
+        )
     }
 
 }

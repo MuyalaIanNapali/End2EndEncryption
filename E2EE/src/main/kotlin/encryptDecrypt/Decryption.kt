@@ -1,6 +1,8 @@
 package encryptDecrypt
 
 import doubleRatchet.RatchetState
+import doubleRatchet.RatchetStateHE
+import doubleRatchet.deepCopy
 import kdf.KDFChain
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
@@ -27,6 +29,55 @@ class Decryption {
         cipher.updateAAD(associatedData)
 
         return cipher.doFinal(actualCiphertext)
+    }
+
+
+    fun ratchetReceiveKey(
+        ratchetState: RatchetStateHE
+    ): Pair<RatchetStateHE, ByteArray>{
+         var ratchetState = ratchetState.deepCopy()
+        //val header = EncryptionAndDecryptionUtility().decodeHeader(headerBytes)
+
+        val (CKr,mk)= KDFChain().kdfChainKey(requireNotNull(ratchetState.CKr))
+
+
+        return Pair(
+            ratchetState.copy(
+                CKr = CKr,
+                Nr = ratchetState.Nr + 1
+            ),
+            mk
+        )
+    }
+
+
+
+    fun decryptPreKeyMessage(
+        ratchetState: RatchetStateHE,
+        ciphertext: ByteArray,
+        AD: ByteArray
+    ): Pair<RatchetStateHE,String>{
+
+        var newState = ratchetState.deepCopy()
+
+
+
+        val (newState1,messageKey) = ratchetReceiveKey(
+            newState
+        )
+
+        newState = newState1
+
+        return Pair(
+            newState,
+            String(
+                plainTextDecryption(
+                    messageKey,
+                    ciphertext,
+                    AD
+                )
+            )
+        )
     }
 
 }

@@ -167,4 +167,48 @@ class EncryptionAndDecryptionUtility {
     }
 
 
+    fun DHRatchetPreKeyMessage(
+        ratchetState: RatchetStateHE,
+        DHs: ByteArray,
+    ):RatchetStateHE {
+        val state =ratchetState.deepCopy()
+
+        state.PN = state.Ns
+        state.Ns = 0
+        state.Nr = 0
+        state.HKs = state.NHKs
+        state.HKr = state.NHKr
+        state.DHr= EncryptionAndDecryptionUtility().decodePublicKey(DHs)
+
+        val(RK,CKr,NHKr)= KDFChain().kdfRootKey(
+            state.RK,
+            EllipticCurveDiffieHellman().performDH(
+                state.DHs.private,
+                requireNotNull(state.DHr)
+            )
+        )
+        state.RK=RK
+        state.CKr= CKr
+        state.NHKr= NHKr
+
+        state.DHs= EllipticCurveDiffieHellman().generateEllipticCurveKeyPair()
+
+        val(RK2,CKs,NHKs)= KDFChain().kdfRootKey(
+            state.RK,
+            EllipticCurveDiffieHellman().performDH(
+                state.DHs.private,
+                requireNotNull(state.DHr)
+            )
+        )
+
+        state.RK=RK2
+        state.CKs= CKs
+        state.NHKs= NHKs
+
+        return state
+
+    }
+
+
+
 }

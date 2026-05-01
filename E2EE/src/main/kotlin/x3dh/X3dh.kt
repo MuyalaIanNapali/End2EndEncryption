@@ -41,7 +41,7 @@ class X3dh(
             )
     }
 
-    fun initSender(
+    fun initSenderX3DH(
         keyManager: X3DHKeyManager,
         preKeyBundle: PreKeyBundle
     ) : Triple<ByteArray, KeyPair,String ?> {
@@ -107,7 +107,7 @@ class X3dh(
 
     }
 
-    fun initReciever(
+    fun initReceiverX3DH(
         keyManager: X3DHKeyManager,
         IKs: PublicKey,
         EKs: PublicKey,

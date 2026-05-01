@@ -10,7 +10,7 @@ class DoubleRatchet(
     private val ecdh: EllipticCurveDiffieHellman
 ) {
 
-    fun ratchetInitAliceHE(
+    fun ratchetInitSenderHE(
         SK: ByteArray,
         bobPublicKey: PublicKey,
         sharedHKa: ByteArray,
@@ -42,7 +42,7 @@ class DoubleRatchet(
         )
     }
 
-    fun ratchetInitBobHE(
+    fun ratchetInitReceiverHE(
         SK: ByteArray,
         bobKeyPair: KeyPair,
         sharedHKa: ByteArray,

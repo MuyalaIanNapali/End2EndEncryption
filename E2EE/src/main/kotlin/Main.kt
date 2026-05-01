@@ -57,7 +57,7 @@ fun main() {
     val bobPreKeyBundle = bobX3dh.publishKeys()
 
     //step 2 initialize sender
-    val (SK_alice,EKPair,opkId) = aliceX3dh.initSender(
+    val (SK_alice,EKPair,opkId) = aliceX3dh.initSenderX3DH(
         aliceKeyManager,
         bobPreKeyBundle
     )
@@ -78,7 +78,7 @@ fun main() {
 
 
 
-    var aliceState= doubleRatchet.ratchetInitAliceHE(
+    var aliceState= doubleRatchet.ratchetInitSenderHE(
         SK_alice,
         util.decodePublicKey(bobPreKeyBundle.SPKpub),
         hks,
@@ -105,7 +105,7 @@ fun main() {
     println("Header1 PN=${header1.contentToString()}")
     println("Ciphertext1 = ${CryptoUtils.b64(ct1)}")
 
-    val SK_bob = bobX3dh.initReciever(
+    val SK_bob = bobX3dh.initReceiverX3DH(
         bobKeyManager,
         util.decodePublicKey(aliceIK),
         util.decodePublicKey(EKs),
@@ -122,7 +122,7 @@ fun main() {
             util.decodePublicKey(EKs))
     )
 
-    var bobState = doubleRatchet.ratchetInitBobHE(
+    var bobState = doubleRatchet.ratchetInitReceiverHE(
         SK_bob,
         bobKeyManager.signedPreKeyPair,
         hkr,

@@ -1,6 +1,5 @@
 package encryptDecrypt
 
-import doubleRatchet.RatchetState
 import doubleRatchet.RatchetStateHE
 import doubleRatchet.deepCopy
 import kdf.KDFChain

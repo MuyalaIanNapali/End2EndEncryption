@@ -1,0 +1,13 @@
+server:
+  port: 3000
+logging:
+  file:
+    path: logs
+  structured:
+    format:
+      console: ecs
+      file: ecs
+spring:
+  application:
+    name: server
+

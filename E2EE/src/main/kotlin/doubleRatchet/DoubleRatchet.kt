@@ -12,7 +12,7 @@ class DoubleRatchet(
 
     fun ratchetInitSenderHE(
         SK: ByteArray,
-        bobPublicKey: PublicKey,
+        recieverPublicKey: PublicKey,
         sharedHKa: ByteArray,
         sharedNHKb: ByteArray?
     ): RatchetStateHE {
@@ -22,13 +22,13 @@ class DoubleRatchet(
             SK,
             ecdh.performDH(
                 DHs.private,
-                bobPublicKey
+                recieverPublicKey
             )
         )
 
         return RatchetStateHE(
             DHs = DHs,
-            DHr = bobPublicKey,
+            DHr = recieverPublicKey,
             RK = RK,
             CKs = CKs,
             CKr = null,
@@ -44,12 +44,12 @@ class DoubleRatchet(
 
     fun ratchetInitReceiverHE(
         SK: ByteArray,
-        bobKeyPair: KeyPair,
+        userKeyPair: KeyPair,
         sharedHKa: ByteArray,
         sharedNHKb: ByteArray
     ): RatchetStateHE{
         return RatchetStateHE(
-            DHs = bobKeyPair,
+            DHs = userKeyPair,
             DHr = null,
             RK=SK,
             CKs = null,

@@ -1,4 +1,4 @@
-package server.users
+package server.users.dto
 
 import java.time.LocalDateTime
 

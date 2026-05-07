@@ -1,4 +1,4 @@
-package server.users
+package server.users.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull

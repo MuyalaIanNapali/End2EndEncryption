@@ -1,6 +1,4 @@
-package server.users
-
-import java.time.LocalDateTime
+package server.users.dto
 
 data class UpdateUserRequest(
     val username: String?,

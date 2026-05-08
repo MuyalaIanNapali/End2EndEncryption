@@ -14,34 +14,42 @@ class JWTService {
 
     private val accessExpiration = 1000 * 60 * 15 // 15 min
 
-    fun generateAccessToken(userId: Long): String {
+    fun generateAccessToken(username: String): String {
         return Jwts.builder()
-            .subject(userId.toString())
+            .subject(username)
             .issuedAt(Date())
             .expiration(Date(System.currentTimeMillis() + accessExpiration))
             .signWith(secret)
             .compact()
     }
 
-    fun extractUsername(token: String): String {
-        return Jwts.parser()
-            .verifyWith(secret)
-            .build()
-            .parseSignedClaims(token)
-            .payload
-            .subject
-    }
-
-    fun isValid(token: String): Boolean {
+    fun isTokenValid(token: String, username: String): Boolean {
         return try {
             val claims = Jwts.parser()
                 .verifyWith(secret)
                 .build()
                 .parseSignedClaims(token)
+                .payload
 
-            claims.payload.expiration.after(Date())
+            val tokenUsername = claims.subject
+            val expiration = claims.expiration
+
+            tokenUsername == username && expiration.after(Date())
         } catch (e: Exception) {
             false
+        }
+    }
+
+    fun extractUsername(token: String): String? {
+        return try {
+            Jwts.parser()
+                .verifyWith(secret)
+                .build()
+                .parseSignedClaims(token)
+                .payload
+                .subject
+        } catch (e: Exception) {
+            null
         }
     }
 }

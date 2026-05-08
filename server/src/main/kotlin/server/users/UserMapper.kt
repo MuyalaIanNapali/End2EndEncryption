@@ -20,7 +20,8 @@ fun UserRequest.toEntity() = User(
     username = username,
     email = email,
     password = password,
-    avatarUrl = avatarUrl
+    avatarUrl = avatarUrl,
+    lastSeen = LocalDateTime.now()
 )
 
 // Update existing entity

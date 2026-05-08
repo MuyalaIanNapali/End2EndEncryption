@@ -11,12 +11,12 @@ class RefreshTokenService(
 
     private val refreshExpirationDays = 7L
 
-    fun createRefreshToken(userid: Long): RefreshToken {
+    fun createRefreshToken(userId : Long): RefreshToken {
         val token = UUID.randomUUID().toString()
 
         val refreshToken = RefreshToken(
             token = token,
-            userId = userid,
+            userId = userId,
             expiresAt = LocalDateTime.now().plusDays(refreshExpirationDays)
         )
 

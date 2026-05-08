@@ -29,17 +29,21 @@ class UserService(
         return passwordEncoder.matches(password, hashedPassword)
     }
 
-    fun getUsers() = ResponseEntity.ok(userRepository.findAll())
+    fun getUsers()= ResponseEntity.ok(userRepository.findAll().map { it.toResponse(LocalDateTime.now()) })
 
-    fun createUser(request: UserRequest): ResponseEntity<UserResponse> {
+    fun createUser(request: UserRequest): ResponseEntity<Any> {
         val user = request.toEntity()
 
+        if (userRepository.findByUsername(user.username) != null)
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken")
+
         // hash password
-        user.password = hashPassword(user.password)
+        val rawPassword = user.password
+        user.password = hashPassword(rawPassword)
 
         userRepository.save(user)
 
-        return ResponseEntity.ok(user.toResponse(LocalDateTime.now()))
+        return loginUser(LoginRequest(user.username, rawPassword))
     }
 
     fun loginUser(request: LoginRequest): ResponseEntity<Any> {
@@ -56,7 +60,7 @@ class UserService(
                 .body("Invalid password")
         }
 
-        val accessToken = jwtService.generateAccessToken(requireNotNull(user.id))
+        val accessToken = jwtService.generateAccessToken(requireNotNull(user.username))
         val refreshToken = refreshTokenService.createRefreshToken(requireNotNull(user.id))
 
         return ResponseEntity.ok(
@@ -84,9 +88,12 @@ class UserService(
     fun refreshToken(token: String): ResponseEntity<RefreshResponse> {
         val refresh = refreshTokenService.validate(token)
 
+        val user = userRepository.findById(refresh.userId).orElse(null)
+            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+
         refreshTokenService.deleteToken(token)
 
-        val newAccessToken = jwtService.generateAccessToken(refresh.userId)
+        val newAccessToken = jwtService.generateAccessToken(requireNotNull(user.username))
 
         val newRefreshToken = refreshTokenService.createRefreshToken(refresh.userId)
 

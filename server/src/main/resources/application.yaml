@@ -21,6 +21,10 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+  security:
+    user:
+      name: admin
+      password: alpha22
 
   jpa:
     hibernate:
@@ -36,3 +40,5 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD}
+      repositories:
+        enabled: false

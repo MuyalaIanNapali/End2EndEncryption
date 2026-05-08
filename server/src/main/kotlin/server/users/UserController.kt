@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -25,12 +26,12 @@ class UserController(
 ) {
 
     @GetMapping
-    fun getUsers(): ResponseEntity<List<User>> {
+    fun getUsers(): ResponseEntity<List<UserResponse>> {
         return userService.getUsers()
     }
 
     @PostMapping(value = ["/createUser"])
-    fun createUser(@RequestBody @Valid userRequest: UserRequest): ResponseEntity<UserResponse> {
+    fun createUser(@RequestBody @Valid userRequest: UserRequest): ResponseEntity<Any> {
         return userService.createUser(userRequest)
     }
 
@@ -44,8 +45,9 @@ class UserController(
         return userService.findUserByUsername(username)
     }
 
-    @PostMapping("/logout/{username}")
-    fun logoutUser(@PathVariable username: String): ResponseEntity<Void> {
+    @PostMapping("/logout")
+    fun logoutUser(auth: Authentication): ResponseEntity<Void> {
+        val username = auth.name
         return userService.logoutUser(username)
     }
 

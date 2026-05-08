@@ -29,7 +29,7 @@ class User(
 
 
     @Column(name = "last_seen")
-    var lastSeen: LocalDateTime? = null,
+    var lastSeen: LocalDateTime,
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

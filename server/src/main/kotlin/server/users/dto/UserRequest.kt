@@ -2,6 +2,7 @@ package server.users.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
+import server.keymanager.dto.PreKeyBundle
 
 data class UserRequest(
     @field:NotNull(message = "Username must be provided")
@@ -15,4 +16,6 @@ data class UserRequest(
     var password: String,
 
     val avatarUrl: String? = null,
+
+    val preKeyBundle: PreKeyBundle
 )

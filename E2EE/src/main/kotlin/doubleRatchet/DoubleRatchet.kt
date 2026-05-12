@@ -13,8 +13,8 @@ class DoubleRatchet(
     fun ratchetInitSenderHE(
         SK: ByteArray,
         recieverPublicKey: PublicKey,
-        sharedHKa: ByteArray,
-        sharedNHKb: ByteArray?
+        sharedHKs: ByteArray,
+        sharedNHKr: ByteArray?
     ): RatchetStateHE {
         val DHs = ecdh.generateEllipticCurveKeyPair()
 
@@ -35,10 +35,10 @@ class DoubleRatchet(
             Ns = 0,
             Nr = 0,
             PN = 0,
-            HKs = sharedHKa,
+            HKs = sharedHKs,
             HKr = null,
             NHKs = NHKs,
-            NHKr = sharedNHKb
+            NHKr = sharedNHKr
         )
     }
 

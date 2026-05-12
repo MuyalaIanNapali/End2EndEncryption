@@ -28,7 +28,7 @@ class X3dh(
         )
 
         val opkMap = keyManager.generateOPK(
-            10,
+            100,
             keyManager.opkStore
         )
 

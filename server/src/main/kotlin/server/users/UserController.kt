@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
+import java.security.Principal
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import server.jwt.JWTService
 import server.jwt.RefreshRequest
 import server.jwt.RefreshResponse
-import server.jwt.RefreshTokenService
 import server.users.dto.LoginRequest
+import server.users.dto.UpdateUserRequest
 import server.users.dto.UserRequest
 import server.users.dto.UserResponse
 
@@ -45,10 +45,14 @@ class UserController(
         return userService.findUserByUsername(username)
     }
 
+    @PatchMapping(value = ["/updateUser/{userId}"])
+    fun updateUserDetails(@PathVariable userId: Long, @RequestBody @Valid request: UpdateUserRequest): ResponseEntity<Any> {
+        return userService.updateUserDetails(userId, request)
+    }
+
     @PostMapping("/logout")
-    fun logoutUser(auth: Authentication): ResponseEntity<Void> {
-        val username = auth.name
-        return userService.logoutUser(username)
+    fun logoutUser(principal: Principal): ResponseEntity<Void> {
+        return userService.logoutUser(principal.name)
     }
 
     @PostMapping("/refresh")

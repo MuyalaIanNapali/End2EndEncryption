@@ -24,4 +24,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "client"
 include(":app")
+include(":domain")
+include(":domain")
 include(":crypto")

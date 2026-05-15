@@ -22,21 +22,7 @@ object CryptoUtils {
         Base64.getEncoder().encodeToString(data)
 }
 
-fun createAccount(): Pair<X3DHKeyManager,PreKeyBundle>{
-    val userKeyManager = X3DHKeyManager(
-        EllipticCurveDiffieHellman(),
-        SignatureHelper()
-    )
-    val userX3dh = X3dh(
-        EllipticCurveDiffieHellman(),
-        SignatureHelper(),
-        userKeyManager
-    )
 
-    val userPreKeyBundle = userX3dh.publishKeys()
-    return Pair(userKeyManager,userPreKeyBundle)
-
-}
 
 
 fun main() {

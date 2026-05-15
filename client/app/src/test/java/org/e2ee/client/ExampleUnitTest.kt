@@ -1,4 +1,4 @@
-package com.e2ee.crypto
+package org.e2ee.client
 
 import org.junit.Test
 

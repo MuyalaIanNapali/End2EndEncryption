@@ -1,4 +1,4 @@
-package com.e2ee.crypto
+package org.e2ee.client
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.e2ee.crypto.test", appContext.packageName)
+        assertEquals("org.e2ee.client", appContext.packageName)
     }
 }

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.e2ee.crypto"
+    namespace = "org.e2ee.crypto"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1

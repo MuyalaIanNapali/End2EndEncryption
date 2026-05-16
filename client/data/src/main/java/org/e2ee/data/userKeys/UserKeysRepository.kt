@@ -1,4 +1,29 @@
 package org.e2ee.data.userKeys
 
-interface UserKeysRepository {
+import androidx.annotation.WorkerThread
+import org.e2ee.crypto.Crypto
+
+class UserKeysRepository (
+    private val dao: UserKeysDao,
+){
+    @WorkerThread
+    suspend fun insertUserKeys(userKeys: UserKeys) {
+        dao.insertUserKeys(userKeys)
+    }
+
+    @WorkerThread
+    suspend fun getUserKeys(): UserKeys? {
+        return dao.getUserKeys()
+    }
+
+    @WorkerThread
+    suspend fun updateUserId(userId: Long) {
+        dao.updateUserId(userId)
+    }
+
+    @WorkerThread
+    suspend fun deleteUserKeys() {
+        dao.deleteUserKeys()
+    }
+
 }

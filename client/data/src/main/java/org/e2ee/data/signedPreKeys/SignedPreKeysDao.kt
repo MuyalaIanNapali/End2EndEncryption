@@ -1,4 +1,44 @@
 package org.e2ee.data.signedPreKeys
 
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+
+@Dao
 interface SignedPreKeysDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSignedPreKey(signedPreKey: SignedPreKeys)
+
+    @Query("SELECT * FROM signed_pre_keys WHERE signedPreKeyId = :signedPreKeyId LIMIT 1")
+    suspend fun getSignedPreKeyById(signedPreKeyId: String): SignedPreKeys?
+
+     @Query("SELECT * FROM signed_pre_keys WHERE active = 1")
+     suspend fun getActiveSignedPreKey(): SignedPreKeys?
+
+     @Query(
+            """
+           UPDATE signed_pre_keys
+           SET active = 0, deleteAfter = :deleteAfter
+           WHERE signedPreKeyId = :signedPreKeyId
+            """
+     )
+     suspend fun markAsInactive(
+         signedPreKeyId: String,
+         deleteAfter: Long
+     )
+
+     @Query(
+            """
+           DELETE FROM signed_pre_keys
+           WHERE active = 0
+           AND deleteAfter IS NOT NULL
+           AND deleteAfter <= :now
+            """
+     )
+     suspend fun deleteExpiredInactiveSignedPreKeys(now: Long)
+
+     @Query("UPDATE signed_pre_keys SET uploaded = 1 WHERE signedPreKeyId = :signedPreKeyId")
+     suspend fun markAsUploaded(signedPreKeyId: String)
+
 }

@@ -1,4 +1,9 @@
 package org.e2ee.data.skippedMessageKeys
 
-class SkippedMessageKeys {
+import androidx.room.Entity
+
+@Entity(tableName = "skipped_message_keys")
+data class SkippedMessageKeys(
+
+) {
 }

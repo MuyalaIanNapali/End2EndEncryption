@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -24,10 +26,20 @@ android {
 }
 
 dependencies {
+    val roomVersion = "2.8.4"
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.sqlcipher.android)
+    implementation(project(":crypto"))
+
+    implementation("net.zetetic:sqlcipher-android:4.12.0")
 }

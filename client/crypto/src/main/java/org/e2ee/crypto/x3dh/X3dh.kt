@@ -35,7 +35,7 @@ class X3dh(
 
         return PreKeyBundle(
             IKpub = keyManager.identityKeyPair.public.encoded,
-            SPKpub = keyManager.signedPreKeyPair.public.encoded,
+            SPKpub = Pair(null, keyManager.signedPreKeyPair.public.encoded),
             OPKpub = opkMap,
             signature = signature,
             IKsigPub = identitySigningKey.public.encoded
@@ -47,10 +47,10 @@ class X3dh(
         preKeyBundle: PreKeyBundle
     ) : Triple<ByteArray, KeyPair,String ?> {
         val IKpub = util.decodePublicKey(preKeyBundle.IKpub)
-        val SPKpub = util.decodePublicKey(preKeyBundle.SPKpub)
+        val SPKpub = util.decodePublicKey(preKeyBundle.SPKpub.second)
 
         val validSignature = sig.verifySignature(
-            preKeyBundle.SPKpub,
+            preKeyBundle.SPKpub.second,
             preKeyBundle.signature,
             sig.decodeEdPublicKey(preKeyBundle.IKsigPub)
         )

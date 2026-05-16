@@ -13,7 +13,7 @@ internal class DoubleRatchet(
 
     fun ratchetInitSenderHE(
         SK: ByteArray,
-        recieverPublicKey: PublicKey,
+        receiverPublicKey: PublicKey,
         sharedHKs: ByteArray,
         sharedNHKr: ByteArray?
     ): RatchetStateHE {
@@ -23,13 +23,13 @@ internal class DoubleRatchet(
             SK,
             ecdh.performDH(
                 DHs.private,
-                recieverPublicKey
+                receiverPublicKey
             )
         )
 
         return RatchetStateHE(
             DHs = DHs,
-            DHr = recieverPublicKey,
+            DHr = receiverPublicKey,
             RK = RK,
             CKs = CKs,
             CKr = null,

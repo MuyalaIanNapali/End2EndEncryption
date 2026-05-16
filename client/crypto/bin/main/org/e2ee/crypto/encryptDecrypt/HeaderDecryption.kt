@@ -2,13 +2,14 @@ package org.e2ee.crypto.encryptDecrypt
 
 import org.e2ee.crypto.doubleRatchet.RatchetStateHE
 import org.e2ee.crypto.doubleRatchet.deepCopy
+import org.e2ee.crypto.entities.SkippedMessageKeyId
 import org.e2ee.crypto.kdf.KDFChain
 import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-class HeaderDecryption {
+internal class HeaderDecryption {
     private val util = EncryptionAndDecryptionUtility()
 
     fun headerDecryption(
@@ -146,10 +147,15 @@ class HeaderDecryption {
 
                 CKr = chainKey
 
-                val key = Pair(HKr, Nr)
-                newSkipped[key] = messageKey
+                val key = SkippedMessageKeyId(
+                    headerKey = HKr.copyOf(),
+                    messageNumber = Nr
+                )
 
-                Nr +=1
+                newSkipped[key] = messageKey.copyOf()
+
+                Nr += 1
+
             }
         }
 
@@ -159,6 +165,5 @@ class HeaderDecryption {
             MKSKIPPED = newSkipped
         )
     }
-
 
 }

@@ -3,7 +3,7 @@ package org.e2ee.crypto.kdf
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-object HKDF {
+internal object HKDF {
     private const val HASH_ALGORITHM = "HmacSHA256"
     private const val HASH_LENGTH = 32
 

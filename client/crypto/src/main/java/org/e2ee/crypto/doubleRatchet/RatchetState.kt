@@ -1,5 +1,6 @@
 package org.e2ee.crypto.doubleRatchet
 
+import org.e2ee.crypto.entities.SkippedMessageKeyId
 import java.security.KeyPair
 import java.security.PublicKey
 
@@ -16,7 +17,7 @@ data class RatchetStateHE(
     var Nr: Int,
     var PN: Int,
 
-    val MKSKIPPED: MutableMap<Pair<ByteArray, Int>, ByteArray> = mutableMapOf(),
+    val MKSKIPPED: MutableMap<SkippedMessageKeyId, ByteArray> = mutableMapOf(),
 
     var HKs: ByteArray?,
     var HKr: ByteArray?,
@@ -26,7 +27,7 @@ data class RatchetStateHE(
     val MAX_SKIP: Int = 10
 )
 
-fun RatchetStateHE.deepCopy(): RatchetStateHE {
+internal fun RatchetStateHE.deepCopy(): RatchetStateHE {
     return RatchetStateHE(
         DHs = this.DHs,
         DHr = this.DHr,
@@ -44,12 +45,34 @@ fun RatchetStateHE.deepCopy(): RatchetStateHE {
     )
 }
 
-fun deepCopyMKSkipped(
-    original: MutableMap<Pair<ByteArray, Int>, ByteArray>
-): MutableMap<Pair<ByteArray, Int>, ByteArray> {
-    val newMap = mutableMapOf<Pair<ByteArray, Int>, ByteArray>()
+/*fun deepCopyMKSkipped(
+    original: MutableMap<SkippedMessageKeyId, ByteArray>
+): MutableMap<SkippedMessageKeyId, ByteArray> {
+    val newMap = mutableMapOf<SkippedMessageKeyId, ByteArray>()
+
     for ((k, v) in original) {
-        newMap[k] = v.copyOf()
+        val copiedKey = SkippedMessageKeyId(
+            headerKey = k.headerKey.copyOf(),
+            messageNumber = k.messageNumber
+        )
+
+        newMap[copiedKey] = v.copyOf()
     }
+
     return newMap
+}
+
+ */
+
+fun deepCopyMKSkipped(
+    original: MutableMap<SkippedMessageKeyId, ByteArray>
+): MutableMap<SkippedMessageKeyId, ByteArray> {
+    return original.mapKeys { (key, _) ->
+        SkippedMessageKeyId(
+            headerKey = key.headerKey.copyOf(),
+            messageNumber = key.messageNumber
+        )
+    }.mapValues { (_, value) ->
+        value.copyOf()
+    }.toMutableMap()
 }

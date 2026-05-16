@@ -1,7 +1,7 @@
 package org.e2ee.crypto.kdf
 
 
-class KDFChain: KDF{
+internal class KDFChain: KDF{
 
     override fun kdfChainKey(
         kdfChainKey: ByteArray

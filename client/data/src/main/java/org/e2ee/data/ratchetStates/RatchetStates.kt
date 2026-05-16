@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class RatchetStates(
     @PrimaryKey
     val sessionId: String,
-    val DHsPublic: ByteArray,    //KeyPair
+    val DHsPublic: ByteArray,
     val DHsPrivate: ByteArray,
-    val DHr: ByteArray?=null,                              //PublicKey?
+    val DHr: ByteArray?=null,
 
     val RK: ByteArray,
     val CKs: ByteArray?=null,
@@ -20,7 +20,7 @@ data class RatchetStates(
     val PN: Int,
 
 
-    //val MKSKIPPED: MutableMap<Pair<ByteArray, Int>, ByteArray> = mutableMapOf(),
+    val MKSKIPPED: ByteArray = ByteArray(0),
 
     var HKs: ByteArray?=null,
     var HKr: ByteArray?=null,
@@ -28,4 +28,115 @@ data class RatchetStates(
     var NHKr: ByteArray?=null,
 
     val MAX_SKIP: Int = 100
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RatchetStates
+
+        if (Ns != other.Ns) return false
+        if (Nr != other.Nr) return false
+        if (PN != other.PN) return false
+        if (MAX_SKIP != other.MAX_SKIP) return false
+        if (sessionId != other.sessionId) return false
+        if (!DHsPublic.contentEquals(other.DHsPublic)) return false
+        if (!DHsPrivate.contentEquals(other.DHsPrivate)) return false
+        if (!DHr.contentEquals(other.DHr)) return false
+        if (!RK.contentEquals(other.RK)) return false
+        if (!CKs.contentEquals(other.CKs)) return false
+        if (!CKr.contentEquals(other.CKr)) return false
+        if (!MKSKIPPED.contentEquals(other.MKSKIPPED)) return false
+        if (!HKs.contentEquals(other.HKs)) return false
+        if (!HKr.contentEquals(other.HKr)) return false
+        if (!NHKs.contentEquals(other.NHKs)) return false
+        if (!NHKr.contentEquals(other.NHKr)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = Ns
+        result = 31 * result + Nr
+        result = 31 * result + PN
+        result = 31 * result + MAX_SKIP
+        result = 31 * result + sessionId.hashCode()
+        result = 31 * result + DHsPublic.contentHashCode()
+        result = 31 * result + DHsPrivate.contentHashCode()
+        result = 31 * result + (DHr?.contentHashCode() ?: 0)
+        result = 31 * result + RK.contentHashCode()
+        result = 31 * result + (CKs?.contentHashCode() ?: 0)
+        result = 31 * result + (CKr?.contentHashCode() ?: 0)
+        result = 31 * result + MKSKIPPED.contentHashCode()
+        result = 31 * result + (HKs?.contentHashCode() ?: 0)
+        result = 31 * result + (HKr?.contentHashCode() ?: 0)
+        result = 31 * result + (NHKs?.contentHashCode() ?: 0)
+        result = 31 * result + (NHKr?.contentHashCode() ?: 0)
+        return result
+    }
+}
+
+
+data class RatchetStateDto(
+    var DHs: Pair<ByteArray, ByteArray>,    //KeyPair
+    var DHr: ByteArray?,                              //PublicKey?
+
+    var RK: ByteArray,
+    var CKs: ByteArray?,
+    var CKr: ByteArray?,
+
+    var Ns: Int,
+    var Nr: Int,
+    var PN: Int,
+
+    val MKSKIPPED: MutableMap<SkippedMessageKeyId, ByteArray> = mutableMapOf(),
+
+    var HKs: ByteArray?,
+    var HKr: ByteArray?,
+    var NHKs: ByteArray?,
+    var NHKr: ByteArray?,
+
+    val MAX_SKIP: Int = 10
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RatchetStateDto
+
+        if (Ns != other.Ns) return false
+        if (Nr != other.Nr) return false
+        if (PN != other.PN) return false
+        if (MAX_SKIP != other.MAX_SKIP) return false
+        if (DHs != other.DHs) return false
+        if (!DHr.contentEquals(other.DHr)) return false
+        if (!RK.contentEquals(other.RK)) return false
+        if (!CKs.contentEquals(other.CKs)) return false
+        if (!CKr.contentEquals(other.CKr)) return false
+        if (MKSKIPPED != other.MKSKIPPED) return false
+        if (!HKs.contentEquals(other.HKs)) return false
+        if (!HKr.contentEquals(other.HKr)) return false
+        if (!NHKs.contentEquals(other.NHKs)) return false
+        if (!NHKr.contentEquals(other.NHKr)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = Ns
+        result = 31 * result + Nr
+        result = 31 * result + PN
+        result = 31 * result + MAX_SKIP
+        result = 31 * result + DHs.hashCode()
+        result = 31 * result + (DHr?.contentHashCode() ?: 0)
+        result = 31 * result + RK.contentHashCode()
+        result = 31 * result + (CKs?.contentHashCode() ?: 0)
+        result = 31 * result + (CKr?.contentHashCode() ?: 0)
+        result = 31 * result + MKSKIPPED.hashCode()
+        result = 31 * result + (HKs?.contentHashCode() ?: 0)
+        result = 31 * result + (HKr?.contentHashCode() ?: 0)
+        result = 31 * result + (NHKs?.contentHashCode() ?: 0)
+        result = 31 * result + (NHKr?.contentHashCode() ?: 0)
+        return result
+    }
+}

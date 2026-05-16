@@ -1,4 +1,4 @@
-package org.e2ee.crypto.entities
+package org.e2ee.data.ratchetStates
 
 data class SkippedMessageKey(
     val id: SkippedMessageKeyId,

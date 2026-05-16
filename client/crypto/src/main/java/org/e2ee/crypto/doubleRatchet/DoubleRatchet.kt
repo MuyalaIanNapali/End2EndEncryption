@@ -6,7 +6,7 @@ import org.e2ee.crypto.kdf.KDFChain
 import java.security.KeyPair
 import java.security.PublicKey
 
-class DoubleRatchet(
+internal class DoubleRatchet(
     private val kdfChain: KDFChain,
     private val ecdh: EllipticCurveDiffieHellman
 ) {

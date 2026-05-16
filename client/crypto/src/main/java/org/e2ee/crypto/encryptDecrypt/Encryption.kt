@@ -10,13 +10,13 @@ import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import java.security.PublicKey
 
-data class HEADER(
+internal data class HEADER(
     var dhPublic: PublicKey,
     var PN: Int,
     var N: Int
 )
 
-class Encryption {
+internal class Encryption {
     private val sha256 = MessageDigest.getInstance("SHA-256")
     private val util = EncryptionAndDecryptionUtility()
 

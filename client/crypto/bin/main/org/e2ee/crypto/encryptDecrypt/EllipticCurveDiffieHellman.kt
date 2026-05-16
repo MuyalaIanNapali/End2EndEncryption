@@ -6,7 +6,7 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.KeyAgreement
 
-class EllipticCurveDiffieHellman {
+internal class EllipticCurveDiffieHellman {
 
     fun generateEllipticCurveKeyPair(): KeyPair {
         val keyGen = KeyPairGenerator.getInstance("X25519")

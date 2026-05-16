@@ -8,7 +8,7 @@ import java.security.PublicKey
 import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
 
-class SignatureHelper {
+internal class SignatureHelper {
     fun generateSigningKeyPair(): KeyPair {
         val keygen = KeyPairGenerator.getInstance("Ed25519")
         return keygen.generateKeyPair()

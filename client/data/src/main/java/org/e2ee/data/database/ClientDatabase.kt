@@ -4,21 +4,29 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import org.e2ee.data.opk.OneTimePreKeysDao
 import org.e2ee.data.opk.OneTimePreKeys
+import org.e2ee.data.ratchetStates.RatchetStates
+import org.e2ee.data.ratchetStates.RatchetStatesDao
 import org.e2ee.data.signedPreKeys.SignedPreKeys
+import org.e2ee.data.signedPreKeys.SignedPreKeysDao
 import org.e2ee.data.userKeys.UserKeys
+import org.e2ee.data.userKeys.UserKeysDao
 
 @Database(
     entities = [
         OneTimePreKeys::class,
         UserKeys::class,
-        SignedPreKeys::class
-               ],
+        SignedPreKeys::class,
+        RatchetStates::class
+    ],
     version = 1,
     exportSchema = false
 )
-abstract class ClientDatabase: RoomDatabase() {
+public abstract class ClientDatabase: RoomDatabase() {
 
-    abstract val oneTimePreKeysDao: OneTimePreKeysDao
+    abstract fun oneTimePreKeysDao(): OneTimePreKeysDao
+    abstract fun userKeysDao(): UserKeysDao
+    abstract fun signedPreKeysDao(): SignedPreKeysDao
+    abstract fun ratchetStatesDao(): RatchetStatesDao
 
     companion object{
         @Volatile

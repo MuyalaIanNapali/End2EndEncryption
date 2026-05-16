@@ -10,7 +10,7 @@ import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
 
-class X3dh(
+internal class X3dh(
     private val ecc: EllipticCurveDiffieHellman,
     private val sig: SignatureHelper
 ) {

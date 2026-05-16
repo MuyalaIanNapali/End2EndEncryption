@@ -40,4 +40,38 @@ data class SignedPreKeys(
 
     val uploaded: Boolean = false,
     val active: Boolean = false
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SignedPreKeys
+
+        if (localUserId != other.localUserId) return false
+        if (createdAt != other.createdAt) return false
+        if (expiresAt != other.expiresAt) return false
+        if (deleteAfter != other.deleteAfter) return false
+        if (uploaded != other.uploaded) return false
+        if (active != other.active) return false
+        if (signedPreKeyId != other.signedPreKeyId) return false
+        if (!publicKey.contentEquals(other.publicKey)) return false
+        if (!privateKey.contentEquals(other.privateKey)) return false
+        if (!signature.contentEquals(other.signature)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = localUserId
+        result = 31 * result + createdAt.hashCode()
+        result = 31 * result + expiresAt.hashCode()
+        result = 31 * result + (deleteAfter?.hashCode() ?: 0)
+        result = 31 * result + uploaded.hashCode()
+        result = 31 * result + active.hashCode()
+        result = 31 * result + signedPreKeyId.hashCode()
+        result = 31 * result + publicKey.contentHashCode()
+        result = 31 * result + privateKey.contentHashCode()
+        result = 31 * result + signature.contentHashCode()
+        return result
+    }
+}

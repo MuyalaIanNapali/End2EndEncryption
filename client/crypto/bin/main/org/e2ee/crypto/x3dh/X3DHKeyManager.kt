@@ -4,7 +4,7 @@ import org.e2ee.crypto.encryptDecrypt.EllipticCurveDiffieHellman
 import java.security.KeyPair
 import java.security.PrivateKey
 
-class X3DHKeyManager (
+internal class X3DHKeyManager (
 
     private val ecc: EllipticCurveDiffieHellman,
     private val sig : SignatureHelper

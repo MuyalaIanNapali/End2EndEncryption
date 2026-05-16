@@ -9,7 +9,7 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.spec.X509EncodedKeySpec
 
-class EncryptionAndDecryptionUtility {
+internal class EncryptionAndDecryptionUtility {
     fun concat(ad: ByteArray, header: ByteArray): ByteArray {
         val adLength = ad.size
 
@@ -92,7 +92,7 @@ class EncryptionAndDecryptionUtility {
 
             try {
                 // decrypt header bytes
-                val header =    HeaderDecryption().headerDecryption(
+                val header = HeaderDecryption().headerDecryption(
                     hk,
                     encryptedHeader
                 )
@@ -102,7 +102,7 @@ class EncryptionAndDecryptionUtility {
                     val newSkipped = state.MKSKIPPED.toMutableMap()
                     newSkipped.remove(key)
 
-                    val fullAD = EncryptionAndDecryptionUtility().concat(
+                    val fullAD = concat(
                         associatedData,
                         encryptedHeader
                     )

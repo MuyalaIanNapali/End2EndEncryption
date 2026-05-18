@@ -1,12 +1,14 @@
 server:
   port: 5000
-logging:
-  file:
-    path: logs
-  structured:
-    format:
-      console: ecs
-      file: ecs
+
+#logging:
+#  file:
+#    path: logs
+#  structured:
+#    format:
+#      console: ecs
+#      file: ecs
+
 
 spring:
   application:

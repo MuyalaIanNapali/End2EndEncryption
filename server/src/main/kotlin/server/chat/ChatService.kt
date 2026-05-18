@@ -40,13 +40,11 @@ class ChatService(
             message = request.message
         )
 
-        val payloadJson = objectMapper.writeValueAsString(chatMessage)
-
         val pendingMessage = PendingMessage(
             id = messageId,
             senderId = request.senderId,
             receiverId = request.receiverId,
-            payloadJson = payloadJson,
+            payload= chatMessage,
             status = MessageStatus.SENT,
             createdAt = LocalDateTime.now()
         )
@@ -70,6 +68,6 @@ class ChatService(
     fun getPendingMessagesFor(receiverId: String): List<ChatMessage> {
         return pendingMessageRepository
             .findByReceiverIdAndStatus(receiverId, MessageStatus.SENT)
-            .map { objectMapper.readValue(it.payloadJson, ChatMessage::class.java) }
+            .map { it.payload }
     }
 }

@@ -66,4 +66,19 @@ class ChatController(
             )
         )
     }
+
+    @MessageMapping("/chat/sync")
+    fun syncPendingMessages(principal: Principal) {
+        val receiverId = principal.name
+
+        val pendingMessages = chatService.getPendingMessagesFor(receiverId)
+
+        pendingMessages.forEach { message ->
+            messagingTemplate.convertAndSendToUser(
+                receiverId,
+                "/queue/messages",
+                message
+            )
+        }
+    }
 }

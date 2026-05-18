@@ -7,10 +7,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent
 import java.util.concurrent.ConcurrentHashMap
 
 @Component
-class OnlineUserTracker(
-    private val chatService: ChatService,
-    private val messagingTemplate: org.springframework.messaging.simp.SimpMessagingTemplate
-) {
+class OnlineUserTracker {
 
     private val onlineUsers = ConcurrentHashMap.newKeySet<String>()
 
@@ -21,23 +18,14 @@ class OnlineUserTracker(
     @EventListener
     fun handleConnected(event: SessionConnectedEvent) {
         val userId = event.user?.name ?: return
-
         onlineUsers.add(userId)
-
-        val pendingMessages = chatService.getPendingMessagesFor(userId)
-
-        pendingMessages.forEach { message ->
-            messagingTemplate.convertAndSendToUser(
-                userId,
-                "/queue/messages",
-                message
-            )
-        }
+        println("User connected: $userId")
     }
 
     @EventListener
     fun handleDisconnected(event: SessionDisconnectEvent) {
         val userId = event.user?.name ?: return
         onlineUsers.remove(userId)
+        println("User disconnected: $userId")
     }
 }

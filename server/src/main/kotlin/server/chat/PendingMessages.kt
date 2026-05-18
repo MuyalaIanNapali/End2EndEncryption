@@ -1,6 +1,8 @@
 package server.chat
 
 import jakarta.persistence.*
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import java.time.LocalDateTime
 
 @Entity
@@ -16,9 +18,9 @@ class PendingMessage(
     @Column(name = "receiver_id", nullable = false)
     var receiverId: String,
 
-    @Lob
-    @Column(name = "payload_json", nullable = false, columnDefinition = "TEXT")
-    var payloadJson: String,
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "payload_json", nullable = false, columnDefinition = "jsonb")
+    var payload: ChatMessage,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

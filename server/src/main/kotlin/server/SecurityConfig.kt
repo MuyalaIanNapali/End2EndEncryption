@@ -34,7 +34,8 @@ class SecurityConfig(
                 it.requestMatchers(
                     "/api/v1/users/login",
                     "/api/v1/users/createUser",
-                    "/api/v1/users/refresh"
+                    "/api/v1/users/refresh",
+                    "/ws/**"
                 ).permitAll()
 
                 it.anyRequest().authenticated()

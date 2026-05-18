@@ -22,7 +22,7 @@ class UserService(
     private val passwordEncoder: PasswordEncoder,
     private val refreshTokenService: RefreshTokenService,
     private val jwtService: JWTService,
-    private val keyManagerService: KeyManagerService
+    private val keyManagerService: KeyManagerService,
 ) {
 
     fun hashPassword(password: String): String {
@@ -47,9 +47,9 @@ class UserService(
         user.password = hashPassword(rawPassword)
 
         userRepository.save(user)
-        request.preKeyBundle.userId = user.id
+        //request.preKeyBundle.userId = user.id
 
-        keyManagerService.savePreKeyBundle(request.preKeyBundle)
+        //keyManagerService.savePreKeyBundle(request.preKeyBundle)
 
         return loginUser(LoginRequest(user.username, rawPassword))
     }
@@ -68,7 +68,10 @@ class UserService(
                 .body("Invalid password")
         }
 
-        val accessToken = jwtService.generateAccessToken(requireNotNull(user.username))
+        val accessToken = jwtService.generateAccessToken(
+            userId = user.id!!,
+            requireNotNull(user.username)
+        )
         val refreshToken = refreshTokenService.createRefreshToken(requireNotNull(user.id))
 
         val preKeyVerification = keyManagerService.getPreKeyVerificationBundle(user.id!!)
@@ -104,7 +107,9 @@ class UserService(
 
         refreshTokenService.deleteToken(token)
 
-        val newAccessToken = jwtService.generateAccessToken(requireNotNull(user.username))
+        val newAccessToken = jwtService.generateAccessToken(
+            userId = user.id!!,
+            requireNotNull(user.username))
 
         val newRefreshToken = refreshTokenService.createRefreshToken(refresh.userId)
 

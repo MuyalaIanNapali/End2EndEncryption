@@ -12,7 +12,7 @@ class User(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?=null,
+    var id: Long? = null,
 
     @Column(name = "username", nullable = false, unique = true)
     var username: String,

@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 
 // Entity → Response
 fun User.toResponse(now: LocalDateTime) = UserResponse(
+    id = id!!,
     username = username,
     email = email,
     avatarUrl = avatarUrl,

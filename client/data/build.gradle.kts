@@ -40,6 +40,13 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.sqlcipher.android)
     implementation(project(":crypto"))
+    implementation(libs.retrofit)
+    implementation(libs.converter.scalars)
+    implementation(libs.okhttp)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.converter.gson)
 
-    implementation("net.zetetic:sqlcipher-android:4.12.0")
+
+
+    implementation(libs.sqlcipher.android.v4160)
 }

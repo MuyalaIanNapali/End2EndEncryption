@@ -1,4 +1,4 @@
-package org.e2ee.data.signedPreKeys
+package org.e2ee.data.local.signedPreKeys
 
 import androidx.room.Dao
 import androidx.room.Insert

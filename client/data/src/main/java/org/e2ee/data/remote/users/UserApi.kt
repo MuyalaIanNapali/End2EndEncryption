@@ -1,11 +1,11 @@
-package org.e2ee.data.local.remote.userApi
+package org.e2ee.data.remote.users
 
-import org.e2ee.data.local.remote.userApi.dto.LoginRequest
-import org.e2ee.data.local.remote.userApi.dto.UpdateUserRequest
-import org.e2ee.data.local.remote.userApi.dto.UserRequest
+import org.e2ee.data.remote.users.dto.LoginRequest
+import org.e2ee.data.remote.users.dto.UpdateUserRequest
+import org.e2ee.data.remote.users.dto.UserRequest
 import retrofit2.Response
 import retrofit2.http.GET
-import org.e2ee.data.local.remote.userApi.dto.UserResponse
+import org.e2ee.data.remote.users.dto.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -13,26 +13,26 @@ import retrofit2.http.Path
 
 interface UserApi {
     @GET("/api/v1/users")
-    suspend fun getUsers(): Response<List<org.e2ee.data.local.remote.userApi.dto.UserResponse>>
+    suspend fun getUsers(): Response<List<UserResponse>>
 
     @POST("/api/v1/users/createUser")
-    suspend fun createUser(
-        @Body request: org.e2ee.data.local.remote.userApi.dto.UserRequest
-    ): Response<org.e2ee.data.local.remote.userApi.dto.UserResponse>
+    suspend fun createAccount(
+        @Body request: UserRequest
+    ): Response<UserResponse>
 
     @POST("/api/v1/users/login")
     suspend fun login(
-        @Body request: org.e2ee.data.local.remote.userApi.dto.LoginRequest
-    ): Response<org.e2ee.data.local.remote.userApi.dto.UserResponse>
+        @Body request: LoginRequest
+    ): Response<UserResponse>
 
     @GET("/api/v1/users/{username}")
     suspend fun getUserByUsername(
         @Path("username") username: String
-    ): Response<org.e2ee.data.local.remote.userApi.dto.UserResponse>
+    ): Response<UserResponse>
 
     @PATCH("/api/v1/users/updateUser")
     suspend fun updateUser(
-        @Body request: org.e2ee.data.local.remote.userApi.dto.UpdateUserRequest
+        @Body request: UpdateUserRequest
     ): Response<Any>
 
     @POST("/api/v1/users/logout")

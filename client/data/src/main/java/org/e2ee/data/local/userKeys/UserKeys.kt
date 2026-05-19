@@ -1,4 +1,4 @@
-package org.e2ee.data.userKeys
+package org.e2ee.data.local.userKeys
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

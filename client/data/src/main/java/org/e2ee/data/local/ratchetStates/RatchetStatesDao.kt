@@ -1,11 +1,10 @@
-package org.e2ee.data.ratchetStates
+package org.e2ee.data.local.ratchetStates
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room.Upsert
 
 @Dao
 interface RatchetStatesDao {

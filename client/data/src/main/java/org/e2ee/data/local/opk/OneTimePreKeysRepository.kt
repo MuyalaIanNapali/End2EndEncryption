@@ -1,4 +1,4 @@
-package org.e2ee.data.opk
+package org.e2ee.data.local.opk
 
 import androidx.annotation.WorkerThread
 import org.e2ee.crypto.Crypto

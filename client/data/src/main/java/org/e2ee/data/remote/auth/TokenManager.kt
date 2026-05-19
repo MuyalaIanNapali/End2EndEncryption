@@ -1,4 +1,4 @@
-package org.e2ee.data.local.remote.auth
+package org.e2ee.data.remote.auth
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -12,25 +12,25 @@ class TokenManager(
     }
 
     fun saveAccessToken(token: String) {
-        prefs.edit { putString(_root_ide_package_.org.e2ee.data.local.remote.auth.TokenManager.Companion.ACCESS_TOKEN, token) }
+        prefs.edit { putString(ACCESS_TOKEN, token) }
     }
 
     fun saveRefreshToken(token: String) {
-        prefs.edit { putString(_root_ide_package_.org.e2ee.data.local.remote.auth.TokenManager.Companion.REFRESH_TOKEN, token) }
+        prefs.edit { putString(REFRESH_TOKEN, token) }
     }
 
     fun getAccessToken(): String? {
-        return prefs.getString(_root_ide_package_.org.e2ee.data.local.remote.auth.TokenManager.Companion.ACCESS_TOKEN, null)
+        return prefs.getString(ACCESS_TOKEN, null)
     }
 
     fun getRefreshToken(): String? {
-        return prefs.getString(_root_ide_package_.org.e2ee.data.local.remote.auth.TokenManager.Companion.REFRESH_TOKEN, null)
+        return prefs.getString(REFRESH_TOKEN, null)
     }
 
     fun clearTokens() {
         prefs.edit {
-            remove(_root_ide_package_.org.e2ee.data.local.remote.auth.TokenManager.Companion.ACCESS_TOKEN)
-                .remove(_root_ide_package_.org.e2ee.data.local.remote.auth.TokenManager.Companion.REFRESH_TOKEN)
+            remove(ACCESS_TOKEN)
+                .remove(REFRESH_TOKEN)
         }
 
     }

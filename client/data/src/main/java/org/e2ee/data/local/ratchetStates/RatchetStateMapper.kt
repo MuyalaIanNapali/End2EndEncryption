@@ -1,4 +1,4 @@
-package org.e2ee.data.ratchetStates
+package org.e2ee.data.local.ratchetStates
 
 fun mkSkippedToList(
     map: MutableMap<SkippedMessageKeyId, ByteArray>
@@ -37,7 +37,9 @@ fun RatchetStateDto.toRatchetStates(sessionId: String): RatchetStates {
         Ns = this.Ns,
         Nr = this.Nr,
         PN = this.PN,
-        MKSKIPPED = SkippedMessageKeysCodec.encodeList(mkSkippedToList(this.MKSKIPPED)),
+        MKSKIPPED = SkippedMessageKeysCodec.encodeList(
+            mkSkippedToList(this.MKSKIPPED)
+        ),
         HKs = this.HKs,
         HKr = this.HKr,
         NHKs = this.NHKs,
@@ -55,7 +57,11 @@ fun RatchetStates.toRatchetStateDto(): RatchetStateDto {
         Ns = this.Ns,
         Nr = this.Nr,
         PN = this.PN,
-        MKSKIPPED = listToMkSkipped(SkippedMessageKeysCodec.decodeList(this.MKSKIPPED)),
+        MKSKIPPED = listToMkSkipped(
+            SkippedMessageKeysCodec.decodeList(
+                this.MKSKIPPED
+            )
+        ),
         HKs = this.HKs,
         HKr = this.HKr,
         NHKs = this.NHKs,

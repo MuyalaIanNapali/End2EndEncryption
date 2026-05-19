@@ -1,4 +1,4 @@
-package org.e2ee.data.ratchetStates
+package org.e2ee.data.local.ratchetStates
 
 import java.nio.ByteBuffer
 

@@ -1,16 +1,16 @@
-package org.e2ee.data.local.remote.auth
+package org.e2ee.data.remote.auth
 
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Route
 import okhttp3.Response
 import okhttp3.Request
-import org.e2ee.data.local.remote.userApi.AuthApi
-import org.e2ee.data.local.remote.userApi.dto.RefreshRequest
+import org.e2ee.data.remote.users.AuthApi
+import org.e2ee.data.remote.users.dto.RefreshRequest
 
 class TokenAuthenticator(
-    private val tokenManager: org.e2ee.data.local.remote.auth.TokenManager,
-    private val authApi: org.e2ee.data.local.remote.userApi.AuthApi
+    private val tokenManager: TokenManager,
+    private val authApi: AuthApi
 ) : Authenticator{
     override fun authenticate(
         route: Route?,
@@ -27,7 +27,7 @@ class TokenAuthenticator(
 
             val refreshResponse = runBlocking {
                 authApi.refreshToken(
-                    _root_ide_package_.org.e2ee.data.local.remote.userApi.dto.RefreshRequest(refresh)
+                    RefreshRequest(refresh)
                 )
             }
 

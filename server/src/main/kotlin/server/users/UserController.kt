@@ -45,14 +45,15 @@ class UserController(
         return userService.findUserByUsername(username)
     }
 
-    @PatchMapping(value = ["/updateUser/{userId}"])
-    fun updateUserDetails(@PathVariable userId: Long, @RequestBody @Valid request: UpdateUserRequest): ResponseEntity<Any> {
-        return userService.updateUserDetails(userId, request)
+    @PatchMapping(value = ["/updateUser"])
+    fun updateUserDetails(principal: Principal, @RequestBody @Valid request: UpdateUserRequest): ResponseEntity<Any> {
+        return userService.updateUserDetails(principal.name, request)
     }
 
     @PostMapping("/logout")
     fun logoutUser(principal: Principal): ResponseEntity<Void> {
-        return userService.logoutUser(principal.name)
+        userService.logoutUser(principal.name)
+        return ResponseEntity.noContent().build()
     }
 
     @PostMapping("/refresh")

@@ -1,7 +1,7 @@
-package org.e2ee.data.signedPreKeys
+package org.e2ee.data.local.signedPreKeys
 
 import org.e2ee.crypto.Crypto
-import org.e2ee.data.userKeys.UserKeysRepository
+import org.e2ee.data.local.userKeys.UserKeysRepository
 import java.util.UUID
 import javax.inject.Inject
 

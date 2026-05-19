@@ -1,7 +1,6 @@
-package org.e2ee.data.userKeys
+package org.e2ee.data.local.userKeys
 
 import androidx.annotation.WorkerThread
-import org.e2ee.crypto.Crypto
 
 class UserKeysRepository (
     private val dao: UserKeysDao,

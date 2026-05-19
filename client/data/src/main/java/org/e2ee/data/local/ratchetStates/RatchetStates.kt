@@ -1,4 +1,4 @@
-package org.e2ee.data.ratchetStates
+package org.e2ee.data.local.ratchetStates
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

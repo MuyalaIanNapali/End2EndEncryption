@@ -1,4 +1,4 @@
-package org.e2ee.data.userKeys
+package org.e2ee.data.local.userKeys
 
 import androidx.room.Dao
 import androidx.room.Query

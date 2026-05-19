@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import server.jwt.JWTService
+import server.jwt.RefreshRequest
 import server.jwt.RefreshResponse
 import server.jwt.RefreshTokenService
 import server.keymanager.KeyManagerService
@@ -102,6 +103,7 @@ class UserService(
     fun refreshToken(token: String): ResponseEntity<RefreshResponse> {
         val refresh = refreshTokenService.validate(token)
 
+
         val user = userRepository.findById(refresh.userId).orElse(null)
             ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
 
@@ -121,8 +123,8 @@ class UserService(
         )
     }
 
-    fun updateUserDetails(userId: Long, request: UpdateUserRequest): ResponseEntity<Any> {
-        val user = userRepository.findById(userId).orElse(null)
+    fun updateUserDetails(username: String, request: UpdateUserRequest): ResponseEntity<Any> {
+        val user = userRepository.findByUsername(username)
             ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
 
         // If username/email are being changed ensure they are not already taken by another user

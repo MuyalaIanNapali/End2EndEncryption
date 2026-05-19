@@ -1,10 +1,10 @@
-package org.e2ee.data.signedPreKeys
+package org.e2ee.data.local.signedPreKeys
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import org.e2ee.data.userKeys.UserKeys
+import org.e2ee.data.local.userKeys.UserKeys
 
 @Entity(
     tableName = "signed_pre_keys",

@@ -183,4 +183,14 @@ class Crypto {
         return ecdh.generateEllipticCurveKeyPair()
     }
 
+    fun generateIKAndIKsPairs():Pair<Pair<ByteArray, ByteArray>, Pair<ByteArray, ByteArray>> {
+        val identityKeyPair = ecdh.generateEllipticCurveKeyPair()
+        val signingKeyPair = sig.generateSigningKeyPair()
+
+        return Pair(
+            Pair(identityKeyPair.public.encoded, identityKeyPair.private.encoded),
+            Pair(signingKeyPair.public.encoded, signingKeyPair.private.encoded)
+        )
+    }
+
 }

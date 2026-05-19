@@ -9,7 +9,7 @@ data class UserKeys(
     val id: Int = 1,
 
     val userId : Long ? = null,
-    val identityKeyPub: ByteArray,
+    val identityKeyPublic: ByteArray,
     val identityKeyPrivate : ByteArray,
     val identitySigningKeyPublic : ByteArray,
     val identitySigningKeyPrivate : ByteArray
@@ -22,7 +22,7 @@ data class UserKeys(
 
         if (id != other.id) return false
         if (userId != other.userId) return false
-        if (!identityKeyPub.contentEquals(other.identityKeyPub)) return false
+        if (!identityKeyPublic.contentEquals(other.identityKeyPublic)) return false
         if (!identityKeyPrivate.contentEquals(other.identityKeyPrivate)) return false
         if (!identitySigningKeyPublic.contentEquals(other.identitySigningKeyPublic)) return false
         if (!identitySigningKeyPrivate.contentEquals(other.identitySigningKeyPrivate)) return false
@@ -33,7 +33,7 @@ data class UserKeys(
     override fun hashCode(): Int {
         var result = id
         result = 31 * result + (userId?.hashCode() ?: 0)
-        result = 31 * result + identityKeyPub.contentHashCode()
+        result = 31 * result + identityKeyPublic.contentHashCode()
         result = 31 * result + identityKeyPrivate.contentHashCode()
         result = 31 * result + identitySigningKeyPublic.contentHashCode()
         result = 31 * result + identitySigningKeyPrivate.contentHashCode()

@@ -9,5 +9,5 @@ data class PreKeyBundle(
 
     val identityKeySigning: ByteArray,
 
-    val opkMap: Map<String, ByteArray>,
+    val opkMap: Map<String, ByteArray>? = null,
 )

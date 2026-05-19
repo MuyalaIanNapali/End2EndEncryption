@@ -22,4 +22,7 @@ interface UserDao {
     @Update
     suspend fun updateUser(user: User)
 
+    @Query("UPDATE user SET userId= :serverId WHERE localId = 1")
+    suspend fun updateUserServerId(serverId: Long)
+
 }

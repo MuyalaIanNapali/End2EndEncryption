@@ -1,6 +1,7 @@
 package org.e2ee.data.remote.users
 
 import org.e2ee.data.remote.users.dto.LoginRequest
+import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
 import retrofit2.Response
@@ -18,12 +19,12 @@ interface UserApi {
     @POST("/api/v1/users/createUser")
     suspend fun createAccount(
         @Body request: UserRequest
-    ): Response<UserResponse>
+    ): Response<LoginResponse>
 
     @POST("/api/v1/users/login")
     suspend fun login(
         @Body request: LoginRequest
-    ): Response<UserResponse>
+    ): Response<LoginResponse>
 
     @GET("/api/v1/users/{username}")
     suspend fun getUserByUsername(
@@ -33,7 +34,7 @@ interface UserApi {
     @PATCH("/api/v1/users/updateUser")
     suspend fun updateUser(
         @Body request: UpdateUserRequest
-    ): Response<Any>
+    ): Response<Unit>
 
     @POST("/api/v1/users/logout")
     suspend fun logout(): Response<Unit>

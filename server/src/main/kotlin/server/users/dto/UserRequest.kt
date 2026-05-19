@@ -17,5 +17,5 @@ data class UserRequest(
 
     val avatarUrl: String? = null,
 
-    val preKeyBundle: PreKeyBundle? = null,
+    val preKeyBundle: PreKeyBundle,
 )

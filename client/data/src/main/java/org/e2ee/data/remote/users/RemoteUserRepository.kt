@@ -1,6 +1,7 @@
 package org.e2ee.data.remote.users
 
 import org.e2ee.data.remote.users.dto.LoginRequest
+import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
 import org.e2ee.data.remote.users.dto.UserResponse
@@ -8,7 +9,7 @@ import org.e2ee.data.remote.users.dto.UserResponse
 class RemoteUserRepository(
     private val userApi: UserApi,
 ) {
-    suspend fun createAccount(request: UserRequest): UserResponse {
+    suspend fun createAccount(request: UserRequest): LoginResponse {
         val response = userApi.createAccount(request)
         if (response.isSuccessful) {
             return response.body()!!
@@ -17,7 +18,7 @@ class RemoteUserRepository(
         }
     }
 
-    suspend fun login(request: LoginRequest): UserResponse{
+    suspend fun login(request: LoginRequest): LoginResponse{
         val response = userApi.login(request)
         if (response.isSuccessful) {
             return response.body()!!
@@ -44,12 +45,12 @@ class RemoteUserRepository(
         }
     }
 
-    suspend fun updateAccount(request: UpdateUserRequest): Any {
+    suspend fun updateAccount(request: UpdateUserRequest): Boolean {
         val response = userApi.updateUser(request)
-        if (!response.isSuccessful) {
-            throw Exception("Account update failed: ${response.code()} ${response.message()}")
+        if (response.isSuccessful) {
+            return true
         }else{
-            return response
+            throw Exception("Account update failed: ${response.code()} ${response.message()}")
         }
     }
 
@@ -60,8 +61,4 @@ class RemoteUserRepository(
             throw Exception("Logout failed: ${response.code()} ${response.message()}")
         }
     }
-
-
-
-
 }

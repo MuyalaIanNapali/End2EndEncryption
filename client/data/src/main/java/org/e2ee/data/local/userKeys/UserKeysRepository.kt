@@ -1,9 +1,11 @@
 package org.e2ee.data.local.userKeys
 
 import androidx.annotation.WorkerThread
+import org.e2ee.crypto.Crypto
 
 class UserKeysRepository (
     private val dao: UserKeysDao,
+    private val crypto: Crypto
 ){
     @WorkerThread
     suspend fun insertUserKeys(userKeys: UserKeys) {
@@ -23,6 +25,18 @@ class UserKeysRepository (
     @WorkerThread
     suspend fun deleteUserKeys() {
         dao.deleteUserKeys()
+    }
+
+    @WorkerThread
+    suspend fun generateAndStoreUserKeys() {
+       val (identityKeyPair, identitySigningKeyPair) = crypto.generateIKAndIKsPairs()
+        val userKeys = UserKeys(
+            identityKeyPublic = identityKeyPair.first,
+            identityKeyPrivate = identityKeyPair.second,
+            identitySigningKeyPublic = identitySigningKeyPair.first,
+            identitySigningKeyPrivate = identitySigningKeyPair.second
+        )
+        insertUserKeys(userKeys)
     }
 
 }

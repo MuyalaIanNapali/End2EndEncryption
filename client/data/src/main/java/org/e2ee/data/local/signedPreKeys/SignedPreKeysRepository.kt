@@ -2,6 +2,7 @@ package org.e2ee.data.local.signedPreKeys
 
 import org.e2ee.crypto.Crypto
 import org.e2ee.data.local.userKeys.UserKeysRepository
+import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
 import java.util.UUID
 import javax.inject.Inject
 
@@ -38,12 +39,16 @@ class SignedPreKeysRepository @Inject constructor(
         createNewActiveSignedPreKey()
     }
 
+    suspend fun getActiveSignedPreKeyBundle(): SignedPreKeyBundle? {
+        return dao.getActiveSignedPreKeyBundle()
+    }
+
     private suspend fun createNewActiveSignedPreKey() {
         val userKeys = userKeysRepository.getUserKeys()
             ?: throw IllegalStateException("User keys not initialized")
 
         val signedPreKeyPairAndSignature = crypto.generateSPKAndSignature(
-            userKeys.identitySigningKeyPriv
+            userKeys.identitySigningKeyPrivate
         )
 
         dao.insertSignedPreKey(
@@ -62,4 +67,6 @@ class SignedPreKeysRepository @Inject constructor(
     private fun generateSignedPreKeyId(): String {
         return "SPK_${System.currentTimeMillis()}_${UUID.randomUUID()}"
     }
+
+
 }

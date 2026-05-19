@@ -29,6 +29,5 @@ fun UserRequest.toEntity() = User(
 fun User.updateFrom(request: UpdateUserRequest) {
     request.username?.let { username = it }
     request.email?.let { email = it }
-    request.password?.let { password = it }
     request.avatarUrl?.let { avatarUrl = it }
 }

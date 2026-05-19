@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
 
 @Dao
 interface SignedPreKeysDao {
@@ -40,5 +41,14 @@ interface SignedPreKeysDao {
 
      @Query("UPDATE signed_pre_keys SET uploaded = 1 WHERE signedPreKeyId = :signedPreKeyId")
      suspend fun markAsUploaded(signedPreKeyId: String)
+
+     @Query(
+         """
+             SELECT signedPreKeyId, publicKey, signature
+                FROM signed_pre_keys
+                WHERE active = 1
+         """
+     )
+        suspend fun getActiveSignedPreKeyBundle(): SignedPreKeyBundle?
 
 }

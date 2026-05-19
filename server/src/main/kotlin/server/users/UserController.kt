@@ -46,8 +46,9 @@ class UserController(
     }
 
     @PatchMapping(value = ["/updateUser"])
-    fun updateUserDetails(principal: Principal, @RequestBody @Valid request: UpdateUserRequest): ResponseEntity<Any> {
-        return userService.updateUserDetails(principal.name, request)
+    fun updateUserDetails(principal: Principal, @RequestBody @Valid request: UpdateUserRequest): ResponseEntity<Void> {
+         userService.updateUserDetails(principal.name, request)
+        return ResponseEntity.noContent().build()
     }
 
     @PostMapping("/logout")

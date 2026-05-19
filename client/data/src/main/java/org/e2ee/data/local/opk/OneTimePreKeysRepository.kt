@@ -13,7 +13,7 @@ class OneTimePreKeysRepository(
     }
 
     @WorkerThread
-    suspend fun insertOneTimePreKey(count: Int) {
+    suspend fun generateAndStoreOPK(count: Int) {
         val preKeys = (1..count).map { index ->
             val opkId = generateOPKId()
             val keyPair = crypto.generateKeyPair()
@@ -33,13 +33,18 @@ class OneTimePreKeysRepository(
     }
 
     @WorkerThread
-    suspend fun getNotUploaded(): List<OneTimePreKeys> {
+    suspend fun getNotUploaded(): List<OneTimePreKeys>? {
         return dao.getNotUploaded()
     }
 
     @WorkerThread
     suspend fun markAsUploaded(opkIds: List<String>) {
         dao.markAsUploaded(opkIds)
+    }
+
+    @WorkerThread
+    suspend fun countNotConsumed(): Int {
+        return dao.countNotConsumed()
     }
 
 }

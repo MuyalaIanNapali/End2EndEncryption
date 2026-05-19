@@ -34,4 +34,11 @@ class TokenManager(
         }
 
     }
+
+    fun saveTokens(accessToken: String, refreshToken: String) {
+        prefs.edit {
+            putString(ACCESS_TOKEN, accessToken)
+            putString(REFRESH_TOKEN, refreshToken)
+        }
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import server.keymanager.dto.PreKeyBundle
@@ -20,20 +21,28 @@ class KeyManagerController (
     private val opkService: OpkService,
 ){
     @PostMapping("/updateSignedPreKey")
-    fun updateSignedPreKey(updateSignedPreKeyBundle: UpdateSignedPreKeyBundle): ResponseEntity<Any> {
-        return keyManagerService.updateSignedPreKeyBundle(updateSignedPreKeyBundle)
-
+    fun updateSignedPreKey(
+        @RequestBody updateSignedPreKeyBundle: UpdateSignedPreKeyBundle
+    ): ResponseEntity<Void> {
+        keyManagerService.updateSignedPreKeyBundle(updateSignedPreKeyBundle)
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/updateOPK")
-    fun updateOPK(updateOpkKeys: UpdateOpkKeys): ResponseEntity<Any> {
-        return opkService.updateOpkKeys(updateOpkKeys).let { ResponseEntity.ok().build() }
+    fun updateOPK(
+        @RequestBody updateOpkKeys: UpdateOpkKeys
+    ): ResponseEntity<Void> {
+        opkService.updateOpkKeys(updateOpkKeys)
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/updatePreKeyBundle")
-    fun updatePreKeyBundle(preKeyBundle: PreKeyBundle):ResponseEntity<Any> {
-        return keyManagerService.updatePreKeyBundle(preKeyBundle)
-    }
+    fun updatePreKeyBundle(
+        @RequestBody preKeyBundle: PreKeyBundle
+    ) : ResponseEntity<Void>{
+        keyManagerService.updatePreKeyBundle(preKeyBundle)
 
+        return ResponseEntity.ok().build()
+    }
 
 }

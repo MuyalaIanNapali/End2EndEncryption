@@ -30,11 +30,21 @@ class UserService(
         return passwordEncoder.encode(password)!!
     }
 
-    fun verifyPassword(password: String, hashedPassword: String): Boolean {
+    fun verifyPassword(
+        password: String,
+        hashedPassword: String
+    ): Boolean {
         return passwordEncoder.matches(password, hashedPassword)
     }
 
-    fun getUsers()= ResponseEntity.ok(userRepository.findAll().map { it.toResponse(LocalDateTime.now()) })
+    fun getUsers()= ResponseEntity.ok(
+        userRepository.findAll()
+            .map {
+                it.toResponse(
+                    LocalDateTime.now()
+                )
+            }
+    )
 
     @Transactional
     fun createUser(request: UserRequest): ResponseEntity<Any> {
@@ -48,9 +58,9 @@ class UserService(
         user.password = hashPassword(rawPassword)
 
         userRepository.save(user)
-        //request.preKeyBundle.userId = user.id
+        request.preKeyBundle.userId = user.id
 
-        //keyManagerService.savePreKeyBundle(request.preKeyBundle)
+        keyManagerService.savePreKeyBundle(request.preKeyBundle)
 
         return loginUser(LoginRequest(user.username, rawPassword))
     }
@@ -123,34 +133,32 @@ class UserService(
         )
     }
 
-    fun updateUserDetails(username: String, request: UpdateUserRequest): ResponseEntity<Any> {
+    fun updateUserDetails(username: String, request: UpdateUserRequest) {
         val user = userRepository.findByUsername(username)
-            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+            ?: throw RuntimeException("User not found")
 
-        // If username/email are being changed ensure they are not already taken by another user
-        request.username?.let { newUsername ->
-            if (newUsername != user.username && userRepository.findByUsername(newUsername) != null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken")
+        val newUsername = request.username?.trim()
+        val newEmail = request.email?.trim()?.lowercase()
+
+        newUsername?.let {
+            if (it != user.username && userRepository.findByUsername(it) != null) {
+                throw RuntimeException("Username already taken")
             }
         }
 
-        request.email?.let { newEmail ->
-            if (newEmail != user.email && userRepository.findByEmail(newEmail) != null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already taken")
+        newEmail?.let {
+            if (it != user.email && userRepository.findByEmail(it) != null) {
+                throw RuntimeException("Email already taken")
             }
         }
 
-        // apply updates
         user.updateFrom(request)
 
-        // hash password if it was updated
-        request.password?.let { raw ->
-            user.password = hashPassword(raw)
+        request.password?.let { rawPassword ->
+            user.password = hashPassword(rawPassword)
         }
 
         userRepository.save(user)
-
-        return ResponseEntity.ok(user.toResponse(LocalDateTime.now()))
     }
 
 }

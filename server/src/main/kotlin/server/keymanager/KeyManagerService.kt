@@ -101,18 +101,17 @@ class KeyManagerService(
         )
     }
 
-    fun updateSignedPreKeyBundle(updateSignedPreKeyBundle: UpdateSignedPreKeyBundle): ResponseEntity<Any>{
+    fun updateSignedPreKeyBundle(updateSignedPreKeyBundle: UpdateSignedPreKeyBundle){
         val userPublicKeys = userPublicKeysRepository.findByUserId(updateSignedPreKeyBundle.userId)
-            ?: return ResponseEntity.status(404).body("User not found")
+            ?: throw RuntimeException("User not found")
 
         userPublicKeys.updateFromSPK(updateSignedPreKeyBundle)
         userPublicKeysRepository.save(userPublicKeys)
-        return ResponseEntity.ok().build()
     }
 
-    fun updatePreKeyBundle(preKeyBundle: PreKeyBundle):ResponseEntity<Any> {
+    fun updatePreKeyBundle(preKeyBundle: PreKeyBundle){
         val userPublicKeys = userPublicKeysRepository.findByUserId(preKeyBundle.userId!!)
-            ?: return ResponseEntity.status(404).body("User not found")
+            ?: throw RuntimeException("user public key not found")
 
         userPublicKeys.updateFromPreKeyBundle(preKeyBundle)
 
@@ -125,7 +124,6 @@ class KeyManagerService(
             )
             oneTimePreKeysRepository.save(oneTimePreKey)
         }
-        return ResponseEntity.ok().build()
     }
 
     fun getPreKeyVerificationBundle(userId: Long): PreKeyVerification? {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import server.jwt.RefreshRequest
 import server.jwt.RefreshResponse
 import server.users.dto.LoginRequest
+import server.users.dto.LoginResponse
 import server.users.dto.UpdateUserRequest
 import server.users.dto.UserRequest
 import server.users.dto.UserResponse
@@ -31,12 +32,12 @@ class UserController(
     }
 
     @PostMapping(value = ["/createUser"])
-    fun createUser(@RequestBody @Valid userRequest: UserRequest): ResponseEntity<Any> {
+    fun createUser(@RequestBody @Valid userRequest: UserRequest): ResponseEntity<LoginResponse> {
         return userService.createUser(userRequest)
     }
 
     @PostMapping(value = ["/login"])
-    fun loginUser(@RequestBody @Valid request: LoginRequest): ResponseEntity<Any> {
+    fun loginUser(@RequestBody @Valid request: LoginRequest): ResponseEntity<LoginResponse> {
         return userService.loginUser(request)
     }
 

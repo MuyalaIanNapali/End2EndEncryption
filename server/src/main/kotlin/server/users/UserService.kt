@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import server.exceptionHandler.EmailAlreadyTakenException
+import server.exceptionHandler.InvalidCredentialsException
+import server.exceptionHandler.UserNotFoundException
+import server.exceptionHandler.UsernameAlreadyTakenException
 import server.jwt.JWTService
 import server.jwt.RefreshRequest
 import server.jwt.RefreshResponse
@@ -47,11 +51,12 @@ class UserService(
     )
 
     @Transactional
-    fun createUser(request: UserRequest): ResponseEntity<Any> {
+    fun createUser(request: UserRequest): ResponseEntity<LoginResponse> {
         val user = request.toEntity()
 
         if (userRepository.findByUsername(user.username) != null)
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken")
+            throw UsernameAlreadyTakenException()
+
 
         // hash password
         val rawPassword = user.password
@@ -65,25 +70,23 @@ class UserService(
         return loginUser(LoginRequest(user.username, rawPassword))
     }
 
-    fun loginUser(request: LoginRequest): ResponseEntity<Any> {
+    fun loginUser(request: LoginRequest): ResponseEntity<LoginResponse> {
 
         val user = if (request.identifier.contains("@")) {
             userRepository.findByEmail(request.identifier)
         } else {
             userRepository.findByUsername(request.identifier)
-        } ?: return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("User not found")
+        } ?: throw UserNotFoundException()
 
         if (!verifyPassword(request.password, user.password)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body("Invalid password")
+            throw InvalidCredentialsException()
         }
 
         val accessToken = jwtService.generateAccessToken(
-            userId = user.id!!,
-            requireNotNull(user.username)
+            user.id!!,
+            user.username,
         )
-        val refreshToken = refreshTokenService.createRefreshToken(requireNotNull(user.id))
+        val refreshToken = refreshTokenService.createRefreshToken(user.id!!)
 
         val preKeyVerification = keyManagerService.getPreKeyVerificationBundle(user.id!!)
 
@@ -97,17 +100,18 @@ class UserService(
         )
     }
 
-    fun findUserByUsername(username: String): ResponseEntity<UserResponse> {
+    fun findUserByUsername(
+        username: String
+    ): ResponseEntity<UserResponse> {
         val user = userRepository.findByUsername(username)
-            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+            ?: throw UserNotFoundException()
 
         return ResponseEntity.ok(user.toResponse(LocalDateTime.now()))
     }
 
-    fun logoutUser(username: String): ResponseEntity<Void> {
+    fun logoutUser(username: String){
         val user = userRepository.findByUsername(username)
         refreshTokenService.deleteByUser(requireNotNull(user?.id))
-        return ResponseEntity.noContent().build()
     }
 
     fun refreshToken(token: String): ResponseEntity<RefreshResponse> {
@@ -115,7 +119,7 @@ class UserService(
 
 
         val user = userRepository.findById(refresh.userId).orElse(null)
-            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+            ?: throw UserNotFoundException()
 
         refreshTokenService.deleteToken(token)
 
@@ -135,20 +139,20 @@ class UserService(
 
     fun updateUserDetails(username: String, request: UpdateUserRequest) {
         val user = userRepository.findByUsername(username)
-            ?: throw RuntimeException("User not found")
+            ?: throw UserNotFoundException()
 
         val newUsername = request.username?.trim()
         val newEmail = request.email?.trim()?.lowercase()
 
         newUsername?.let {
             if (it != user.username && userRepository.findByUsername(it) != null) {
-                throw RuntimeException("Username already taken")
+                throw UsernameAlreadyTakenException()
             }
         }
 
         newEmail?.let {
             if (it != user.email && userRepository.findByEmail(it) != null) {
-                throw RuntimeException("Email already taken")
+                throw EmailAlreadyTakenException()
             }
         }
 

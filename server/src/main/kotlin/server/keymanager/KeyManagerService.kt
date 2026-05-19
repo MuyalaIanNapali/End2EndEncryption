@@ -3,6 +3,8 @@ package server.keymanager
 import jakarta.transaction.Transactional
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import server.exceptionHandler.UserNotFoundException
+import server.exceptionHandler.UserPublicKeyNotFoundException
 import server.keymanager.dto.PreKeyBundle
 import server.keymanager.dto.PreKeyBundleResponse
 import server.keymanager.dto.PreKeyVerification
@@ -103,7 +105,7 @@ class KeyManagerService(
 
     fun updateSignedPreKeyBundle(updateSignedPreKeyBundle: UpdateSignedPreKeyBundle){
         val userPublicKeys = userPublicKeysRepository.findByUserId(updateSignedPreKeyBundle.userId)
-            ?: throw RuntimeException("User not found")
+            ?: throw UserNotFoundException()
 
         userPublicKeys.updateFromSPK(updateSignedPreKeyBundle)
         userPublicKeysRepository.save(userPublicKeys)
@@ -111,7 +113,7 @@ class KeyManagerService(
 
     fun updatePreKeyBundle(preKeyBundle: PreKeyBundle){
         val userPublicKeys = userPublicKeysRepository.findByUserId(preKeyBundle.userId!!)
-            ?: throw RuntimeException("user public key not found")
+            ?: throw UserPublicKeyNotFoundException()
 
         userPublicKeys.updateFromPreKeyBundle(preKeyBundle)
 
@@ -131,7 +133,6 @@ class KeyManagerService(
             ?: return null
 
         return preKeys.toPreKeyVerification()
-
     }
 
 }

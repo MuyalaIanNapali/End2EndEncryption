@@ -5,7 +5,7 @@ import org.e2ee.data.local.opk.OneTimePreKeysRepository
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.keyManagerApi.RemoteKeyManagerRepository
-import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundle
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerification
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerificationResult
 import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
@@ -31,7 +31,7 @@ class KeyManagerRepository (
         val oneTimePreKeys = opkRepository.getNotUploaded()
             ?: throw Exception("No one-time pre-keys available")
 
-        val preKeyBundleRequest = PreKeyBundle(
+        val preKeyBundleRequest = PreKeyBundleDto(
             userId = userKeys.userId,
             identityKey = userKeys.identityKeyPublic,
             signedPreKeyBundle = signedPreKey,

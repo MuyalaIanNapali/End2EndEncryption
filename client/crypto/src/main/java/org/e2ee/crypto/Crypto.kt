@@ -1,10 +1,13 @@
 package org.e2ee.crypto
 
+import org.e2ee.common.PreKeyBundle
 import org.e2ee.common.PreKeyMessage
 import org.e2ee.common.RatchetMessage
+import org.e2ee.common.RatchetStateDto
 import org.e2ee.crypto.doubleRatchet.DoubleRatchet
 import org.e2ee.crypto.doubleRatchet.toDto
 import org.e2ee.common.UserKeysDto
+import org.e2ee.crypto.doubleRatchet.RatchetStateHE
 import org.e2ee.crypto.doubleRatchet.toRatchetStateHE
 import org.e2ee.crypto.encryptDecrypt.Decryption
 import org.e2ee.crypto.encryptDecrypt.EllipticCurveDiffieHellman
@@ -120,7 +123,8 @@ class Crypto {
         )
 
 
-        val senderIK = encryptionDto.senderPreKeyBundle.IKpub
+        val senderKeys = encryptionDto.senderPreKeyBundle
+        val senderIK = senderKeys.first
 
 
         val (hks, nhkr) = kdf.initHeaderKeyKDF(
@@ -151,10 +155,10 @@ class Crypto {
                 EKs = eKPair.public.encoded,
                 DHs = newState1.DHs.public.encoded,
                 opkId = opkId,
-                spkId = encryptionDto.receiverPreKeyBundle.SPKid,
+                spkId = senderKeys.second,
                 ciphertext = ct1
             ),
-            newState1
+            newState1.toDto()
         )
     }
 
@@ -173,7 +177,7 @@ class Crypto {
                 encryptedHeader = encryptedHeader,
                 ciphertext = cipherText
             ),
-            newState,
+            newState.toDto(),
         )
     }
 
@@ -222,6 +226,34 @@ class Crypto {
             message = message,
             associatedData = associatedData,
             receiverKeyManager = receiverKeyManager
+        )
+    }
+
+     fun createEncryptedMessageDto(
+         associatedData: ByteArray,
+         plainText: String,
+         state : RatchetStateDto
+     ): EncryptMessageDto {
+         return EncryptMessageDto(
+             associatedData = associatedData,
+             plainText = plainText,
+             state = state.toRatchetStateHE()
+         )
+     }
+
+    fun createEncryptedPreKeyMessageDto(
+        associatedData: ByteArray,
+        plainText: String,
+        receiverPreKeyBundle: PreKeyBundle,
+        senderPreKeyBundle: Pair<ByteArray, String>,
+        senderKeyManager: UserKeysDto
+    ): EncryptPreKeyMessageDto {
+        return EncryptPreKeyMessageDto(
+            associatedData = associatedData,
+            plainText = plainText,
+            receiverPreKeyBundle = receiverPreKeyBundle,
+            senderPreKeyBundle = senderPreKeyBundle,
+            senderKeyManager = senderKeyManager.toDecodedDto()
         )
     }
 

@@ -4,17 +4,26 @@ import org.e2ee.common.Message
 import java.time.LocalDateTime
 
 data class ChatRequest(
+    val messageId: String,
     val senderId: String,
     val receiverId: String,
-    val message: Message
+    val messageType: MessageType,
+    val message: Message,
+    val createdAt: String
 )
+
+enum class MessageType {
+    PRE_KEY_MESSAGE,
+    RATCHET_MESSAGE
+}
 
 data class ChatMessage(
     val messageId: String,
     val senderId: String,
     val receiverId: String,
+    val messageType: MessageType,
     val message: Message,
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: String? = null
 )
 
 data class MessageAck(

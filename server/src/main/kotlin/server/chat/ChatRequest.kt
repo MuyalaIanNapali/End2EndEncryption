@@ -4,9 +4,11 @@ import server.message.Message
 import java.time.LocalDateTime
 
 data class ChatRequest(
+    val messageId: String,
     val senderId: String,
     val receiverId: String,
-    val message: Message
+    val message: Message,
+    val createdAt: String
 )
 
 data class ChatMessage(
@@ -14,7 +16,7 @@ data class ChatMessage(
     val senderId: String,
     val receiverId: String,
     val message: Message,
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    val createdAt: String
 )
 
 data class MessageAck(

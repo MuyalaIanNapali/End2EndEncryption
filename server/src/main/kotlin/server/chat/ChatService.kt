@@ -31,22 +31,22 @@ class ChatService(
             request.receiverId.toLong()
         )
 
-        val messageId = UUID.randomUUID().toString()
 
         val chatMessage = ChatMessage(
-            messageId = messageId,
+            messageId = request.messageId,
             senderId = request.senderId,
             receiverId = request.receiverId,
-            message = request.message
+            message = request.message,
+            createdAt = request.createdAt
         )
 
         val pendingMessage = PendingMessage(
-            id = messageId,
+            id = request.messageId,
             senderId = request.senderId,
             receiverId = request.receiverId,
             payload= chatMessage,
             status = MessageStatus.SENT,
-            createdAt = LocalDateTime.now()
+            createdAt = LocalDateTime.now(),
         )
 
         pendingMessageRepository.save(pendingMessage)

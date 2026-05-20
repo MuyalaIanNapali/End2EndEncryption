@@ -20,4 +20,9 @@ class MessagesRepository (
         dao.deleteMessagesBySessionId(sessionId)
     }
 
+    @WorkerThread
+    suspend fun updateStatus(remoteMessageId: String, status: MessageStatus) {
+        dao.updateStatus(remoteMessageId, status)
+    }
+
 }

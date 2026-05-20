@@ -14,4 +14,14 @@ interface MessagesDao {
 
     @Query("DELETE FROM messages WHERE sessionId = :sessionId")
     suspend fun deleteMessagesBySessionId(sessionId: String)
+
+    @Query("""
+    UPDATE messages
+    SET status = :status
+    WHERE remoteMessageId = :remoteMessageId
+""")
+    suspend fun updateStatus(
+        remoteMessageId: String,
+        status: MessageStatus
+    )
 }

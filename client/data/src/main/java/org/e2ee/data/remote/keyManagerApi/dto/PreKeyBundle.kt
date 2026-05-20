@@ -1,6 +1,6 @@
 package org.e2ee.data.remote.keyManagerApi.dto
 
-data class PreKeyBundle(
+data class PreKeyBundleDto(
     var userId: Long? = null,
 
     val identityKey: ByteArray,
@@ -11,3 +11,4 @@ data class PreKeyBundle(
 
     val opkMap: Map<String, ByteArray>,
 )
+

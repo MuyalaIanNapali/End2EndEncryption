@@ -1,7 +1,9 @@
 package org.e2ee.data.local.messages
 
+import android.se.omapi.Session
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import org.e2ee.data.local.chatRoom.ChatRoom
 
 @Entity(
@@ -17,8 +19,12 @@ import org.e2ee.data.local.chatRoom.ChatRoom
     ]
 )
 data class Messages(
-    val messageId: String,
-    val sessionId: ChatRoom,
+    @PrimaryKey(autoGenerate = true)
+    val localId: Long = 0L,
+
+    val remoteMessageId: String,
+
+    val sessionId: String,
     val content: String,
     val timestamp: Long,
     val status: MessageStatus,
@@ -30,5 +36,6 @@ enum class MessageStatus {
     DELIVERED,
     EXPIRED,
     FAILED,
-    RECEIVED
+    RECEIVED,
+    SENDING
 }

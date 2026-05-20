@@ -1,5 +1,11 @@
 package org.e2ee.data.repository
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import org.e2ee.common.Message
+import org.e2ee.common.PreKeyBundle
 import org.e2ee.crypto.Crypto
 import org.e2ee.common.PreKeyMessage as CryptoPreKeyMessage
 import org.e2ee.data.local.chatRoom.ChatRoom
@@ -17,13 +23,16 @@ import org.e2ee.common.UserKeysDto
 import org.e2ee.crypto.entities.DecryptMessageDto
 import org.e2ee.data.local.chatRoom.ChatRoomRepository
 import org.e2ee.data.local.messages.MessageStatus
+import org.e2ee.data.local.messages.MessagesRepository
 import org.e2ee.data.local.ratchetStates.toRatchetStateDto
+import org.e2ee.data.remote.keyManagerApi.dto.toPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.websocket.ChatMessage
 import org.e2ee.data.remote.websocket.ChatRequest
 import org.e2ee.data.remote.websocket.ChatStompClient
 import org.e2ee.data.remote.websocket.DeliveryReceiptRequest
+import org.e2ee.data.remote.websocket.MessageType
 
 class ChatRepository(
     private val accessToken: String,
@@ -35,13 +44,15 @@ class ChatRepository(
     private val opkRepository : OneTimePreKeysRepository,
     private val userKeysRepository: UserKeysRepository,
     private val notificationHelper: (String, String) -> Unit,
-    private val stompClientProvider: () -> ChatStompClient,
     private val ratchetStatesRepository: RatchetStatesRepository,
     private val chatRoomRepository: ChatRoomRepository,
+    private val messagesRepository: MessagesRepository
 ) {
 
     // Associated data used for AEAD operations
     private val AD: ByteArray = "MyChatAppV1".toByteArray()
+
+    private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private lateinit var stompClient: ChatStompClient
 
@@ -49,24 +60,46 @@ class ChatRepository(
         stompClient = ChatStompClient(
             serverUrl = "ws://192.168.1.10:8080/ws",
             accessToken = accessToken,
-            onMessageReceived = { message ->
-                println("New message: $message")
 
-                // After receiving message, notify backend that it was delivered
-                stompClient.sendDeliveredReceipt(
-                    DeliveryReceiptRequest(
-                        messageId = message.messageId,
-                        senderId = message.senderId,
-                        receiverId = message.receiverId
-                    )
-                )
+            onMessageReceived = { message ->
+                repositoryScope.launch {
+                    receiveIncomingMessage(message)
+                }
             },
+
             onMessageStatusReceived = { ack ->
-                println("Message status changed: $ack")
+                repositoryScope.launch {
+                    when (ack.status) {
+                        org.e2ee.data.remote.websocket.MessageStatus.SENT -> {
+                            messagesRepository.updateStatus(
+                                remoteMessageId = ack.messageId,
+                                status = MessageStatus.SENT
+                            )
+                        }
+
+                        org.e2ee.data.remote.websocket.MessageStatus.DELIVERED -> {
+                            messagesRepository.updateStatus(
+                                remoteMessageId = ack.messageId,
+                                status = MessageStatus.DELIVERED
+                            )
+                        }
+
+                        org.e2ee.data.remote.websocket.MessageStatus.FAILED -> {
+                            messagesRepository.updateStatus(
+                                remoteMessageId = ack.messageId,
+                                status = MessageStatus.FAILED
+                            )
+                        }
+
+                        else -> Unit
+                    }
+                }
             },
+
             onConnected = {
                 println("Connected to chat WebSocket")
             },
+
             onError = { error ->
                 println("WebSocket error: $error")
             }
@@ -78,33 +111,31 @@ class ChatRepository(
     suspend fun receiveIncomingMessage(encryptedMessage: ChatMessage) {
         try {
             // 1. Decrypt message body
-            val message = encryptedMessage.message
-            val senderId = encryptedMessage.receiverId
-            val receiverId = encryptedMessage.senderId
-            val sessionId = "${senderId}_${receiverId}"
+            val localUser = encryptedMessage.receiverId
+            val otherUser = encryptedMessage.senderId
+            val sessionId = "${localUser}_${otherUser}"
             val user = userRepository.getUser()
 
             if (user?.userId == encryptedMessage.receiverId.toLong()) {
-                val decryptedBody = when (message) {
-                    is CryptoPreKeyMessage -> {
-                        val preKeyBundleResult =
-                            remoteUserRepository.getUserPreKeys(encryptedMessage.senderId)
+                val decryptedBody = when (encryptedMessage.messageType) {
+                    MessageType.PRE_KEY_MESSAGE -> {
+                        val message = encryptedMessage.message as CryptoPreKeyMessage
+
                         val spk = spkRepository.getSpkById(message.spkId)
                         val userKeys = userKeysRepository.getUserKeys()
+                            ?: throw IllegalStateException(
+                                "User keys not found for incoming pre-key message decryption"
+                            )
+                        val opk = message.opkId?.let { opkRepository.getOneTimePreKeyById(it) }
 
-                        if (preKeyBundleResult is ApiResult.Success && spk != null) {
-                            val preKeyBundle = preKeyBundleResult.data
-
-
+                        if (spk != null) {
                             // Build UserKeysDto expected by crypto module. userId is not provided by
                             // remote bundle here so we use 0L as a placeholder.
                             val userKeysDto = UserKeysDto(
                                 userId = user.userId,
-                                identityKey = userKeys?.identityKeyPrivate ?: ByteArray(0),
+                                identityKey = userKeys.identityKeyPrivate ,
                                 signedPreKey = Pair(spk.first, spk.second),
-                                oneTimePreKeys = message.opkId?.let {
-                                    opkRepository.getOneTimePreKeyById(it)?.privateKey
-                                } ?: ByteArray(0)
+                                oneTimePreKeys = opk?.privateKey
                             )
 
                             val decryptDto = crypto.createDecryptedPreKeyMessageDto(
@@ -122,7 +153,7 @@ class ChatRepository(
 
 
                             val remoteUser =
-                                remoteUserRepository.getUserByUserId(receiverId.toLong())
+                                remoteUserRepository.getUserByUserId(otherUser.toLong())
 
                             if (remoteUser is ApiResult.Success) {
                                 chatRoomRepository.insertChatRoom(
@@ -130,26 +161,32 @@ class ChatRepository(
                                         sessionId = sessionId,
                                         senderId = userRepository.getUser()!!,
                                         recipientId = Friends(
-                                            userId = receiverId.toLong(),
+                                            userId = otherUser.toLong(),
                                             username = remoteUser.data.username,
                                             email = remoteUser.data.email
                                         )
                                     )
                                 )
                             } else {
-                                println("Failed to fetch remote user info for userId: $receiverId")
+                                println(
+                                    "Failed to fetch remote user message: $remoteUser"
+                                )
                             }
 
-
-
-
+                            message.opkId?.let { opkId ->
+                                opkRepository.deleteOneTimePreKeyById(opkId)
+                            }
                             result.plaintext
                         } else {
-                            "[Unable to fetch pre-key bundle or missing SPK]"
+                            throw IllegalStateException(
+                                "Failed to fetch pre-key bundle or SPK for incoming message decryption"
+                            )
                         }
                     }
 
-                    is RatchetMessage -> {
+                    MessageType.RATCHET_MESSAGE -> {
+                        val message = encryptedMessage.message as RatchetMessage
+
                         val ratchetState = ratchetStatesRepository
                             .getRatchetStateById(sessionId)?.toRatchetStateDto()
 
@@ -168,25 +205,31 @@ class ChatRepository(
                             result.plaintext
 
                         } else {
-                            "[No existing session state for this sender]"
+                            throw IllegalStateException(
+                                "No ratchet state found for session $sessionId"
+                            )
                         }
-                    }
-
-                    else -> {
-                        "[Unsupported message type]"
                     }
                 }
 
                 // Convert ChatMessage.createdAt (LocalDateTime) to epoch millis
-                val epochMillis = encryptedMessage.createdAt
-                    .atZone(java.time.ZoneId.systemDefault())
-                    .toInstant()
-                    .toEpochMilli()
+                val epochMillis =encryptedMessage
+                    .createdAt
+                    ?.let { java.time.LocalDateTime.parse(it) }
+                    ?.atZone(java.time.ZoneId.systemDefault())
+                    ?.toInstant()?.toEpochMilli()
+                    ?: System.currentTimeMillis()
+
+                val chatRoom = createOrFetchChatRoom(
+                    sessionId = sessionId,
+                    localUser = user,
+                    otherUserId = otherUser
+                )
 
 
                 val localMessage = Messages(
-                    messageId = encryptedMessage.messageId,
-                    sessionId = chatRoomRepository.getChatRoomBySessionId(sessionId)!!,
+                    remoteMessageId = encryptedMessage.messageId,
+                    sessionId = chatRoom.sessionId,
                     content = decryptedBody,
                     timestamp = epochMillis,
                     status = MessageStatus.RECEIVED,
@@ -197,7 +240,7 @@ class ChatRepository(
                 messagesDao.insertMessage(localMessage)
 
                 // 4. Tell backend message was delivered
-                stompClientProvider().sendDeliveredReceipt(
+                stompClient.sendDeliveredReceipt(
                     DeliveryReceiptRequest(
                         messageId = encryptedMessage.messageId,
                         senderId = encryptedMessage.senderId,
@@ -217,23 +260,173 @@ class ChatRepository(
         }
     }
 
-    fun sendMessage(senderId: String, receiverId: String, content: String) {
-        // Wrap the plain string into a RatchetMessage ciphertext for transport
-        val outgoing = RatchetMessage(
-            encryptedHeader = ByteArray(0),
-            ciphertext = content.toByteArray()
+    suspend fun sendMessage(receiverId: String, content: String) {
+        val senderId = userRepository.getUser()?.userId?.toString() ?: return
+        val messageId = java.util.UUID.randomUUID().toString()
+
+        val sessionId = "${senderId}_${receiverId}"
+
+        val chatRoom = chatRoomRepository.getChatRoomBySessionId(sessionId)
+
+        val encryptedOutgoingMessage = if (chatRoom != null) {
+            val ratchetState =
+                ratchetStatesRepository.getRatchetStateById(sessionId)?.toRatchetStateDto()
+
+            if (ratchetState != null) {
+                val encryptedMessage = crypto.encryptRatchetMessage(
+                    encryptionDto = crypto.createEncryptedMessageDto(
+                        associatedData = AD,
+                        plainText = content,
+                        state = ratchetState
+                    )
+                )
+
+                ratchetStatesRepository.updateRatchetState(
+                    sessionId = sessionId,
+                    ratchetState = encryptedMessage.newState
+                )
+
+                encryptedMessage.message
+            } else {
+                createPreKeyMessageAndSession(sessionId, senderId, receiverId, content)
+            }
+        } else {
+            createPreKeyMessageAndSession(sessionId, senderId, receiverId, content)
+        }
+
+        val existingRoom = createOrFetchChatRoom(
+            sessionId = sessionId,
+            localUser = userRepository.getUser()!!,
+            otherUserId = receiverId
         )
+        messagesRepository.insertMessage(
+            Messages(
+                localId = 0L,
+                remoteMessageId = messageId,
+                sessionId = existingRoom.sessionId,
+                content = content,
+                timestamp = System.currentTimeMillis(),
+                status = MessageStatus.SENDING,
+                isSentByUser = true
+            )
+        )
+
+        val messageType = when(encryptedOutgoingMessage) {
+            is CryptoPreKeyMessage -> MessageType.PRE_KEY_MESSAGE
+            is RatchetMessage -> MessageType.RATCHET_MESSAGE
+            else -> throw IllegalStateException("Unsupported message type")
+        }
 
         stompClient.sendChatMessage(
             ChatRequest(
+                messageId = messageId,
                 senderId = senderId,
                 receiverId = receiverId,
-                message = outgoing
+                messageType = messageType,
+                message = encryptedOutgoingMessage,
+                createdAt = java.time.LocalDateTime.now().toString()
             )
         )
     }
 
     fun disconnect() {
         stompClient.disconnect()
+    }
+    private suspend fun createPreKeyMessageAndSession(
+        sessionId: String,
+        senderId: String,
+        receiverId: String,
+        content: String
+    ): Message {
+        val remoteUserResult = remoteUserRepository.getUserByUserId(receiverId.toLong())
+        val preKeyBundleResult = remoteUserRepository.getUserPreKeys(receiverId)
+        val spk = spkRepository.getFullActiveSignedPreKey()
+        val userKeys = userKeysRepository.getUserKeys()
+
+        if (
+            remoteUserResult !is ApiResult.Success ||
+            preKeyBundleResult !is ApiResult.Success ||
+            spk == null ||
+            userKeys == null
+        ) {
+            throw IllegalStateException("Cannot create pre-key session")
+        }
+
+        val remoteUser = remoteUserResult.data
+
+        val userKeysDto = UserKeysDto(
+            userId = senderId.toLong(),
+            identityKey = userKeys.identityKeyPrivate,
+            signedPreKey = Pair(spk.publicKey, spk.privateKey),
+            oneTimePreKeys = preKeyBundleResult.data.opkPair?.second
+        )
+
+        val encryptedMessage = crypto.encryptPreKeyMessage(
+            encryptionDto = crypto.createEncryptedPreKeyMessageDto(
+                associatedData = AD,
+                plainText = content,
+                receiverPreKeyBundle = preKeyBundleResult.data.toPreKeyBundle(),
+                senderPreKeyBundle = Pair(
+                    userKeys.identityKeyPublic,
+                    spk.signedPreKeyId
+                ),
+                senderKeyManager = userKeysDto
+            )
+        )
+
+        ratchetStatesRepository.updateRatchetState(
+            sessionId = sessionId,
+            ratchetState = encryptedMessage.newState
+        )
+
+        chatRoomRepository.insertChatRoom(
+            ChatRoom(
+                sessionId = sessionId,
+                senderId = userRepository.getUser()!!,
+                recipientId = Friends(
+                    userId = receiverId.toLong(),
+                    username = remoteUser.username,
+                    email = remoteUser.email
+                )
+            )
+        )
+
+        return encryptedMessage.message
+    }
+
+
+    private suspend fun createOrFetchChatRoom(
+        sessionId: String,
+        localUser: User,
+        otherUserId: String
+    ): ChatRoom {
+        val existingRoom = chatRoomRepository.getChatRoomBySessionId(sessionId)
+
+        if (existingRoom != null) {
+            return existingRoom
+        }
+
+        val remoteUserResult = remoteUserRepository.getUserByUserId(otherUserId.toLong())
+
+        if (remoteUserResult !is ApiResult.Success) {
+            throw IllegalStateException("Failed to fetch remote user for chat room: $otherUserId")
+        }
+
+        val remoteUser = remoteUserResult.data
+
+        val newChatRoom = ChatRoom(
+            sessionId = sessionId,
+            senderId = localUser,
+            recipientId = Friends(
+                userId = otherUserId.toLong(),
+                username = remoteUser.username,
+                email = remoteUser.email
+            )
+        )
+
+        chatRoomRepository.insertChatRoom(newChatRoom)
+
+        return chatRoomRepository.getChatRoomBySessionId(sessionId)
+            ?: throw IllegalStateException("Chat room was inserted but could not be fetched: $sessionId")
     }
 }

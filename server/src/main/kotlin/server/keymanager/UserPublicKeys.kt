@@ -21,7 +21,7 @@ class UserPublicKeys (
     val userId: Long,
 
     @Column(name = "signed_pre_key_id", nullable = false)
-    var signedPreKeyId: Long,
+    var signedPreKeyId: String,
 
     @Column(name="signed_pre_key", nullable = false)
     var signedPreKey: ByteArray,

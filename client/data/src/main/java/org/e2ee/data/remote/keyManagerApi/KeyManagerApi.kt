@@ -1,6 +1,6 @@
 package org.e2ee.data.remote.keyManagerApi
 
-import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundle
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateOpkKeys
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateSignedPreKeyBundle
 import retrofit2.Response
@@ -14,5 +14,5 @@ interface KeyManagerApi {
     suspend fun updateOneTimePreKeys(request: UpdateOpkKeys): Response<Unit>
 
     @POST("/api/v1/keymanager/updatePreKeyBundle")
-    suspend fun updatePreKeyBundle(request: PreKeyBundle): Response<Unit>
+    suspend fun updatePreKeyBundle(request: PreKeyBundleDto): Response<Unit>
 }

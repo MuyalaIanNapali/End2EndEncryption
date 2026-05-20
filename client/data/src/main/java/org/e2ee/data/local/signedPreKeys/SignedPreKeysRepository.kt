@@ -77,5 +77,10 @@ class SignedPreKeysRepository @Inject constructor(
         return "SPK_${System.currentTimeMillis()}_${UUID.randomUUID()}"
     }
 
+    @WorkerThread
+    suspend fun getFullActiveSignedPreKey(): SignedPreKeys? {
+        return dao.getActiveSignedPreKey()
+    }
+
 
 }

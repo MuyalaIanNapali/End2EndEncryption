@@ -7,7 +7,7 @@ import org.e2ee.data.local.user.LocalUserRepository
 import org.e2ee.data.local.user.toUser
 import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.auth.TokenManager
-import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundle
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.LoginRequest
@@ -54,7 +54,7 @@ class UserRepository(
                 return ApiResult.UnknownError("Failed to generate one-time prekeys")
             }
 
-            val preKeyBundle = PreKeyBundle(
+            val preKeyBundle = PreKeyBundleDto(
                 userId = null,
                 identityKey = userKeys.identityKeyPublic,
                 identityKeySigning = userKeys.identitySigningKeyPublic,
@@ -159,8 +159,8 @@ class UserRepository(
                         }
                     )
 
-                    if (!result.isValid) {
-                        return false
+                    if(!result.isValid){
+                        return  false
                     }
 
                     true

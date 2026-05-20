@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import server.jwt.RefreshRequest
 import server.jwt.RefreshResponse
+import server.keymanager.dto.PreKeyBundleResponse
 import server.users.dto.LoginRequest
 import server.users.dto.LoginResponse
 import server.users.dto.UpdateUserRequest
@@ -43,7 +44,12 @@ class UserController(
 
     @GetMapping(value = ["/{username}"], produces = ["application/json"])
     fun getUserByUsername(@PathVariable username: String): ResponseEntity<UserResponse> {
-        return userService.findUserByUsername(username)
+        return ResponseEntity.ok(userService.findUserByUsername(username))
+    }
+
+    @GetMapping(value = ["/{userId}"], produces = ["application/json"])
+    fun getUserByUserId(@PathVariable userId: Long): ResponseEntity<UserResponse> {
+        return ResponseEntity.ok(userService.findUserByUserId(userId))
     }
 
     @PatchMapping(value = ["/updateUser"])
@@ -62,5 +68,10 @@ class UserController(
     fun refresh(@RequestBody request: RefreshRequest): ResponseEntity<RefreshResponse> {
 
         return userService.refreshToken(request.refreshToken)
+    }
+
+    @GetMapping(value = ["/key/{username}"], produces = ["application/json"])
+    fun getUserPreKeys(@PathVariable username: String): ResponseEntity<PreKeyBundleResponse> {
+        return ResponseEntity.ok(userService.getUserPreKeys(username))
     }
 }

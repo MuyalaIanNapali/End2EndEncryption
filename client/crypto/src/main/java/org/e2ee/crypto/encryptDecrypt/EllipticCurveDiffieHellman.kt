@@ -14,7 +14,7 @@ internal class EllipticCurveDiffieHellman {
     }
 
     fun performDH(
-        privateKey: PrivateKey,
+        privateKey: PrivateKey?,
         publicKey: PublicKey
     ): ByteArray {
 

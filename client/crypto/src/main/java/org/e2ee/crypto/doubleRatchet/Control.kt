@@ -1,8 +1,8 @@
 package org.e2ee.crypto.doubleRatchet
 /*
-import org.e2ee.crypto.Message
-import org.e2ee.crypto.PreKeyMessage
-import org.e2ee.crypto.RatchetMessage
+import org.e2ee.common.Message
+import org.e2ee.common.PreKeyMessage
+import org.e2ee.common.RatchetMessage
 import org.e2ee.crypto.encryptDecrypt.Decryption
 import org.e2ee.crypto.encryptDecrypt.EllipticCurveDiffieHellman
 import org.e2ee.crypto.encryptDecrypt.Encryption
@@ -10,7 +10,7 @@ import org.e2ee.crypto.encryptDecrypt.EncryptionAndDecryptionUtility
 import org.e2ee.crypto.encryptDecrypt.HeaderDecryption
 import org.e2ee.crypto.encryptDecrypt.HeaderEncryption
 import org.e2ee.crypto.kdf.KDFChain
-import org.e2ee.crypto.x3dh.PreKeyBundle
+import org.e2ee.common.PreKeyBundle
 import org.e2ee.crypto.x3dh.SignatureHelper
 import org.e2ee.crypto.x3dh.X3DHKeyManager
 import org.e2ee.crypto.x3dh.X3dh

@@ -21,19 +21,7 @@ class LocalUserRepository(
     }
 
     @WorkerThread
-    suspend fun updateServerId(serverId: Long) {
-        dao.updateServerId(serverId)
-    }
-
-    @WorkerThread
     suspend fun updateUser(user: User) {
         dao.updateUser(user)
     }
-
-    @WorkerThread
-    suspend fun updateUserServerId(serverId: Long) {
-        dao.updateUserServerId(serverId)
-    }
-
-
 }

@@ -48,7 +48,13 @@ interface SignedPreKeysDao {
                 FROM signed_pre_keys
                 WHERE active = 1
          """
-     )
-        suspend fun getActiveSignedPreKeyBundle(): SignedPreKeyBundle?
+     ) suspend fun getActiveSignedPreKeyBundle(): SignedPreKeyBundle?
+
+     @Query("""
+         SELECT publicKey,privateKey FROM signed_pre_keys
+         WHERE signedPreKeyId = :signedPreKeyId
+     """)suspend fun getSignedPreKeyPairById(signedPreKeyId: String): Pair<ByteArray, ByteArray>?
+
+
 
 }

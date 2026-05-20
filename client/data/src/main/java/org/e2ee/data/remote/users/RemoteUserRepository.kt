@@ -1,5 +1,8 @@
 package org.e2ee.data.remote.users
 
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleResponse
+import org.e2ee.data.remote.network.ApiResult
+import org.e2ee.data.remote.network.safeApiCall
 import org.e2ee.data.remote.users.dto.LoginRequest
 import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
@@ -9,56 +12,46 @@ import org.e2ee.data.remote.users.dto.UserResponse
 class RemoteUserRepository(
     private val userApi: UserApi,
 ) {
-    suspend fun createAccount(request: UserRequest): LoginResponse {
-        val response = userApi.createAccount(request)
-        if (response.isSuccessful) {
-            return response.body()!!
-        } else {
-            throw Exception("Account creation failed: ${response.code()} ${response.message()}")
+    suspend fun createAccount(request: UserRequest): ApiResult<LoginResponse> {
+        return safeApiCall {
+            userApi.createAccount(request)
         }
     }
 
-    suspend fun login(request: LoginRequest): LoginResponse{
-        val response = userApi.login(request)
-        if (response.isSuccessful) {
-            return response.body()!!
-        } else {
-            throw Exception("Login failed: ${response.code()} ${response.message()}")
+    suspend fun login(request: LoginRequest): ApiResult<LoginResponse> {
+        return safeApiCall {
+            userApi.login(request)
         }
     }
 
-    suspend fun getUserByUsername(username: String): UserResponse {
-        val response = userApi.getUserByUsername(username)
-        if (response.isSuccessful) {
-            return response.body()!!
-        } else {
-            throw Exception("Get user failed: ${response.code()} ${response.message()}")
+    suspend fun getUserByUsername(username: String): ApiResult<UserResponse> {
+        return safeApiCall {
+            userApi.getUserByUsername(username)
         }
     }
 
-    suspend fun getAllUsers(): List<UserResponse> {
-        val response = userApi.getUsers()
-        if (response.isSuccessful) {
-            return response.body() ?: emptyList()
-        } else {
-            throw Exception("Get users failed: ${response.code()} ${response.message()}")
+    suspend fun getUserByUserId(userId : Long): ApiResult<UserResponse> {
+        return safeApiCall {
+            userApi.getUserByUserId(userId)
         }
     }
 
-    suspend fun updateAccount(request: UpdateUserRequest): Boolean {
-        val response = userApi.updateUser(request)
-        if (response.isSuccessful) {
-            return true
-        }else{
-            throw Exception("Account update failed: ${response.code()} ${response.message()}")
-        }
+    suspend fun getAllUsers(): ApiResult<List<UserResponse>> {
+         return safeApiCall {
+             userApi.getUsers()
+         }
+    }
+
+    suspend fun updateAccount(request: UpdateUserRequest): ApiResult<Unit> {
+        return safeApiCall { userApi.updateUser(request)}
     }
 
 
     suspend fun logout() {
-        val response = userApi.logout()
-        if (!response.isSuccessful) {
-            throw Exception("Logout failed: ${response.code()} ${response.message()}")
-        }
+        safeApiCall { userApi.logout() }
+    }
+
+    suspend fun getUserPreKeys(username: String): ApiResult<PreKeyBundleResponse> {
+        return safeApiCall { userApi.getUserPublicKeys(username) }
     }
 }

@@ -2,6 +2,12 @@ package org.e2ee.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import org.e2ee.data.local.chatRoom.ChatRoom
+import org.e2ee.data.local.chatRoom.ChatRoomDao
+import org.e2ee.data.local.friends.Friends
+import org.e2ee.data.local.friends.FriendsDao
+import org.e2ee.data.local.messages.Messages
+import org.e2ee.data.local.messages.MessagesDao
 import org.e2ee.data.local.opk.OneTimePreKeys
 import org.e2ee.data.local.opk.OneTimePreKeysDao
 import org.e2ee.data.local.ratchetStates.RatchetStates
@@ -20,7 +26,10 @@ import org.e2ee.data.local.userKeys.UserKeysDao
         OneTimePreKeys::class,
         SignedPreKeys::class,
         RatchetStates::class,
-        User::class
+        User::class,
+        Friends::class,
+        ChatRoom::class,
+        Messages::class
     ],
     version = 1,
     exportSchema = false
@@ -32,6 +41,9 @@ public abstract class ClientDatabase: RoomDatabase() {
     abstract fun signedPreKeysDao(): SignedPreKeysDao
     abstract fun ratchetStatesDao(): RatchetStatesDao
     abstract fun userDao(): UserDao
+    abstract fun friendsDao(): FriendsDao
+    abstract fun chatRoomDao(): ChatRoomDao
+    abstract fun messagesDao(): MessagesDao
 
     companion object{
         @Volatile

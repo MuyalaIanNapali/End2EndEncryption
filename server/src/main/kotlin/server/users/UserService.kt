@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import server.exceptionHandler.EmailAlreadyTakenException
 import server.exceptionHandler.InvalidCredentialsException
+import server.exceptionHandler.PreKeyBundlesNotFoundException
 import server.exceptionHandler.UserNotFoundException
 import server.exceptionHandler.UsernameAlreadyTakenException
 import server.jwt.JWTService
@@ -14,6 +15,7 @@ import server.jwt.RefreshRequest
 import server.jwt.RefreshResponse
 import server.jwt.RefreshTokenService
 import server.keymanager.KeyManagerService
+import server.keymanager.dto.PreKeyBundleResponse
 import server.users.dto.LoginRequest
 import server.users.dto.LoginResponse
 import server.users.dto.UpdateUserRequest
@@ -63,9 +65,14 @@ class UserService(
         user.password = hashPassword(rawPassword)
 
         userRepository.save(user)
-        request.preKeyBundle.userId = user.id
 
-        keyManagerService.savePreKeyBundle(request.preKeyBundle)
+        if(request.preKeyBundle != null){
+            request.preKeyBundle.userId = user.id
+            keyManagerService.savePreKeyBundle(request.preKeyBundle)
+        }else{
+            throw PreKeyBundlesNotFoundException()
+        }
+
 
         return loginUser(LoginRequest(user.username, rawPassword))
     }
@@ -102,11 +109,22 @@ class UserService(
 
     fun findUserByUsername(
         username: String
-    ): ResponseEntity<UserResponse> {
+    ): UserResponse {
         val user = userRepository.findByUsername(username)
             ?: throw UserNotFoundException()
 
-        return ResponseEntity.ok(user.toResponse(LocalDateTime.now()))
+        return user.toResponse(LocalDateTime.now())
+    }
+
+    fun findUserByUserId(
+        userId: Long
+    ): UserResponse{
+        val user = userRepository.findById(userId)
+            .orElseThrow { UserNotFoundException() }
+
+
+        return user?.toResponse(LocalDateTime.now()) ?: throw UserNotFoundException()
+
     }
 
     fun logoutUser(username: String){
@@ -163,6 +181,14 @@ class UserService(
         }
 
         userRepository.save(user)
+    }
+
+    fun getUserPreKeys(username : String ): PreKeyBundleResponse{
+        val user = userRepository.findByUsername(username)
+                ?: throw UserNotFoundException()
+        val bundle = keyManagerService.getPreKeyBundle(user.id!!)
+            ?: throw PreKeyBundlesNotFoundException()
+        return bundle
     }
 
 }

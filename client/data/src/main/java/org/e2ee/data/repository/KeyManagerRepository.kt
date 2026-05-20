@@ -6,16 +6,22 @@ import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.keyManagerApi.RemoteKeyManagerRepository
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundle
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerification
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerificationResult
+import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateOpkKeys
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateSignedPreKeyBundle
+import org.e2ee.data.remote.network.ApiResult
+import org.e2ee.data.remote.users.RemoteUserRepository
 
 class KeyManagerRepository (
     private val remoteKeyManagerRepository: RemoteKeyManagerRepository,
     private val keysRepository: UserKeysRepository,
     private val spkRepository: SignedPreKeysRepository,
     private val opkRepository: OneTimePreKeysRepository,
+    private val remoteUserRepository: RemoteUserRepository
 ){
-    suspend fun updatePreKeyBundle(): Boolean{
+    suspend fun updatePreKeyBundle(): ApiResult<Unit> {
         val userKeys = keysRepository.getUserKeys()
             ?: throw Exception("User keys not found")
 
@@ -36,7 +42,7 @@ class KeyManagerRepository (
         return remoteKeyManagerRepository.updatePreKeyBundle(preKeyBundleRequest)
     }
 
-    suspend fun updateSignedPreKey() : Boolean {
+    suspend fun updateSignedPreKey() : ApiResult<Unit> {
         val userKeys = keysRepository.getUserKeys()
             ?: throw Exception("User keys not found")
 
@@ -58,7 +64,7 @@ class KeyManagerRepository (
         )
     }
 
-    suspend fun updateOneTimePreKeys() : Boolean {
+    suspend fun updateOneTimePreKeys() : ApiResult<Unit> {
         val userKeys = keysRepository.getUserKeys()
             ?: throw Exception("User keys not found")
 
@@ -89,7 +95,7 @@ class KeyManagerRepository (
     }
 
     @WorkerThread
-    suspend fun initUserPreKeysKeys(){
+    suspend fun initUserPreKeys(){
         try {
             keysRepository.generateAndStoreUserKeys()
 
@@ -101,4 +107,48 @@ class KeyManagerRepository (
             println("Error initializing user keys: ${e.message}")
         }
     }
+
+    fun verifyOwnServerPreKeys(
+        server: PreKeyVerification,
+        localIdentitySigningPublicKey: ByteArray,
+        localSignedPreKeyBundle: SignedPreKeyBundle,
+        verifySignature: (
+            publicKey: ByteArray,
+            message: ByteArray,
+            signature: ByteArray
+        ) -> Boolean
+    ): PreKeyVerificationResult {
+
+        val identitySigningKeyMatches =
+            server.identityKeySigning.contentEquals(localIdentitySigningPublicKey)
+
+        val signedPreKeyIdMatches =
+            server.signedPreKeyBundle.keyId == localSignedPreKeyBundle.keyId
+
+        val signedPreKeyMatches =
+            server.signedPreKeyBundle.signedPreKey.contentEquals(
+                localSignedPreKeyBundle.signedPreKey
+            )
+
+        val signatureValid = verifySignature(
+            server.identityKeySigning,
+            server.signedPreKeyBundle.signedPreKey,
+            server.signedPreKeyBundle.signature
+        )
+
+        val isValid =
+            identitySigningKeyMatches &&
+                    signedPreKeyIdMatches &&
+                    signedPreKeyMatches &&
+                    signatureValid
+
+        return PreKeyVerificationResult(
+            isValid = isValid,
+            identitySigningKeyMatches = identitySigningKeyMatches,
+            signedPreKeyMatches = signedPreKeyMatches,
+            signedPreKeyIdMatches = signedPreKeyIdMatches,
+            signatureValid = signatureValid
+        )
+    }
+
 }

@@ -1,6 +1,7 @@
 package org.e2ee.data.local.ratchetStates
 
 import androidx.annotation.WorkerThread
+import org.e2ee.common.RatchetStateDto
 
 class RatchetStatesRepository(
     private val dao: RatchetStatesDao,

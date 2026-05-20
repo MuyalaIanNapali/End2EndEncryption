@@ -1,5 +1,9 @@
 package org.e2ee.data.local.ratchetStates
 
+import org.e2ee.common.RatchetStateDto
+import org.e2ee.common.SkippedMessageKey
+import org.e2ee.common.SkippedMessageKeyId
+
 fun mkSkippedToList(
     map: MutableMap<SkippedMessageKeyId, ByteArray>
 ): List<SkippedMessageKey> {

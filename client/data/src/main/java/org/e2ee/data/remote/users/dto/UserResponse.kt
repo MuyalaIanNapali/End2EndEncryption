@@ -1,5 +1,6 @@
 package org.e2ee.data.remote.users.dto
 
+import org.e2ee.data.local.user.User
 import java.time.LocalDateTime
 
 data class UserResponse(
@@ -9,4 +10,13 @@ data class UserResponse(
     val avatarUrl: String? = null,
     val isOnline: Boolean,
     val lastSeen: LocalDateTime? = null
-)
+) {
+    fun toUser(): User {
+        return User(
+            userId = id,
+            username = username,
+            email = email,
+            avatarUrl = avatarUrl
+        )
+    }
+}

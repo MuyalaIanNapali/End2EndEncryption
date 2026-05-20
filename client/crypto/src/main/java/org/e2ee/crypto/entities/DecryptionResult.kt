@@ -1,14 +1,14 @@
 package org.e2ee.crypto.entities
 
-import org.e2ee.crypto.PreKeyMessage
-import org.e2ee.crypto.RatchetMessage
+import org.e2ee.common.PreKeyMessage
+import org.e2ee.common.RatchetMessage
+import org.e2ee.common.RatchetStateDto
 import org.e2ee.crypto.doubleRatchet.RatchetStateHE
-import org.e2ee.crypto.dto.UserKeysDecodedDto
-import org.e2ee.crypto.x3dh.X3DHKeyManager
+import org.e2ee.common.UserKeysDecodedDto
 
 data class DecryptionResult(
     val plaintext: String,
-    val newState: RatchetStateHE
+    val newState: RatchetStateDto
 )
 
 data class DecryptPreKeyMessageDto(
@@ -20,5 +20,5 @@ data class DecryptPreKeyMessageDto(
 data class DecryptMessageDto(
     val message: RatchetMessage,
     val associatedData: ByteArray,
-    val state : RatchetStateHE
+    val state : RatchetStateDto
 )

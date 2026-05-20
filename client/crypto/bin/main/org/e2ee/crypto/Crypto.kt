@@ -1,6 +1,10 @@
 package org.e2ee.crypto
 
+import org.e2ee.common.PreKeyMessage
+import org.e2ee.common.RatchetMessage
 import org.e2ee.crypto.doubleRatchet.DoubleRatchet
+import org.e2ee.crypto.doubleRatchet.toDto
+import org.e2ee.common.UserKeysDto
 import org.e2ee.crypto.encryptDecrypt.Decryption
 import org.e2ee.crypto.encryptDecrypt.EllipticCurveDiffieHellman
 import org.e2ee.crypto.encryptDecrypt.Encryption
@@ -10,7 +14,6 @@ import org.e2ee.crypto.encryptDecrypt.HeaderEncryption
 import org.e2ee.crypto.entities.DecryptMessageDto
 import org.e2ee.crypto.entities.DecryptPreKeyMessageDto
 import org.e2ee.crypto.kdf.KDFChain
-import org.e2ee.crypto.x3dh.PreKeyBundle
 import org.e2ee.crypto.x3dh.SignatureHelper
 import org.e2ee.crypto.x3dh.X3DHKeyManager
 import org.e2ee.crypto.x3dh.X3dh
@@ -39,6 +42,7 @@ class Crypto {
     fun decryptPreKeyMessage(
         decryptionDto: DecryptPreKeyMessageDto
     ): DecryptionResult {
+
         val receiverX3dh = X3dh(
             ecdh,
             sig
@@ -81,7 +85,7 @@ class Crypto {
 
         return DecryptionResult(
             plaintext = pt1,
-            newState = receiverNewState
+            newState = receiverNewState.toDto()
         )
     }
 
@@ -97,7 +101,7 @@ class Crypto {
 
         return DecryptionResult(
             plaintext = pt2,
-            newState = userNewState
+            newState = userNewState.toDto()
         )
     }
 
@@ -181,6 +185,42 @@ class Crypto {
 
     fun generateKeyPair(): KeyPair {
         return ecdh.generateEllipticCurveKeyPair()
+    }
+
+    fun generateIKAndIKsPairs():Pair<Pair<ByteArray, ByteArray>, Pair<ByteArray, ByteArray>> {
+        val identityKeyPair = ecdh.generateEllipticCurveKeyPair()
+        val signingKeyPair = sig.generateSigningKeyPair()
+
+        return Pair(
+            Pair(identityKeyPair.public.encoded, identityKeyPair.private.encoded),
+            Pair(signingKeyPair.public.encoded, signingKeyPair.private.encoded)
+        )
+    }
+
+    fun verifySignature(
+        publicKey: ByteArray,
+        message: ByteArray,
+        signature: ByteArray
+    ): Boolean {
+        return sig.verifySignature(
+            message,
+            signature,
+            sig.decodeEdPublicKey(publicKey)
+        )
+    }
+
+    fun createDecryptedPreKeyMessageDto(
+        message: PreKeyMessage,
+        associatedData: ByteArray,
+        userKeysDto: UserKeysDto
+    ): DecryptPreKeyMessageDto {
+
+        val receiverKeyManager = userKeysDto.toDecodedDto()
+        return DecryptPreKeyMessageDto(
+            message = message,
+            associatedData = associatedData,
+            receiverKeyManager = receiverKeyManager
+        )
     }
 
 }

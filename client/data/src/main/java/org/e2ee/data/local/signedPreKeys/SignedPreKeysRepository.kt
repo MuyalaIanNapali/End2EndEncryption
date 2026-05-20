@@ -1,5 +1,6 @@
 package org.e2ee.data.local.signedPreKeys
 
+import androidx.annotation.WorkerThread
 import org.e2ee.crypto.Crypto
 import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
@@ -12,6 +13,7 @@ class SignedPreKeysRepository @Inject constructor(
     private val crypto: Crypto
 ) {
 
+    @WorkerThread
     suspend fun rotateIfExpired() {
         val now = System.currentTimeMillis()
 
@@ -39,10 +41,12 @@ class SignedPreKeysRepository @Inject constructor(
         createNewActiveSignedPreKey()
     }
 
+    @WorkerThread
     suspend fun getActiveSignedPreKeyBundle(): SignedPreKeyBundle? {
         return dao.getActiveSignedPreKeyBundle()
     }
 
+    @WorkerThread
     private suspend fun createNewActiveSignedPreKey() {
         val userKeys = userKeysRepository.getUserKeys()
             ?: throw IllegalStateException("User keys not initialized")
@@ -62,6 +66,11 @@ class SignedPreKeysRepository @Inject constructor(
                 uploaded = false
             )
         )
+    }
+
+    @WorkerThread
+    suspend fun getSpkById(signedPreKeyId: String): Pair<ByteArray, ByteArray>? {
+        return dao.getSignedPreKeyPairById(signedPreKeyId)
     }
 
     private fun generateSignedPreKeyId(): String {

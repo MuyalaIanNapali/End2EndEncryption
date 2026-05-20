@@ -1,4 +1,4 @@
-package org.e2ee.data.remote
+package org.e2ee.data.remote.network
 
 data class ApiErrorResponse(
     val timestamp: String? = null,

@@ -1,4 +1,23 @@
 package org.e2ee.data.local.messages
 
-class MessagesRepository {
+import androidx.annotation.WorkerThread
+
+class MessagesRepository (
+    private val dao: MessagesDao
+){
+    @WorkerThread
+    suspend fun insertMessage(message: Messages) {
+        dao.insertMessage(message)
+    }
+
+    @WorkerThread
+    suspend fun getMessagesBySessionId(sessionId: String): List<Messages> {
+        return dao.getMessagesBySessionId(sessionId)
+    }
+
+    @WorkerThread
+    suspend fun deleteMessagesBySessionId(sessionId: String) {
+        dao.deleteMessagesBySessionId(sessionId)
+    }
+
 }

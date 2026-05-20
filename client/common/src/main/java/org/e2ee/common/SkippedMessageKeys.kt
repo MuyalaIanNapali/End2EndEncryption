@@ -1,4 +1,4 @@
-package org.e2ee.crypto.entities
+package org.e2ee.common
 
 data class SkippedMessageKey(
     val id: SkippedMessageKeyId,

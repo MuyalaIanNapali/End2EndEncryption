@@ -9,3 +9,5 @@ class EmailAlreadyTakenException(message: String = "Email already taken") : Runt
 class InvalidCredentialsException(message: String = "Invalid username or password") : RuntimeException(message)
 
 class UserPublicKeyNotFoundException(message: String = "User public key not found") : RuntimeException(message)
+
+class PreKeyBundlesNotFoundException(message: String = "Pre-key-bundle not found") : RuntimeException(message)

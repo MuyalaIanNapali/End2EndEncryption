@@ -1,5 +1,6 @@
 package org.e2ee.data.remote.users
 
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleResponse
 import org.e2ee.data.remote.users.dto.LoginRequest
 import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
@@ -31,6 +32,11 @@ interface UserApi {
         @Path("username") username: String
     ): Response<UserResponse>
 
+    @GET("/api/v1/users/{userId}")
+    suspend fun getUserByUserId(
+        @Path("userId") userId: Long
+    ): Response<UserResponse>
+
     @PATCH("/api/v1/users/updateUser")
     suspend fun updateUser(
         @Body request: UpdateUserRequest
@@ -38,6 +44,11 @@ interface UserApi {
 
     @POST("/api/v1/users/logout")
     suspend fun logout(): Response<Unit>
+
+    @GET("/api/v1/users/key/{username}")
+    suspend fun getUserPublicKeys(
+        @Path("username") username: String
+    ): Response<PreKeyBundleResponse>
 
 
 }

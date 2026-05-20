@@ -1,11 +1,9 @@
 package org.e2ee.crypto.entities
 
-import org.e2ee.crypto.Message
-import org.e2ee.crypto.PreKeyMessage
+import org.e2ee.common.Message
 import org.e2ee.crypto.doubleRatchet.RatchetStateHE
-import org.e2ee.crypto.dto.UserKeysDecodedDto
-import org.e2ee.crypto.x3dh.PreKeyBundle
-import org.e2ee.crypto.x3dh.X3DHKeyManager
+import org.e2ee.common.UserKeysDecodedDto
+import org.e2ee.common.PreKeyBundle
 
 data class EncryptionResult(
     val message: Message,

@@ -1,6 +1,7 @@
 package org.e2ee.crypto.doubleRatchet
 
-import org.e2ee.crypto.entities.SkippedMessageKeyId
+import org.e2ee.common.RatchetStateDto
+import org.e2ee.common.SkippedMessageKeyId
 import java.security.KeyPair
 import java.security.PublicKey
 
@@ -76,3 +77,26 @@ fun deepCopyMKSkipped(
         value.copyOf()
     }.toMutableMap()
 }
+
+fun RatchetStateHE.toDto(): RatchetStateDto {
+    return RatchetStateDto(
+        DHs = Pair(
+            DHs.public.encoded,
+            DHs.private.encoded
+        ),
+        DHr = DHr?.encoded,
+        RK = RK.copyOf(),
+        CKs = CKs?.copyOf(),
+        CKr = CKr?.copyOf(),
+        Ns = Ns,
+        Nr = Nr,
+        PN = PN,
+        MKSKIPPED = MKSKIPPED.mapValues { it.value.copyOf() }.toMutableMap(),
+        HKs = HKs?.copyOf(),
+        HKr = HKr?.copyOf(),
+        NHKs = NHKs?.copyOf(),
+        NHKr = NHKr?.copyOf()
+    )
+}
+
+

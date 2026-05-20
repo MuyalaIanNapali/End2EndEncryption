@@ -1,5 +1,7 @@
 package org.e2ee.data.local.ratchetStates
 
+import org.e2ee.common.SkippedMessageKey
+import org.e2ee.common.SkippedMessageKeyId
 import java.nio.ByteBuffer
 
 object SkippedMessageKeysCodec {

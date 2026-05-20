@@ -105,7 +105,7 @@ class GlobalExceptionHandler {
     ): ResponseEntity<ErrorResponse> {
         return buildErrorResponse(
             status = HttpStatus.INTERNAL_SERVER_ERROR,
-            message = "Something went wrong",
+            message = ex.message ?:"Something went wrong",
             request = request
         )
     }
@@ -130,6 +130,18 @@ class GlobalExceptionHandler {
         return buildErrorResponse(
             status = HttpStatus.BAD_REQUEST,
             message = ex.message ?: "Invalid argument",
+            request = request
+        )
+    }
+
+    @ExceptionHandler(PreKeyBundlesNotFoundException::class)
+    fun handlePreKeyBundlesNotFound(
+        ex: PreKeyBundlesNotFoundException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return buildErrorResponse(
+            status = HttpStatus.BAD_REQUEST,
+            message = "Pre-key-bundle not found",
             request = request
         )
     }

@@ -1,13 +1,12 @@
 package org.e2ee.crypto.x3dh
 
 
-import org.e2ee.crypto.dto.UserKeysDecodedDto
-import org.e2ee.crypto.dto.UserKeysDto
+import org.e2ee.common.PreKeyBundle
+import org.e2ee.common.UserKeysDecodedDto
 import org.e2ee.crypto.encryptDecrypt.EllipticCurveDiffieHellman
 import org.e2ee.crypto.encryptDecrypt.EncryptionAndDecryptionUtility
 import org.e2ee.crypto.kdf.KDFChain
 import java.security.KeyPair
-import java.security.PrivateKey
 import java.security.PublicKey
 
 internal class X3dh(

@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.sqlcipher.android)
     implementation(project(":crypto"))
+    implementation(project(":common"))
     implementation(libs.retrofit)
     implementation(libs.converter.scalars)
     implementation(libs.okhttp)

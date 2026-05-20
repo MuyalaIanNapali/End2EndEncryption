@@ -16,13 +16,7 @@ interface UserDao {
     @Query("DELETE FROM user WHERE localId = 1")
     suspend fun deleteUser()
 
-    @Query("UPDATE user SET id = :serverId WHERE localId = 1")
-    suspend fun updateServerId(serverId: Long)
-
     @Update
     suspend fun updateUser(user: User)
-
-    @Query("UPDATE user SET userId= :serverId WHERE localId = 1")
-    suspend fun updateUserServerId(serverId: Long)
 
 }

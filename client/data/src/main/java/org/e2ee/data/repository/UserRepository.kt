@@ -51,7 +51,7 @@ class UserRepository(
             }
 
             if (opk.isNullOrEmpty()) {
-                return ApiResult.UnknownError("Failed to generate one-time prekeys")
+                return ApiResult.UnknownError("Failed to generate one-time preKeys")
             }
 
             val preKeyBundle = PreKeyBundleDto(

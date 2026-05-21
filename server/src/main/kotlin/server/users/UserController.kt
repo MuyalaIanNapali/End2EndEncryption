@@ -42,12 +42,12 @@ class UserController(
         return userService.loginUser(request)
     }
 
-    @GetMapping(value = ["/{username}"], produces = ["application/json"])
+    @GetMapping(value = ["/username/{username}"], produces = ["application/json"])
     fun getUserByUsername(@PathVariable username: String): ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.findUserByUsername(username))
     }
 
-    @GetMapping(value = ["/{userId}"], produces = ["application/json"])
+    @GetMapping(value = ["/id/{userId}"], produces = ["application/json"])
     fun getUserByUserId(@PathVariable userId: Long): ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.findUserByUserId(userId))
     }

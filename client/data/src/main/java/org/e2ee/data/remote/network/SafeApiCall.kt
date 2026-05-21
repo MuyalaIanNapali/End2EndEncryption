@@ -13,8 +13,11 @@ suspend fun <T> safeApiCall(
         if (response.isSuccessful) {
             val body = response.body()
 
-            if (body != null) {
+            return if (body != null) {
                 ApiResult.Success(body)
+            } else if (response.code() == 204) {
+                @Suppress("UNCHECKED_CAST")
+                ApiResult.Success(Unit as T)
             } else {
                 ApiResult.UnknownError("Empty response from server")
             }

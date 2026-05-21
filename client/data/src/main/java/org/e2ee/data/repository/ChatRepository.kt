@@ -5,11 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.e2ee.common.Message
-import org.e2ee.common.PreKeyBundle
 import org.e2ee.crypto.Crypto
-import org.e2ee.common.PreKeyMessage as CryptoPreKeyMessage
+import org.e2ee.common.PreKeyMessage
 import org.e2ee.data.local.chatRoom.ChatRoom
-import org.e2ee.data.local.friends.Friends
 import org.e2ee.data.local.messages.Messages
 import org.e2ee.data.local.messages.MessagesDao
 import org.e2ee.data.local.user.User
@@ -43,7 +41,7 @@ class ChatRepository(
     private val remoteUserRepository: RemoteUserRepository,
     private val opkRepository : OneTimePreKeysRepository,
     private val userKeysRepository: UserKeysRepository,
-    private val notificationHelper: (String, String) -> Unit,
+    private val notificationHelper: (String, String) -> Unit, ///update later to MessageNotifier
     private val ratchetStatesRepository: RatchetStatesRepository,
     private val chatRoomRepository: ChatRoomRepository,
     private val messagesRepository: MessagesRepository
@@ -56,9 +54,13 @@ class ChatRepository(
 
     private lateinit var stompClient: ChatStompClient
 
+    fun observeMessages(sessionId: String): kotlinx.coroutines.flow.Flow<List<Messages>> {
+        return messagesRepository.observeMessagesBySessionId(sessionId)
+    }
+
     fun connect() {
         stompClient = ChatStompClient(
-            serverUrl = "ws://192.168.1.10:8080/ws",
+            serverUrl = "ws://192.168.1.10:5000/ws",
             accessToken = accessToken,
 
             onMessageReceived = { message ->
@@ -115,11 +117,12 @@ class ChatRepository(
             val otherUser = encryptedMessage.senderId
             val sessionId = "${localUser}_${otherUser}"
             val user = userRepository.getUser()
+                ?: throw IllegalStateException("No local user found for incoming message decryption")
 
-            if (user?.userId == encryptedMessage.receiverId.toLong()) {
+            if (user.userId == encryptedMessage.receiverId.toLong()) {
                 val decryptedBody = when (encryptedMessage.messageType) {
                     MessageType.PRE_KEY_MESSAGE -> {
-                        val message = encryptedMessage.message as CryptoPreKeyMessage
+                        val message = encryptedMessage.message as PreKeyMessage
 
                         val spk = spkRepository.getSpkById(message.spkId)
                         val userKeys = userKeysRepository.getUserKeys()
@@ -159,12 +162,8 @@ class ChatRepository(
                                 chatRoomRepository.insertChatRoom(
                                     ChatRoom(
                                         sessionId = sessionId,
-                                        senderId = userRepository.getUser()!!,
-                                        recipientId = Friends(
-                                            userId = otherUser.toLong(),
-                                            username = remoteUser.data.username,
-                                            email = remoteUser.data.email
-                                        )
+                                        senderId = userRepository.getUser()!!.userId,
+                                        recipientId = otherUser.toLong(),
                                     )
                                 )
                             } else {
@@ -251,7 +250,7 @@ class ChatRepository(
                 // 5. Show notification (callback)
                 notificationHelper(encryptedMessage.senderId, decryptedBody)
             } else {
-                println("Received message intended for user ${encryptedMessage.receiverId}, but local user is ${user?.userId}")
+                println("Received message intended for user ${encryptedMessage.receiverId}, but local user is ${user.userId}")
 
             }
 
@@ -312,7 +311,7 @@ class ChatRepository(
         )
 
         val messageType = when(encryptedOutgoingMessage) {
-            is CryptoPreKeyMessage -> MessageType.PRE_KEY_MESSAGE
+            is PreKeyMessage -> MessageType.PRE_KEY_MESSAGE
             is RatchetMessage -> MessageType.RATCHET_MESSAGE
             else -> throw IllegalStateException("Unsupported message type")
         }
@@ -379,15 +378,14 @@ class ChatRepository(
             ratchetState = encryptedMessage.newState
         )
 
+        val senderId = userRepository.getUser()?.userId
+            ?: throw IllegalStateException("No local user found for chat session creation")
+
         chatRoomRepository.insertChatRoom(
             ChatRoom(
                 sessionId = sessionId,
-                senderId = userRepository.getUser()!!,
-                recipientId = Friends(
-                    userId = receiverId.toLong(),
-                    username = remoteUser.username,
-                    email = remoteUser.email
-                )
+                senderId = senderId,
+                recipientId = receiverId.toLong(),
             )
         )
 
@@ -416,12 +414,8 @@ class ChatRepository(
 
         val newChatRoom = ChatRoom(
             sessionId = sessionId,
-            senderId = localUser,
-            recipientId = Friends(
-                userId = otherUserId.toLong(),
-                username = remoteUser.username,
-                email = remoteUser.email
-            )
+            senderId = localUser.userId,
+            recipientId =otherUserId.toLong()
         )
 
         chatRoomRepository.insertChatRoom(newChatRoom)

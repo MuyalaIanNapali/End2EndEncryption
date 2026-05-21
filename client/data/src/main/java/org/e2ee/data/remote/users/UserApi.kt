@@ -27,12 +27,12 @@ interface UserApi {
         @Body request: LoginRequest
     ): Response<LoginResponse>
 
-    @GET("/api/v1/users/{username}")
+    @GET("/api/v1/users/username/{username}")
     suspend fun getUserByUsername(
         @Path("username") username: String
     ): Response<UserResponse>
 
-    @GET("/api/v1/users/{userId}")
+    @GET("/api/v1/users/id/{userId}")
     suspend fun getUserByUserId(
         @Path("userId") userId: Long
     ): Response<UserResponse>

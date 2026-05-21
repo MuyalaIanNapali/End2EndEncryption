@@ -1,11 +1,13 @@
 package org.e2ee.data.local.user
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
 
 @Entity(tableName = "user")
 data class User(
+    @PrimaryKey
     val localId: Long = 1L, // Always 1 since we only store one user locally
     val userId: Long,
     val username: String,

@@ -27,9 +27,9 @@ data class ChatRoom (
     @PrimaryKey
     val sessionId: String,
 
-    val senderId : User,
+    val senderId: Long,
 
-    val recipientId : Friends,
+    val recipientId: Long,
 
     val lastMessage: String? = null,
 

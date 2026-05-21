@@ -26,7 +26,11 @@ android {
 }
 
 dependencies {
-    val roomVersion = "2.8.4"
+
+    implementation(project(":crypto"))
+    implementation(project(":common"))
+    implementation(project(":app"))
+
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
@@ -39,8 +43,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.sqlcipher.android)
-    implementation(project(":crypto"))
-    implementation(project(":common"))
     implementation(libs.retrofit)
     implementation(libs.converter.scalars)
     implementation(libs.okhttp)

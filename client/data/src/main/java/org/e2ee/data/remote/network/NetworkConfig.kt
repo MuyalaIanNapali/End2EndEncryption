@@ -1,4 +1,6 @@
 package org.e2ee.data.remote.network
 
-class NetworkConfig {
-}
+data class NetworkConfig(
+    val baseUrl: String,
+    val websocketUrl: String
+)

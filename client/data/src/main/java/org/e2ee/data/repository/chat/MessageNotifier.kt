@@ -1,4 +1,8 @@
 package org.e2ee.data.repository.chat
 
-class MessageNotifier {
+interface MessageNotifier {
+    fun showMessageNotification(
+        senderId: String,
+        message: String
+    )
 }

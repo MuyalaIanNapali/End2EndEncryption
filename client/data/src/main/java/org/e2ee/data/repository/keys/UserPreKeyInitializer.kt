@@ -1,4 +1,4 @@
-package org.e2ee.data.repository
+package org.e2ee.data.repository.keys
 
 import androidx.annotation.WorkerThread
 import org.e2ee.data.local.opk.OneTimePreKeysRepository

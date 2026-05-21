@@ -1,4 +1,27 @@
 package org.e2ee.data.repository.chat
 
-class ChatMessageStatusUpdater {
+import org.e2ee.data.local.messages.MessageStatus
+import org.e2ee.data.local.messages.MessagesRepository
+import org.e2ee.data.remote.websocket.MessageStatus as RemoteMessageStatus
+
+class ChatMessageStatusUpdater(
+    private val messagesRepository: MessagesRepository
+) {
+
+    suspend fun updateStatus(
+        messageId: String,
+        status: RemoteMessageStatus
+    ) {
+        val localStatus = when (status) {
+            RemoteMessageStatus.SENT -> MessageStatus.SENT
+            RemoteMessageStatus.DELIVERED -> MessageStatus.DELIVERED
+            RemoteMessageStatus.FAILED -> MessageStatus.FAILED
+            else -> return
+        }
+
+        messagesRepository.updateStatus(
+            remoteMessageId = messageId,
+            status = localStatus
+        )
+    }
 }

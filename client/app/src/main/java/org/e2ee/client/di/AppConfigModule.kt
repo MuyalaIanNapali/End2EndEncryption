@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.e2ee.client.BuildConfig
-import org.e2ee.data.remote.network.NetworkConfig
 import javax.inject.Singleton
 
 @Module
@@ -21,3 +20,8 @@ object AppConfigModule {
         )
     }
 }
+
+data class NetworkConfig(
+    val baseUrl: String,
+    val websocketUrl: String
+)

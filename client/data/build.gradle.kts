@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    //alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -29,6 +31,7 @@ dependencies {
 
     implementation(project(":crypto"))
     implementation(project(":common"))
+    implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
@@ -45,8 +48,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.converter.gson)
     ksp(libs.androidx.room.compiler)
-
-
-
-    implementation(libs.sqlcipher.android.v4160)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.protobuf)
+    implementation(libs.kotlinx.datetime)
 }

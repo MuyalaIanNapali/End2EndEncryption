@@ -15,6 +15,7 @@ import org.e2ee.data.remote.keyManagerApi.dto.toPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.websocket.ChatMessage
+import org.e2ee.data.remote.websocket.MessagePayloadCodec
 import org.e2ee.data.remote.websocket.MessageType
 import javax.inject.Inject
 
@@ -34,18 +35,29 @@ class ChatCryptoManager @Inject constructor(
         sessionId: String,
         localUserId: Long
     ): String {
+        val decodedMessage = MessagePayloadCodec.decodeFromBase64(
+            messageType = encryptedMessage.messageType,
+            encodedMessage = encryptedMessage.encodedMessage
+        )
+
         return when (encryptedMessage.messageType) {
             MessageType.PRE_KEY_MESSAGE -> {
+                val message = decodedMessage as? PreKeyMessage
+                    ?: throw IllegalStateException("Expected PreKeyMessage")
+
                 decryptPreKeyMessage(
-                    encryptedMessage = encryptedMessage,
+                    message = message,
                     sessionId = sessionId,
                     localUserId = localUserId
                 )
             }
 
             MessageType.RATCHET_MESSAGE -> {
+                val message = decodedMessage as? RatchetMessage
+                    ?: throw IllegalStateException("Expected RatchetMessage")
+
                 decryptRatchetMessage(
-                    encryptedMessage = encryptedMessage,
+                    message = message,
                     sessionId = sessionId
                 )
             }
@@ -88,12 +100,10 @@ class ChatCryptoManager @Inject constructor(
     }
 
     private suspend fun decryptPreKeyMessage(
-        encryptedMessage: ChatMessage,
+        message: PreKeyMessage,
         sessionId: String,
         localUserId: Long
     ): String {
-        val message = encryptedMessage.message as? PreKeyMessage
-            ?: throw IllegalStateException("Expected PreKeyMessage")
 
         val spk = spkRepository.getSpkById(message.spkId)
             ?: throw IllegalStateException("Signed pre-key not found: ${message.spkId}")
@@ -133,12 +143,9 @@ class ChatCryptoManager @Inject constructor(
     }
 
     private suspend fun decryptRatchetMessage(
-        encryptedMessage: ChatMessage,
+        message: RatchetMessage,
         sessionId: String
     ): String {
-        val message = encryptedMessage.message as? RatchetMessage
-            ?: throw IllegalStateException("Expected RatchetMessage")
-
         val ratchetState = ratchetStatesRepository
             .getRatchetStateById(sessionId)
             ?.toRatchetStateDto()

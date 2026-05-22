@@ -2,8 +2,10 @@ package org.e2ee.crypto.doubleRatchet
 
 import org.e2ee.common.RatchetStateDto
 import org.e2ee.common.SkippedMessageKeyId
+import org.e2ee.crypto.encryptDecrypt.EncryptionAndDecryptionUtility
 import java.security.KeyPair
 import java.security.PublicKey
+import kotlin.collections.mapValues
 
 
 data class RatchetStateHE(
@@ -85,6 +87,27 @@ fun RatchetStateHE.toDto(): RatchetStateDto {
             DHs.private.encoded
         ),
         DHr = DHr?.encoded,
+        RK = RK.copyOf(),
+        CKs = CKs?.copyOf(),
+        CKr = CKr?.copyOf(),
+        Ns = Ns,
+        Nr = Nr,
+        PN = PN,
+        MKSKIPPED = MKSKIPPED.mapValues { it.value.copyOf() }.toMutableMap() ,
+        HKs = HKs?.copyOf(),
+        HKr = HKr?.copyOf(),
+        NHKs = NHKs?.copyOf(),
+        NHKr = NHKr?.copyOf()
+    )
+}
+
+fun RatchetStateDto.toRatchetStateHE(): RatchetStateHE {
+    return RatchetStateHE(
+        DHs = KeyPair(
+            EncryptionAndDecryptionUtility().decodePublicKey(DHs.first),
+            EncryptionAndDecryptionUtility().decodePrivateKey(DHs.second)
+        ),
+        DHr = DHr?.let { EncryptionAndDecryptionUtility().decodePublicKey(it) },
         RK = RK.copyOf(),
         CKs = CKs?.copyOf(),
         CKr = CKr?.copyOf(),

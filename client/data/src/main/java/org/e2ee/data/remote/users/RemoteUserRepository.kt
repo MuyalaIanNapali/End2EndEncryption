@@ -3,7 +3,7 @@ package org.e2ee.data.remote.users
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleResponse
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.network.safeApiCall
-import org.e2ee.data.remote.users.dto.LoginRequest
+import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
@@ -19,7 +19,7 @@ class RemoteUserRepository @Inject constructor(
         }
     }
 
-    suspend fun login(request: LoginRequest): ApiResult<LoginResponse> {
+    suspend fun login(request: LoginRequestDto): ApiResult<LoginResponse> {
         return safeApiCall {
             userApi.login(request)
         }

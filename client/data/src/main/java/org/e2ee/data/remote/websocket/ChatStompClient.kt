@@ -1,6 +1,5 @@
 package org.e2ee.data.remote.websocket
 
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -17,7 +16,7 @@ class ChatStompClient(
 ) {
 
     private val client = OkHttpClient()
-    private val gson = Gson()
+
     private var webSocket: WebSocket? = null
 
     fun connect() {
@@ -81,12 +80,13 @@ class ChatStompClient(
 
                 when {
                     destination?.contains("/queue/messages") == true -> {
-                        val message = gson.fromJson(body, ChatMessage::class.java)
+                        //use serializable data classes instead of gson for better performance and type safety
+                        val message = WebSocketJson.json.decodeFromString<ChatMessage>(body)
                         onMessageReceived(message)
                     }
 
                     destination?.contains("/queue/message-status") == true -> {
-                        val ack = gson.fromJson(body, MessageAck::class.java)
+                        val ack = WebSocketJson.json.decodeFromString<MessageAck>(body)
                         onMessageStatusReceived(ack)
                     }
                 }
@@ -123,7 +123,7 @@ class ChatStompClient(
     }
 
     fun sendChatMessage(request: ChatRequest) {
-        val body = gson.toJson(request)
+        val body = WebSocketJson.json.encodeToString(request)
 
         val frame = buildString {
             append("SEND\n")
@@ -138,7 +138,7 @@ class ChatStompClient(
     }
 
     fun sendDeliveredReceipt(request: DeliveryReceiptRequest) {
-        val body = gson.toJson(request)
+        val body = WebSocketJson.json.encodeToString(request)
 
         val frame = buildString {
             append("SEND\n")

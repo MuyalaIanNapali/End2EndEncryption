@@ -70,7 +70,8 @@ class SignedPreKeysRepository @Inject constructor(
 
     @WorkerThread
     suspend fun getSpkById(signedPreKeyId: String): Pair<ByteArray, ByteArray>? {
-        return dao.getSignedPreKeyPairById(signedPreKeyId)
+        val spk = dao.getSignedPreKeyById(signedPreKeyId)
+        return spk?.let { Pair(it.publicKey, it.privateKey) }
     }
 
     private fun generateSignedPreKeyId(): String {

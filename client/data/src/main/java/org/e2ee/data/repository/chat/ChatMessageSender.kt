@@ -8,6 +8,7 @@ import org.e2ee.data.local.messages.MessagesRepository
 import org.e2ee.data.local.user.LocalUserRepository
 import org.e2ee.data.remote.websocket.ChatRequest
 import org.e2ee.data.remote.websocket.ChatStompClient
+import org.e2ee.data.remote.websocket.MessagePayloadCodec
 import org.e2ee.data.remote.websocket.MessageType
 import java.time.LocalDateTime
 import java.util.UUID
@@ -65,8 +66,11 @@ class ChatMessageSender @Inject constructor(
         val messageType = when (encryptedOutgoingMessage) {
             is PreKeyMessage -> MessageType.PRE_KEY_MESSAGE
             is RatchetMessage -> MessageType.RATCHET_MESSAGE
-            else -> throw IllegalStateException("Unsupported message type")
         }
+
+        val encodedMessage = MessagePayloadCodec.encodeToBase64(
+            encryptedOutgoingMessage
+        )
 
         stompClient.sendChatMessage(
             ChatRequest(
@@ -74,7 +78,7 @@ class ChatMessageSender @Inject constructor(
                 senderId = senderId,
                 receiverId = receiverId,
                 messageType = messageType,
-                message = encryptedOutgoingMessage,
+                encodedMessage = encodedMessage,
                 createdAt = LocalDateTime.now().toString()
             )
         )

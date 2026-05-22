@@ -3,12 +3,11 @@ package org.e2ee.data.repository.user
 import org.e2ee.crypto.Crypto
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.user.LocalUserRepository
-import org.e2ee.data.local.user.toUser
 import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.auth.TokenManager
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
-import org.e2ee.data.remote.users.dto.LoginRequest
+import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.repository.keys.KeyManagerRepository
 import javax.inject.Inject
 
@@ -22,7 +21,7 @@ class UserLoginRepository @Inject constructor(
     private val crypto: Crypto
 ) {
 
-    suspend fun login(request: LoginRequest): Boolean {
+    suspend fun login(request: LoginRequestDto): Boolean {
         return try {
             when (val response = remoteUser.login(request)) {
                 is ApiResult.Success -> {

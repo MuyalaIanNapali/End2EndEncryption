@@ -1,6 +1,5 @@
 package org.e2ee.data.local.messages
 
-import android.se.omapi.Session
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey

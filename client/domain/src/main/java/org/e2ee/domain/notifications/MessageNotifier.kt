@@ -1,4 +1,8 @@
 package org.e2ee.domain.notifications
 
-class MessageNotifier {
+interface MessageNotifier {
+    fun showMessageNotification(
+        senderId: String,
+        messageBody: String
+    )
 }

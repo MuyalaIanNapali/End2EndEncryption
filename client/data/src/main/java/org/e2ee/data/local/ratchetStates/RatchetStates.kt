@@ -42,15 +42,18 @@ data class RatchetStates(
         if (sessionId != other.sessionId) return false
         if (!DHsPublic.contentEquals(other.DHsPublic)) return false
         if (!DHsPrivate.contentEquals(other.DHsPrivate)) return false
-        if (!DHr.contentEquals(other.DHr)) return false
+        // DHr is nullable; perform a null-safe comparison
+        if (!(DHr?.contentEquals(other.DHr) ?: (other.DHr == null))) return false
         if (!RK.contentEquals(other.RK)) return false
-        if (!CKs.contentEquals(other.CKs)) return false
-        if (!CKr.contentEquals(other.CKr)) return false
+        // CKs and CKr are nullable; compare safely
+        if (!(CKs?.contentEquals(other.CKs) ?: (other.CKs == null))) return false
+        if (!(CKr?.contentEquals(other.CKr) ?: (other.CKr == null))) return false
         if (!MKSKIPPED.contentEquals(other.MKSKIPPED)) return false
-        if (!HKs.contentEquals(other.HKs)) return false
-        if (!HKr.contentEquals(other.HKr)) return false
-        if (!NHKs.contentEquals(other.NHKs)) return false
-        if (!NHKr.contentEquals(other.NHKr)) return false
+        // HKs, HKr, NHKs, NHKr are nullable; compare safely
+        if (!(HKs?.contentEquals(other.HKs) ?: (other.HKs == null))) return false
+        if (!(HKr?.contentEquals(other.HKr) ?: (other.HKr == null))) return false
+        if (!(NHKs?.contentEquals(other.NHKs) ?: (other.NHKs == null))) return false
+        if (!(NHKr?.contentEquals(other.NHKr) ?: (other.NHKr == null))) return false
 
         return true
     }

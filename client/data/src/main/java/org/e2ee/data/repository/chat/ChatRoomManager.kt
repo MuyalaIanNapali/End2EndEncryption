@@ -46,24 +46,4 @@ class ChatRoomManager @Inject constructor(
                 "Chat room was inserted but could not be fetched: $sessionId"
             )
     }
-
-    suspend fun insertChatRoomIfMissing(
-        sessionId: String,
-        senderId: Long,
-        recipientId: Long
-    ) {
-        val existingRoom = chatRoomRepository.getChatRoomBySessionId(sessionId)
-
-        if (existingRoom != null) {
-            return
-        }
-
-        chatRoomRepository.insertChatRoom(
-            ChatRoom(
-                sessionId = sessionId,
-                senderId = senderId,
-                recipientId = recipientId
-            )
-        )
-    }
 }

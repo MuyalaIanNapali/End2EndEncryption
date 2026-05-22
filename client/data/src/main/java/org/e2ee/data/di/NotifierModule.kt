@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.e2ee.data.notifications.AndroidMessageNotifier
-import org.e2ee.data.repository.chat.MessageNotifier
+import org.e2ee.domain.notifications.MessageNotifier
 import javax.inject.Singleton
 
 @Module

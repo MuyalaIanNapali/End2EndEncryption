@@ -2,7 +2,7 @@ package org.e2ee.crypto.encryptDecrypt
 
 import org.e2ee.crypto.doubleRatchet.RatchetStateHE
 import org.e2ee.crypto.doubleRatchet.deepCopy
-import org.e2ee.crypto.entities.SkippedMessageKeyId
+import org.e2ee.common.SkippedMessageKeyId
 import org.e2ee.crypto.kdf.KDFChain
 import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher

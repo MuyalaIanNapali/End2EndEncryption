@@ -42,18 +42,15 @@ interface SignedPreKeysDao {
      @Query("UPDATE signed_pre_keys SET uploaded = 1 WHERE signedPreKeyId = :signedPreKeyId")
      suspend fun markAsUploaded(signedPreKeyId: String)
 
-     @Query(
-         """
-             SELECT signedPreKeyId, publicKey, signature
+      @Query(
+          """
+             SELECT signedPreKeyId AS keyId, publicKey AS signedPreKey, signature
                 FROM signed_pre_keys
                 WHERE active = 1
          """
      ) suspend fun getActiveSignedPreKeyBundle(): SignedPreKeyBundle?
 
-     @Query("""
-         SELECT publicKey,privateKey FROM signed_pre_keys
-         WHERE signedPreKeyId = :signedPreKeyId
-     """)suspend fun getSignedPreKeyPairById(signedPreKeyId: String): Pair<ByteArray, ByteArray>?
+      // Use getSignedPreKeyById to retrieve the full SignedPreKeys entity when a key pair is needed.
 
 
 

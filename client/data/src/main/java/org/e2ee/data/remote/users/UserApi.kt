@@ -1,7 +1,7 @@
 package org.e2ee.data.remote.users
 
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleResponse
-import org.e2ee.data.remote.users.dto.LoginRequest
+import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
@@ -24,7 +24,7 @@ interface UserApi {
 
     @POST("/api/v1/users/login")
     suspend fun login(
-        @Body request: LoginRequest
+        @Body request: LoginRequestDto
     ): Response<LoginResponse>
 
     @GET("/api/v1/users/username/{username}")

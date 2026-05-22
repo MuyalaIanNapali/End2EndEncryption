@@ -20,5 +20,5 @@ data class DecryptPreKeyMessageDto(
 data class DecryptMessageDto(
     val message: RatchetMessage,
     val associatedData: ByteArray,
-    val state : RatchetStateHE
+    val state : RatchetStateDto
 )

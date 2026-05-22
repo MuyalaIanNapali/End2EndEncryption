@@ -11,10 +11,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.e2ee.data.repository.chat.MessageNotifier
 import javax.inject.Inject
 
-//import org.e2ee.domain.notifications.MessageNotifier
+import org.e2ee.domain.notifications.MessageNotifier
 
 class AndroidMessageNotifier @Inject constructor(
     @ApplicationContext private val context: Context

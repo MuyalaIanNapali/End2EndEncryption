@@ -15,6 +15,9 @@ android {
             minorApiLevel = 1
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "org.e2ee.client"

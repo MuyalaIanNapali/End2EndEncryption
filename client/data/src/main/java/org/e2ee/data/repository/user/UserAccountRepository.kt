@@ -5,8 +5,9 @@ import org.e2ee.data.local.user.toUser
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
+import javax.inject.Inject
 
-class UserAccountRepository(
+class UserAccountRepository @Inject constructor(
     private val remoteUser: RemoteUserRepository,
     private val localUser: LocalUserRepository
 ) {

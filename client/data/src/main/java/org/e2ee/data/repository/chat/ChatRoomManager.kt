@@ -5,8 +5,9 @@ import org.e2ee.data.local.chatRoom.ChatRoomRepository
 import org.e2ee.data.local.user.User
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
+import javax.inject.Inject
 
-class ChatRoomManager(
+class ChatRoomManager @Inject constructor(
     private val chatRoomRepository: ChatRoomRepository,
     private val remoteUserRepository: RemoteUserRepository
 ) {

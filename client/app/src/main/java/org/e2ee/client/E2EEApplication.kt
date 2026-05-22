@@ -1,4 +1,7 @@
 package org.e2ee.client
 
-class E2EEApplication {
-}
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class E2EEApplication : Application()

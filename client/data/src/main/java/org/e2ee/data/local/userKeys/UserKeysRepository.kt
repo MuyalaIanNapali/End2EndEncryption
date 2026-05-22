@@ -2,8 +2,9 @@ package org.e2ee.data.local.userKeys
 
 import androidx.annotation.WorkerThread
 import org.e2ee.crypto.Crypto
+import javax.inject.Inject
 
-class UserKeysRepository (
+class UserKeysRepository @Inject constructor(
     private val dao: UserKeysDao,
     private val crypto: Crypto
 ){

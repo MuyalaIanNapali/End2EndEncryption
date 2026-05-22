@@ -9,8 +9,9 @@ import org.e2ee.data.remote.websocket.ChatStompClient
 import org.e2ee.data.remote.websocket.DeliveryReceiptRequest
 import java.time.LocalDateTime
 import java.time.ZoneId
+import javax.inject.Inject
 
-class ChatMessageReceiver(
+class ChatMessageReceiver @Inject constructor(
     private val userRepository: LocalUserRepository,
     private val messagesRepository: MessagesRepository,
     private val chatRoomManager: ChatRoomManager,

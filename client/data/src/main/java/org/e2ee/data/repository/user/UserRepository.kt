@@ -4,8 +4,9 @@ import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.dto.LoginRequest
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
+import javax.inject.Inject
 
-class UserRepository(
+class UserRepository @Inject constructor(
     private val userRegistrationRepository: UserRegistrationRepository,
     private val userLoginRepository: UserLoginRepository,
     private val userAccountRepository: UserAccountRepository,

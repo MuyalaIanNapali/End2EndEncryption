@@ -16,8 +16,9 @@ import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.websocket.ChatMessage
 import org.e2ee.data.remote.websocket.MessageType
+import javax.inject.Inject
 
-class ChatCryptoManager(
+class ChatCryptoManager @Inject constructor(
     private val crypto: Crypto,
     private val spkRepository: SignedPreKeysRepository,
     private val opkRepository: OneTimePreKeysRepository,

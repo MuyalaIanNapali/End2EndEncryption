@@ -10,8 +10,9 @@ import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.LoginRequest
 import org.e2ee.data.repository.keys.KeyManagerRepository
+import javax.inject.Inject
 
-class UserLoginRepository(
+class UserLoginRepository @Inject constructor(
     private val remoteUser: RemoteUserRepository,
     private val localUser: LocalUserRepository,
     private val tokenManager: TokenManager,

@@ -6,13 +6,18 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
+import org.e2ee.data.repository.chat.MessageNotifier
+import javax.inject.Inject
+
 //import org.e2ee.domain.notifications.MessageNotifier
-/*
-class AndroidMessageNotifier(
-    private val context: Context
+
+class AndroidMessageNotifier @Inject constructor(
+    @ApplicationContext private val context: Context
 ) : MessageNotifier {
 
     companion object {
@@ -35,6 +40,7 @@ class AndroidMessageNotifier(
         }
     }
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     override fun showMessageNotification(
         senderId: String,
         messageBody: String
@@ -42,7 +48,7 @@ class AndroidMessageNotifier(
         if (!hasNotificationPermission()) return
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(android.R.drawable.ic_notification_overlay)
             .setContentTitle("New message")
             .setContentText(messageBody)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -66,7 +72,3 @@ class AndroidMessageNotifier(
         }
     }
 }
-
-
-
- */

@@ -4,8 +4,9 @@ import androidx.annotation.WorkerThread
 import org.e2ee.data.local.opk.OneTimePreKeysRepository
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.userKeys.UserKeysRepository
+import javax.inject.Inject
 
-class UserPreKeyInitializer(
+class UserPreKeyInitializer @Inject constructor(
     private val keysRepository: UserKeysRepository,
     private val spkRepository: SignedPreKeysRepository,
     private val opkRepository: OneTimePreKeysRepository

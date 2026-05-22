@@ -3,8 +3,9 @@ package org.e2ee.data.local.opk
 import androidx.annotation.WorkerThread
 import org.e2ee.crypto.Crypto
 import java.util.UUID
+import javax.inject.Inject
 
-class OneTimePreKeysRepository(
+class OneTimePreKeysRepository @Inject constructor(
     private val dao: OneTimePreKeysDao,
     private val crypto: Crypto
 ) {

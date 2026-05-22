@@ -2,9 +2,10 @@ package org.e2ee.data.repository.chat
 
 import org.e2ee.data.local.messages.MessageStatus
 import org.e2ee.data.local.messages.MessagesRepository
+import javax.inject.Inject
 import org.e2ee.data.remote.websocket.MessageStatus as RemoteMessageStatus
 
-class ChatMessageStatusUpdater(
+class ChatMessageStatusUpdater @Inject constructor(
     private val messagesRepository: MessagesRepository
 ) {
 

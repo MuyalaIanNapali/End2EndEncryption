@@ -9,8 +9,9 @@ import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.UserRequest
+import javax.inject.Inject
 
-class UserRegistrationRepository(
+class UserRegistrationRepository @Inject constructor(
     private val remoteUser: RemoteUserRepository,
     private val localUser: LocalUserRepository,
     private val tokenManager: TokenManager,

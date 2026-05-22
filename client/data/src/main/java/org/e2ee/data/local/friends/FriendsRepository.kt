@@ -1,8 +1,9 @@
 package org.e2ee.data.local.friends
 
 import androidx.annotation.WorkerThread
+import javax.inject.Inject
 
-class FriendsRepository(
+class FriendsRepository @Inject constructor(
     private val dao: FriendsDao
 ) {
 

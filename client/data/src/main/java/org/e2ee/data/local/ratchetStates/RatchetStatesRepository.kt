@@ -2,8 +2,9 @@ package org.e2ee.data.local.ratchetStates
 
 import androidx.annotation.WorkerThread
 import org.e2ee.common.RatchetStateDto
+import javax.inject.Inject
 
-class RatchetStatesRepository(
+class RatchetStatesRepository @Inject constructor(
     private val dao: RatchetStatesDao,
 ) {
 

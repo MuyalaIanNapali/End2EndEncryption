@@ -11,8 +11,9 @@ import org.e2ee.data.remote.websocket.ChatStompClient
 import org.e2ee.data.remote.websocket.MessageType
 import java.time.LocalDateTime
 import java.util.UUID
+import javax.inject.Inject
 
-class ChatMessageSender(
+class ChatMessageSender @Inject constructor(
     private val userRepository: LocalUserRepository,
     private val messagesRepository: MessagesRepository,
     private val chatRoomManager: ChatRoomManager,

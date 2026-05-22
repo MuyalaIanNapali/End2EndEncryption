@@ -8,7 +8,6 @@ import org.e2ee.data.local.chatRoom.ChatRoom
 
 @Entity(
     tableName = "messages",
-    primaryKeys = ["messageId"],
     foreignKeys = [
         ForeignKey(
             entity = ChatRoom::class,

@@ -5,8 +5,9 @@ import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.keyManagerApi.RemoteKeyManagerRepository
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateOpkKeys
 import org.e2ee.data.remote.network.ApiResult
+import javax.inject.Inject
 
-class OneTimePreKeyUploader(
+class OneTimePreKeyUploader @Inject constructor(
     private val remoteKeyManagerRepository: RemoteKeyManagerRepository,
     private val keysRepository: UserKeysRepository,
     private val opkRepository: OneTimePreKeysRepository

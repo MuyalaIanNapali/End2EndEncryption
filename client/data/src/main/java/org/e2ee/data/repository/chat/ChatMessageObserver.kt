@@ -3,8 +3,9 @@ package org.e2ee.data.repository.chat
 import kotlinx.coroutines.flow.Flow
 import org.e2ee.data.local.messages.Messages
 import org.e2ee.data.local.messages.MessagesRepository
+import javax.inject.Inject
 
-class ChatMessageObserver(
+class ChatMessageObserver @Inject constructor(
     private val messagesRepository: MessagesRepository
 ) {
 

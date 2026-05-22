@@ -1,6 +1,8 @@
 package org.e2ee.data.repository.chat
 
-class ChatSessionIdFactory {
+import javax.inject.Inject
+
+class ChatSessionIdFactory @Inject constructor() {
 
     fun createSessionId(
         localUserId: String,

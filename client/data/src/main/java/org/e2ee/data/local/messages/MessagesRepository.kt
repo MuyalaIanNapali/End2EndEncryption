@@ -2,8 +2,9 @@ package org.e2ee.data.local.messages
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MessagesRepository(
+class MessagesRepository @Inject constructor(
     private val dao: MessagesDao
 ) {
     @WorkerThread

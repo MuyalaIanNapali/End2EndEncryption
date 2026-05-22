@@ -4,11 +4,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.e2ee.data.remote.auth.TokenManager
+import org.e2ee.data.remote.network.NetworkConfig
 import org.e2ee.data.remote.websocket.ChatStompClient
+import javax.inject.Inject
 
-class ChatConnectionManager(
-    private val accessToken: String,
-    private val serverUrl: String,
+class ChatConnectionManager @Inject constructor(
+    private val tokenManager: TokenManager,
+    private val networkConfig: NetworkConfig,
     private val chatMessageReceiver: ChatMessageReceiver,
     private val chatMessageStatusUpdater: ChatMessageStatusUpdater
 ) {
@@ -20,10 +23,13 @@ class ChatConnectionManager(
     fun connect() {
         if (stompClient != null) return
 
+        val accessToken = tokenManager.getAccessToken()
+            ?: throw IllegalStateException("Cannot connect WebSocket: no access token found")
+
         lateinit var client: ChatStompClient
 
         client = ChatStompClient(
-            serverUrl = serverUrl,
+            serverUrl = networkConfig.websocketUrl,
             accessToken = accessToken,
 
             onMessageReceived = { message ->

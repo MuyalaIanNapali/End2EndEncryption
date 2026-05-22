@@ -3,8 +3,9 @@ package org.e2ee.data.repository.keys
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerification
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerificationResult
 import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
+import javax.inject.Inject
 
-class OwnPreKeyVerifier {
+class OwnPreKeyVerifier @Inject constructor() {
 
     fun verifyOwnServerPreKeys(
         server: PreKeyVerification,

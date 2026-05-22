@@ -5,8 +5,9 @@ import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerification
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerificationResult
 import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
+import javax.inject.Inject
 
-class KeyManagerRepository(
+class KeyManagerRepository @Inject constructor(
     private val userPreKeyInitializer: UserPreKeyInitializer,
     private val preKeyBundleUploader: PreKeyBundleUploader,
     private val signedPreKeyUploader: SignedPreKeyUploader,

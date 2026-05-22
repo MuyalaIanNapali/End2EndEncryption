@@ -8,8 +8,9 @@ import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
 import org.e2ee.data.remote.users.dto.UserResponse
+import javax.inject.Inject
 
-class RemoteUserRepository(
+class RemoteUserRepository @Inject constructor(
     private val userApi: UserApi,
 ) {
     suspend fun createAccount(request: UserRequest): ApiResult<LoginResponse> {

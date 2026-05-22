@@ -5,8 +5,9 @@ import org.e2ee.data.remote.keyManagerApi.dto.UpdateOpkKeys
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateSignedPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.network.safeApiCall
+import javax.inject.Inject
 
-class RemoteKeyManagerRepository(
+class RemoteKeyManagerRepository @Inject constructor(
     private val api: KeyManagerApi
 ) {
     suspend fun updateSignedPreKey(request: UpdateSignedPreKeyBundle): ApiResult<Unit> {

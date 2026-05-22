@@ -1,8 +1,9 @@
 package org.e2ee.data.local.user
 
 import androidx.annotation.WorkerThread
+import javax.inject.Inject
 
-class LocalUserRepository(
+class LocalUserRepository @Inject constructor(
     private val dao: UserDao
 ) {
     @WorkerThread

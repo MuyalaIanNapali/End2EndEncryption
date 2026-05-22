@@ -19,7 +19,6 @@ import org.e2ee.data.local.user.UserDao
 import org.e2ee.data.local.userKeys.UserKeys
 import org.e2ee.data.local.userKeys.UserKeysDao
 
-
 @Database(
     entities = [
         UserKeys::class,
@@ -34,7 +33,7 @@ import org.e2ee.data.local.userKeys.UserKeysDao
     version = 1,
     exportSchema = false
 )
-public abstract class ClientDatabase: RoomDatabase() {
+abstract class ClientDatabase : RoomDatabase() {
 
     abstract fun oneTimePreKeysDao(): OneTimePreKeysDao
     abstract fun userKeysDao(): UserKeysDao
@@ -44,21 +43,4 @@ public abstract class ClientDatabase: RoomDatabase() {
     abstract fun friendsDao(): FriendsDao
     abstract fun chatRoomDao(): ChatRoomDao
     abstract fun messagesDao(): MessagesDao
-
-    companion object{
-        @Volatile
-        private var INSTANCE: ClientDatabase? = null
-
-        fun getInstance(context: android.content.Context): ClientDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = androidx.room.Room.databaseBuilder(
-                    context.applicationContext,
-                    ClientDatabase::class.java,
-                    "client_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }

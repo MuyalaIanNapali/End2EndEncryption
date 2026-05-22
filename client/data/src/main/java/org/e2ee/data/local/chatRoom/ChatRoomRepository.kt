@@ -1,8 +1,9 @@
 package org.e2ee.data.local.chatRoom
 
 import androidx.annotation.WorkerThread
+import javax.inject.Inject
 
-class ChatRoomRepository(
+class ChatRoomRepository @Inject constructor(
     private val dao: ChatRoomDao
 ) {
 

@@ -29,12 +29,8 @@ dependencies {
 
     implementation(project(":crypto"))
     implementation(project(":common"))
-    implementation(project(":app"))
 
-
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
@@ -48,6 +44,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.converter.gson)
+    ksp(libs.androidx.room.compiler)
 
 
 

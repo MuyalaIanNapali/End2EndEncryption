@@ -2,8 +2,9 @@ package org.e2ee.data.repository.user
 
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
+import javax.inject.Inject
 
-class UserSearchRepository(
+class UserSearchRepository @Inject constructor(
     private val remoteUser: RemoteUserRepository
 ) {
 

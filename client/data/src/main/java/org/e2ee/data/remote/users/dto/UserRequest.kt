@@ -1,6 +1,6 @@
 package org.e2ee.data.remote.users.dto
 
-import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundle
+import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 
 data class UserRequest(
     var username: String,
@@ -11,5 +11,5 @@ data class UserRequest(
 
     val avatarUrl: String? = null,
 
-    var preKeyBundle: PreKeyBundle? = null,
+    var preKeyBundle: PreKeyBundleDto? = null,
 )

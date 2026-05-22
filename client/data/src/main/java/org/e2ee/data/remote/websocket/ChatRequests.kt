@@ -1,46 +1,51 @@
 package org.e2ee.data.remote.websocket
 
-import org.e2ee.common.Message
-import java.time.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ChatRequest(
     val messageId: String,
     val senderId: String,
     val receiverId: String,
     val messageType: MessageType,
-    val message: Message,
+    val encodedMessage: String,
     val createdAt: String
 )
 
-enum class MessageType {
-    PRE_KEY_MESSAGE,
-    RATCHET_MESSAGE
-}
-
+@Serializable
 data class ChatMessage(
     val messageId: String,
     val senderId: String,
     val receiverId: String,
     val messageType: MessageType,
-    val message: Message,
+    val encodedMessage: String,
     val createdAt: String? = null
 )
 
+@Serializable
 data class MessageAck(
     val messageId: String,
     val status: MessageStatus,
     val reason: String? = null
 )
 
+@Serializable
+data class DeliveryReceiptRequest(
+    val messageId: String,
+    val senderId: String,
+    val receiverId: String
+)
+
+@Serializable
+enum class MessageType {
+    PRE_KEY_MESSAGE,
+    RATCHET_MESSAGE
+}
+
+@Serializable
 enum class MessageStatus {
     SENT,
     DELIVERED,
     EXPIRED,
     FAILED
 }
-
-data class DeliveryReceiptRequest(
-    val messageId: String,
-    val senderId: String,
-    val receiverId: String
-)

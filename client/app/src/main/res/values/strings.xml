@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">client</string>
+    <string name="app_name">Varsity Chat</string>
+    <string name="placeholder_email_or_username">Enter Email or Username</string>
 </resources>

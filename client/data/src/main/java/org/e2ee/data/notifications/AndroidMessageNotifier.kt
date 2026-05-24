@@ -25,18 +25,16 @@ class AndroidMessageNotifier @Inject constructor(
     }
 
     fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            )
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        )
 
-            val manager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            manager.createNotificationChannel(channel)
-        }
+        manager.createNotificationChannel(channel)
     }
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)

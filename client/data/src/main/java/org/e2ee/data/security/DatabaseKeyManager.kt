@@ -12,6 +12,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.content.edit
 
 @Singleton
 class DatabaseKeyManager @Inject constructor(
@@ -44,10 +45,13 @@ class DatabaseKeyManager @Inject constructor(
 
             val encrypted = encryptDatabaseKey(newDatabaseKey)
 
-            prefs.edit()
-                .putString(PREF_DB_KEY, Base64.encodeToString(encrypted.encryptedData, Base64.NO_WRAP))
-                .putString(PREF_DB_KEY_IV, Base64.encodeToString(encrypted.iv, Base64.NO_WRAP))
-                .apply()
+            prefs.edit {
+                putString(
+                    PREF_DB_KEY,
+                    Base64.encodeToString(encrypted.encryptedData, Base64.NO_WRAP)
+                )
+                    .putString(PREF_DB_KEY_IV, Base64.encodeToString(encrypted.iv, Base64.NO_WRAP))
+            }
 
             newDatabaseKey
         }

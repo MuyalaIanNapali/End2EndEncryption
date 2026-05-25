@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 sealed interface Route: NavKey {
 
     @Serializable
-    data object Auth: Route {
+     data object Auth: Route {
 
         @Serializable
         data object Login : Route

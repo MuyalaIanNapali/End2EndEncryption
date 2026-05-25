@@ -4,20 +4,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.e2ee.client.auth.screen.ForgotPasswordScreen
-import org.e2ee.client.auth.screen.RegisterScreen
 import org.e2ee.client.auth.screen.LoginScreen
-import org.e2ee.client.ui.elements.AuthScreenShell
-
+import org.e2ee.client.auth.screen.RegisterScreen
 
 @Composable
 fun AuthNavigation(
@@ -25,78 +24,82 @@ fun AuthNavigation(
 ) {
     val authBackStack = rememberNavBackStack(Route.Auth.Login)
 
-    val currentRoute = remember {
+    val currentRoute by remember {
         derivedStateOf {
             authBackStack.lastOrNull()
         }
     }
 
-    AuthScreenShell(
-        modifier = modifier,
-        selectedRoute = currentRoute.value as Route.Auth?,
-        onLoginClick = {
+    fun switchAuthTab(route: Route) {
+        if (currentRoute != route) {
             authBackStack.clear()
-            authBackStack.add(Route.Auth.Login)
-        },
-        onRegisterClick = {
-            authBackStack.clear()
-            authBackStack.add(Route.Auth.Register)
-        },
-        showToggle = currentRoute.value != Route.Auth.ForgotPassword
-    ) { contentModifier ->
+            authBackStack.add(route)
+        }
+    }
 
-        NavDisplay(
-            modifier = contentModifier,
-            backStack = authBackStack,
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator()
-            ),
-            entryProvider = entryProvider {
-                entry<Route.Auth.Login> {
-                    LoginScreen(
-                        onRegisterClick = {
-                            authBackStack.clear()
-                            authBackStack.add(Route.Auth.Register)
-                        },
-                        onForgotPasswordClick = {
-                            authBackStack.add(Route.Auth.ForgotPassword)
-                        }
-                    )
-                }
+    Column(
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .padding(top = 24.dp)
+    ) {
 
-                entry<Route.Auth.Register> {
-                    RegisterScreen(
-                        onLoginClick = {
-                            authBackStack.clear()
-                            authBackStack.add(Route.Auth.Login)
-                        }
-                    )
+        Column(
+            modifier = modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 24.dp)
+        ) {
+            AuthTabSwitcher(
+                selectedRoute = currentRoute as Route?,
+                onLoginClick = {
+                    switchAuthTab(Route.Auth.Login)
+                },
+                onRegisterClick = {
+                    switchAuthTab(Route.Auth.Register)
                 }
+            )
 
-                entry<Route.Auth.ForgotPassword> {
-                    ForgotPasswordScreen(
-                        onBackClick = {
-                            authBackStack.removeLastOrNull()
-                        }
-                    )
+            NavDisplay(
+                modifier = Modifier.padding(top = 24.dp),
+                backStack = authBackStack,
+                entryDecorators = listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator()
+                ),
+                entryProvider = entryProvider {
+                    entry<Route.Auth.Login> {
+                        LoginScreen(
+                            onRegisterClick = {
+                                switchAuthTab(Route.Auth.Register)
+                            },
+                            onForgotPasswordClick = {
+                                authBackStack.add(Route.Auth.ForgotPassword)
+                            }
+                        )
+                    }
+
+                    entry<Route.Auth.Register> {
+                        RegisterScreen(
+                            onLoginClick = {
+                                switchAuthTab(Route.Auth.Login)
+                            }
+                        )
+                    }
+
+                    entry<Route.Auth.ForgotPassword> {
+                        ForgotPasswordScreen(
+                            onBackClick = {
+                                authBackStack.removeLastOrNull()
+                            }
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
-/*
-@Composable
-fun LoginScreen(onRegisterClick: () -> add, onForgotPasswordClick: () -> add) {
-    TODO("Not yet implemented")
-}
 
- */
-
-@Composable
 @Preview
+@Composable
 fun AuthNavigationPreview() {
-    AuthNavigation(
-        modifier = Modifier.padding(16.dp)
-    )
+    AuthNavigation()
 }

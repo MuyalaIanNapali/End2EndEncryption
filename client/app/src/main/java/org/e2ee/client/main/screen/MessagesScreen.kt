@@ -32,7 +32,7 @@ import org.e2ee.client.ui.elements.MessageCard
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
-fun ChatsScreen(
+fun MessagesScreen(
     modifier: Modifier = Modifier,
     onSettingsClick: () -> Unit = {},
     onChatCardClick: (otherUserName: String) -> Unit = { _ -> }
@@ -169,5 +169,5 @@ private data class ChatPreview(
 @Composable
 @Preview
 fun ChatsScreenPreview() {
-    ChatsScreen()
+    MessagesScreen ()
 }

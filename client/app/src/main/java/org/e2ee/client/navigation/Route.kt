@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 sealed interface Route: NavKey {
 
     @Serializable
-     data object Auth: Route {
+    data object Auth : Route {
 
         @Serializable
         data object Login : Route
@@ -15,12 +15,10 @@ sealed interface Route: NavKey {
         @Serializable
         data object Register : Route
 
-        @Serializable
-        data object ForgotPassword : Route
     }
 
     @Serializable
-    data object Main: Route {
+    data object Main : Route {
 
         @Serializable
         data object Chats : Route
@@ -31,20 +29,8 @@ sealed interface Route: NavKey {
         @Serializable
         data object Search : Route
 
-    }
-
-    @Serializable
-    data object Settings: Route{
-
         @Serializable
-        data object General: Route, NavKey
-
-        @Serializable
-        data object Account: Route, NavKey
-
-        @Serializable
-        data object ProfileSettings: Route, NavKey
-
+        data object Settings : Route
 
     }
 }

@@ -16,16 +16,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.e2ee.client.R
 import org.e2ee.client.ui.elements.AppButton
 import org.e2ee.client.ui.elements.AppTextField
 import org.e2ee.client.ui.elements.PasswordTextField
 
 @Composable
 fun LoginScreen(
-    onRegisterClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit
+    onRegisterClick: () -> Unit
 ) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -39,7 +40,7 @@ fun LoginScreen(
         AppTextField(
             value = email.value,
             onValueChange = { email.value = it },
-            placeholder = "Email or username",
+            placeholder = stringResource(R.string.email_or_username_placeholder),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Person,
@@ -47,23 +48,14 @@ fun LoginScreen(
                 )
             }
         )
-
         PasswordTextField(
             value = password.value,
             onValueChange = { password.value = it }
         )
-        // Your login fields and button here
-
-        TextButton(
-            onClick = onForgotPasswordClick,
-            modifier = Modifier.align(CenterHorizontally)
-        ) {
-            Text("Forgot Password?")
-        }
 
         AppButton(
             onClick = { /* Handle login logic here */ },
-            buttonText = "Login",
+            buttonText =stringResource(R.string.login_button) ,
             modifier = Modifier
                 .width(200.dp)
                 .align (CenterHorizontally)
@@ -80,6 +72,5 @@ fun LoginScreen(
 fun LoginScreenPreview() {
     LoginScreen(
         onRegisterClick = {},
-        onForgotPasswordClick = {}
     )
 }

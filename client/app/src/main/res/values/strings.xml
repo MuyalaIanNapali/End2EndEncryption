@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">Varsity Chat</string>
     <string name="placeholder_email_or_username">Enter Email or Username</string>
+    <string name="placeholder_password">Enter Password</string>
+    <string name="login_button">Login</string>
+    <string name="create_account_button">Create Account</string>
+    <string name="error_invalid_credentials">Invalid email/username or password</string>
+    <string name="error_empty_fields">Please fill in all fields</string>
+    <string name="login_title">Welcome Back</string>
+    <string name="register_title">Create an Account</string>
+    <string name="forgot_password">Enter your email to reset your password</string>
+    <string name="forgot_password_title">Forgot your password?</string>
+    <string name="header_subtitle">Connect with your university community</string>
+    <string name="email_placeholder">Enter your email</string>
+    <string name="username_placeholder">Enter your username</string>
+    <string name="password_placeholder">Enter your password</string>
+    <string name="confirm_password_placeholder">Confirm your password</string>
+    <string name="email_or_username_placeholder">Enter your email or username</string>
+
 </resources>

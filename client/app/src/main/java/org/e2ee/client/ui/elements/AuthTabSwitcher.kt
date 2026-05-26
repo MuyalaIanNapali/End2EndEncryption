@@ -1,4 +1,4 @@
-package org.e2ee.client.navigation
+package org.e2ee.client.ui.elements
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -19,15 +19,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.e2ee.client.navigation.Route
 
 @Composable
 fun AuthTabSwitcher(
-    selectedRoute: Route?,
+    selectedRoute: Route.Auth?,
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isLoginSelected = selectedRoute == Route.Auth.Login
+    val isRegisterSelected = selectedRoute == Route.Auth.Register
 
     Row(
         modifier = modifier
@@ -48,7 +50,7 @@ fun AuthTabSwitcher(
 
         AuthTabItem(
             text = "Register",
-            selected = !isLoginSelected,
+            selected = isRegisterSelected,
             onClick = onRegisterClick,
             modifier = Modifier.weight(1f)
         )
@@ -88,9 +90,7 @@ private fun AuthTabItem(
                 color = backgroundColor,
                 shape = RoundedCornerShape(24.dp)
             )
-            .clickable {
-                onClick()
-            },
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(

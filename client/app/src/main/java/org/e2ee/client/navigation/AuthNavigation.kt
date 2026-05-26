@@ -1,22 +1,28 @@
 package org.e2ee.client.navigation
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import org.e2ee.client.auth.screen.ForgotPasswordScreen
+import org.e2ee.client.R
 import org.e2ee.client.auth.screen.LoginScreen
 import org.e2ee.client.auth.screen.RegisterScreen
+import org.e2ee.client.ui.elements.AuthTabSwitcher
+import org.e2ee.client.ui.elements.HeaderSection
 
 @Composable
 fun AuthNavigation(
@@ -37,19 +43,33 @@ fun AuthNavigation(
         }
     }
 
+    val isLogin = currentRoute == Route.Auth.Login
+    val isRegister = currentRoute == Route.Auth.Register
+
     Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .padding(top = 24.dp)
+        modifier = modifier.fillMaxSize()
     ) {
+        HeaderSection(
+            title = when {
+                isLogin -> stringResource(R.string.login_title)
+                isRegister -> stringResource(R.string.register_title)
+                else -> ""
+            },
+            subtitle = when {
+                else -> stringResource(R.string.header_subtitle)
+            },
+            onBackClick = {
+                authBackStack.removeLastOrNull()
+            }
+        )
 
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp)
         ) {
             AuthTabSwitcher(
-                selectedRoute = currentRoute as Route?,
+                selectedRoute = currentRoute as? Route.Auth,
                 onLoginClick = {
                     switchAuthTab(Route.Auth.Login)
                 },
@@ -58,8 +78,10 @@ fun AuthNavigation(
                 }
             )
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+
             NavDisplay(
-                modifier = Modifier.padding(top = 24.dp),
                 backStack = authBackStack,
                 entryDecorators = listOf(
                     rememberSaveableStateHolderNavEntryDecorator(),
@@ -70,9 +92,6 @@ fun AuthNavigation(
                         LoginScreen(
                             onRegisterClick = {
                                 switchAuthTab(Route.Auth.Register)
-                            },
-                            onForgotPasswordClick = {
-                                authBackStack.add(Route.Auth.ForgotPassword)
                             }
                         )
                     }
@@ -85,20 +104,13 @@ fun AuthNavigation(
                         )
                     }
 
-                    entry<Route.Auth.ForgotPassword> {
-                        ForgotPasswordScreen(
-                            onBackClick = {
-                                authBackStack.removeLastOrNull()
-                            }
-                        )
-                    }
                 }
             )
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun AuthNavigationPreview() {
     AuthNavigation()

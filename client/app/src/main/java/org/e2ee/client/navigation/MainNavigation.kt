@@ -29,7 +29,11 @@ fun MainNavigation(
                 //TODO
             }
 
-            entry<Route.Settings> {
+            entry<Route.Main.Search> {
+                //TODO
+            }
+
+            entry<Route.Main.Settings> {
                 //TODO
             }
         }

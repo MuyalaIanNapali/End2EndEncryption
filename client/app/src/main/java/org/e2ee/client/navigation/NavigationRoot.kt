@@ -29,10 +29,6 @@ fun NavigationRoot(
             entry<Route.Main> {
                 //TODO
             }
-
-            entry<Route.Main.Search> {
-                //TODO
-            }
         }
     )
 }

@@ -14,6 +14,9 @@ import org.e2ee.data.local.chatRoom.ChatRoom
             childColumns = ["sessionId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        androidx.room.Index(value = ["sessionId"])
     ]
 )
 data class Messages(

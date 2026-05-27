@@ -1,5 +1,6 @@
 package org.e2ee.client.auth.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -94,7 +95,9 @@ class CreateAccountViewModel @Inject constructor(
                 isAccountCreationSuccessful = false
             )
 
+            Log.d("CreateAccount", "createAccount() called")
             try {
+                Log.d("CreateAccount", "Before use case")
                 val request = RegistrationRequest(
                     email = currentState.email.trim(),
                     username = currentState.username.trim(),

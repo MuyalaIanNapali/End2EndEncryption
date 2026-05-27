@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
 
 @Dao
 interface SignedPreKeysDao {

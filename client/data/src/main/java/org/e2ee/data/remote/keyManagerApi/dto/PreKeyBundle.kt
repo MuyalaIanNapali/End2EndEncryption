@@ -1,5 +1,7 @@
 package org.e2ee.data.remote.keyManagerApi.dto
 
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
+
 data class PreKeyBundleDto(
     var userId: Long? = null,
 

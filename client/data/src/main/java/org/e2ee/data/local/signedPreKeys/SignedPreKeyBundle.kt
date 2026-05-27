@@ -1,4 +1,4 @@
-package org.e2ee.data.remote.keyManagerApi.dto
+package org.e2ee.data.local.signedPreKeys
 
 data class SignedPreKeyBundle(
     val keyId: String,

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.e2ee.client.auth.content.CreateAccountScreenContent
 import org.e2ee.client.auth.viewmodel.CreateAccountViewModel
@@ -13,7 +14,7 @@ import org.e2ee.client.ui.elements.AppLoadingIndicator
 
 @Composable
 fun CreateAccountScreen(
-    viewModel: CreateAccountViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: CreateAccountViewModel = hiltViewModel(),
     onCreateAccountSuccess: () -> Unit = {}
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value

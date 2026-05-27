@@ -1,6 +1,8 @@
 package org.e2ee.data.remote.keyManagerApi.dto
 
 import org.e2ee.common.PreKeyBundle
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
+import org.e2ee.data.remote.util.fromBase64
 
 data class PreKeyBundleResponse(
     val identityKey: ByteArray,

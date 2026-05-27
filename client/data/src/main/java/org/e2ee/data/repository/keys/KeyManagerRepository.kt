@@ -3,7 +3,7 @@ package org.e2ee.data.repository.keys
 import androidx.annotation.WorkerThread
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerification
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerificationResult
-import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
 import javax.inject.Inject
 

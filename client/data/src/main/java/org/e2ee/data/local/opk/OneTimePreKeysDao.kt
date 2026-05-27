@@ -17,7 +17,7 @@ interface  OneTimePreKeysDao {
     suspend fun deleteOneTimePreKeyById(opkId: String)
 
     @Query("SELECT * FROM one_time_pre_keys WHERE uploaded = 0")
-    suspend fun getNotUploaded(): List<OneTimePreKeys>?
+    suspend fun getNotUploaded(): List<OneTimePreKeys>
 
     @Query("UPDATE one_time_pre_keys SET uploaded = 1 WHERE opkId IN (:opkIds)")
     suspend fun markAsUploaded(opkIds: List<String>)

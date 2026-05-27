@@ -2,7 +2,8 @@ package org.e2ee.data.repository.keys
 
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerification
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyVerificationResult
-import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
+import org.e2ee.data.remote.util.fromBase64
 import javax.inject.Inject
 
 class OwnPreKeyVerifier @Inject constructor() {
@@ -19,22 +20,22 @@ class OwnPreKeyVerifier @Inject constructor() {
     ): PreKeyVerificationResult {
 
         val identitySigningKeyMatches =
-            server.identityKeySigning.contentEquals(localIdentitySigningPublicKey)
+            (server.identityKeySigning.fromBase64()).contentEquals(localIdentitySigningPublicKey)
 
         val signedPreKeyIdMatches =
-            server.signedPreKeyBundle.keyId == localSignedPreKeyBundle.keyId
+            server.signedPreKeyBundleDto.keyId == localSignedPreKeyBundle.keyId
 
         val signedPreKeyMatches =
-            server.signedPreKeyBundle.signedPreKey.contentEquals(
+            (server.signedPreKeyBundleDto.signedPreKey.fromBase64()).contentEquals(
                 localSignedPreKeyBundle.signedPreKey
             )
 
         val signatureValid =
             if (identitySigningKeyMatches && signedPreKeyMatches) {
                 verifySignature(
-                    server.identityKeySigning,
-                    server.signedPreKeyBundle.signedPreKey,
-                    server.signedPreKeyBundle.signature
+                    server.identityKeySigning.fromBase64(),
+                    server.signedPreKeyBundleDto.signedPreKey.fromBase64(),
+                    server.signedPreKeyBundleDto.signature.fromBase64()
                 )
             } else {
                 false

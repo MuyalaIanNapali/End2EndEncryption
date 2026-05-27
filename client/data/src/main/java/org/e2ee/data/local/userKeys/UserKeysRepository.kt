@@ -1,5 +1,6 @@
 package org.e2ee.data.local.userKeys
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import org.e2ee.crypto.Crypto
 import javax.inject.Inject
@@ -30,7 +31,9 @@ class UserKeysRepository @Inject constructor(
 
     @WorkerThread
     suspend fun generateAndStoreUserKeys() {
-       val (identityKeyPair, identitySigningKeyPair) = crypto.generateIKAndIKsPairs()
+        Log.d("CreateAccountDebug", "calling crypto to generate user keys")
+        val (identityKeyPair, identitySigningKeyPair) = crypto.generateIKAndIKsPairs()
+        Log.d("CreateAccountDebug", "crypto generated keys")
         val userKeys = UserKeys(
             identityKeyPublic = identityKeyPair.first,
             identityKeyPrivate = identityKeyPair.second,

@@ -3,7 +3,7 @@ package org.e2ee.data.local.signedPreKeys
 import androidx.annotation.WorkerThread
 import org.e2ee.crypto.Crypto
 import org.e2ee.data.local.userKeys.UserKeysRepository
-import org.e2ee.data.remote.keyManagerApi.dto.SignedPreKeyBundle
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
 import java.util.UUID
 import javax.inject.Inject
 

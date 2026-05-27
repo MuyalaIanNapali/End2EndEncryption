@@ -1,5 +1,6 @@
 [versions]
 agp = "9.2.1"
+bcprovJdk18on = "1.84"
 converterScalars = "3.0.0"
 coreKtx = "1.18.0"
 hiltAndroidCompiler = "2.59.2"
@@ -28,6 +29,7 @@ material3 = "1.4.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+bcprov-jdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bcprovJdk18on" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterScalars" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }

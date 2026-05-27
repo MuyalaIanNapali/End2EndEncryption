@@ -21,6 +21,10 @@ import org.e2ee.data.local.user.User
             childColumns = ["recipientId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        androidx.room.Index(value = ["senderId"]),
+        androidx.room.Index(value = ["recipientId"])
     ]
 )
 data class ChatRoom (

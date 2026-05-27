@@ -14,4 +14,5 @@ kotlin {
 
 dependencies{
     implementation(project(":common"))
+    implementation(libs.bcprov.jdk18on)
 }

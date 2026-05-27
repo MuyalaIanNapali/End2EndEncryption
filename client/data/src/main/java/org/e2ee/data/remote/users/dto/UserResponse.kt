@@ -9,7 +9,7 @@ data class UserResponse(
     val email: String,
     val avatarUrl: String? = null,
     val isOnline: Boolean,
-    val lastSeen: LocalDateTime? = null
+    val lastSeen: String ?= null
 ) {
     fun toUser(): User {
         return User(

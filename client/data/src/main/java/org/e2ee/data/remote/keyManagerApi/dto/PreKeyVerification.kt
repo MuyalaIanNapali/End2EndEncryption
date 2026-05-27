@@ -1,8 +1,10 @@
 package org.e2ee.data.remote.keyManagerApi.dto
 
+import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
+
 data class PreKeyVerification(
-    val identityKeySigning: ByteArray,
-    val signedPreKeyBundle: SignedPreKeyBundle,
+    val identityKeySigning: String,
+    val signedPreKeyBundleDto: SignedPreKeyBundleDto,
 )
 
 data class PreKeyVerificationResult(
@@ -12,3 +14,5 @@ data class PreKeyVerificationResult(
     val signedPreKeyIdMatches: Boolean,
     val signatureValid: Boolean
 )
+
+

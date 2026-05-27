@@ -19,15 +19,10 @@ internal class SignatureHelper {
     }
 
     fun generateSigningKeyPair(): KeyPair {
-        println("CreateAccountDebug: Generating Ed25519 signing key pair with BC")
 
         val keygen = KeyPairGenerator.getInstance("Ed25519", "BC")
 
-        println("CreateAccountDebug: Initialized BC Ed25519 KeyPairGenerator")
-
         val keyPair = keygen.generateKeyPair()
-
-        println("CreateAccountDebug: BC Ed25519 signing key pair generated")
 
         return keyPair
     }

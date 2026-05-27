@@ -95,9 +95,7 @@ class CreateAccountViewModel @Inject constructor(
                 isAccountCreationSuccessful = false
             )
 
-            Log.d("CreateAccount", "createAccount() called")
             try {
-                Log.d("CreateAccount", "Before use case")
                 val request = RegistrationRequest(
                     email = currentState.email.trim(),
                     username = currentState.username.trim(),

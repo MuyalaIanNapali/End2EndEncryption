@@ -10,6 +10,7 @@ import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.UserRequest
+import org.e2ee.data.remote.users.dto.UserRequestDto
 import javax.inject.Inject
 
 class UserRegistrationRepository @Inject constructor(
@@ -23,20 +24,13 @@ class UserRegistrationRepository @Inject constructor(
 
     suspend fun register(request: UserRequest): ApiResult<Boolean> {
         return try {
-            Log.d("CreateAccountDebug", "getting user keys")
             var userKeys = keysRepository.getUserKeys()
 
-
-            Log.d("CreateAccountDebug", "getting user keys 2")
             if (userKeys == null) {
-                Log.d("CreateAccountDebug", "generating user keys")
                 keysRepository.generateAndStoreUserKeys()
-                Log.d("CreateAccountDebug", "userkeys generated")
                 userKeys = keysRepository.getUserKeys()
                     ?: return ApiResult.UnknownError("Failed to generate user keys")
             }
-
-            Log.d("CreateAccountDebug", "getting spk")
 
             var signedPreKey = spkRepository.getActiveSignedPreKeyBundle()
 
@@ -46,7 +40,6 @@ class UserRegistrationRepository @Inject constructor(
                     ?: return ApiResult.UnknownError("Failed to generate signed pre-key")
             }
 
-            Log.d("CreateAccountDebug", "getting opks")
             var opks = opkRepository.getNotUploaded()
 
             if (opks.isNullOrEmpty()) {
@@ -58,7 +51,7 @@ class UserRegistrationRepository @Inject constructor(
                 return ApiResult.UnknownError("Failed to generate one-time pre-keys")
             }
 
-            Log.d("CreateAccountDebug", "Create prekey bundle")
+
             val preKeyBundle = PreKeyBundleDto(
                 userId = null,
                 identityKey = userKeys.identityKeyPublic,
@@ -67,7 +60,11 @@ class UserRegistrationRepository @Inject constructor(
                 opkMap = opks.associate { it.opkId to it.publicKey }
             )
 
-            val registrationRequest = request.copy(
+            val registrationRequest = UserRequestDto(
+                username = request.username,
+                email = request.email,
+                password = request.password,
+                avatarUrl = request.avatarUrl,
                 preKeyBundle = preKeyBundle
             )
 

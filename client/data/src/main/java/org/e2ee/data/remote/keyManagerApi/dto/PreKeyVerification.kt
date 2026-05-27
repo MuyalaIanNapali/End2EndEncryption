@@ -4,7 +4,7 @@ import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
 
 data class PreKeyVerification(
     val identityKeySigning: String,
-    val signedPreKeyBundleDto: SignedPreKeyBundleDto,
+    val signedPreKeyBundle: SignedPreKeyBundleDto,
 )
 
 data class PreKeyVerificationResult(

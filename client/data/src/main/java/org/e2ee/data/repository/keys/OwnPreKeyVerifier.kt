@@ -23,10 +23,10 @@ class OwnPreKeyVerifier @Inject constructor() {
             (server.identityKeySigning.fromBase64()).contentEquals(localIdentitySigningPublicKey)
 
         val signedPreKeyIdMatches =
-            server.signedPreKeyBundleDto.keyId == localSignedPreKeyBundle.keyId
+            server.signedPreKeyBundle.keyId == localSignedPreKeyBundle.keyId
 
         val signedPreKeyMatches =
-            (server.signedPreKeyBundleDto.signedPreKey.fromBase64()).contentEquals(
+            (server.signedPreKeyBundle.signedPreKey.fromBase64()).contentEquals(
                 localSignedPreKeyBundle.signedPreKey
             )
 
@@ -34,8 +34,8 @@ class OwnPreKeyVerifier @Inject constructor() {
             if (identitySigningKeyMatches && signedPreKeyMatches) {
                 verifySignature(
                     server.identityKeySigning.fromBase64(),
-                    server.signedPreKeyBundleDto.signedPreKey.fromBase64(),
-                    server.signedPreKeyBundleDto.signature.fromBase64()
+                    server.signedPreKeyBundle.signedPreKey.fromBase64(),
+                    server.signedPreKeyBundle.signature.fromBase64()
                 )
             } else {
                 false

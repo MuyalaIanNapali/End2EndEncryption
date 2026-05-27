@@ -26,7 +26,7 @@ class UserRepository @Inject constructor(
             .toDomainResult()
     }
 
-    override suspend fun login(request: LoginRequest): Boolean {
+    override suspend fun login(request: LoginRequest): DomainResult<Boolean> {
         return userLoginRepository.login(request.toLoginRequestDto())
     }
 

@@ -66,12 +66,8 @@ class UserService(
 
         userRepository.save(user)
 
-        if(request.preKeyBundle != null){
-            request.preKeyBundle.userId = user.id
-            keyManagerService.savePreKeyBundle(request.preKeyBundle)
-        }else{
-            throw PreKeyBundlesNotFoundException()
-        }
+        request.preKeyBundle.userId = user.id
+        keyManagerService.savePreKeyBundle(request.preKeyBundle)
 
 
         return loginUser(LoginRequest(user.username, rawPassword))
@@ -96,6 +92,7 @@ class UserService(
         val refreshToken = refreshTokenService.createRefreshToken(user.id!!)
 
         val preKeyVerification = keyManagerService.getPreKeyVerificationBundle(user.id!!)
+            ?: throw PreKeyBundlesNotFoundException()
 
         return ResponseEntity.ok(
             LoginResponse(

@@ -5,6 +5,7 @@ import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
+import org.e2ee.data.remote.users.dto.UserRequestDto
 import retrofit2.Response
 import retrofit2.http.GET
 import org.e2ee.data.remote.users.dto.UserResponse
@@ -19,7 +20,7 @@ interface UserApi {
 
     @POST("/api/v1/users/createUser")
     suspend fun createAccount(
-        @Body request: UserRequest
+        @Body request: UserRequestDto
     ): Response<LoginResponse>
 
     @POST("/api/v1/users/login")

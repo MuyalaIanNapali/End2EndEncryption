@@ -7,7 +7,7 @@ import org.e2ee.domain.model.RegistrationRequest
 interface AuthRepository {
         suspend fun register(request: RegistrationRequest): DomainResult<Boolean>
 
-        suspend fun login(request: LoginRequest): Boolean
+        suspend fun login(request: LoginRequest): DomainResult<Boolean>
 
         suspend fun logout()
 }

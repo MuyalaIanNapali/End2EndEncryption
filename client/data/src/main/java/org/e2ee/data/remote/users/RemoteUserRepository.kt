@@ -7,13 +7,14 @@ import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
 import org.e2ee.data.remote.users.dto.UserRequest
+import org.e2ee.data.remote.users.dto.UserRequestDto
 import org.e2ee.data.remote.users.dto.UserResponse
 import javax.inject.Inject
 
 class RemoteUserRepository @Inject constructor(
     private val userApi: UserApi,
 ) {
-    suspend fun createAccount(request: UserRequest): ApiResult<LoginResponse> {
+    suspend fun createAccount(request: UserRequestDto): ApiResult<LoginResponse> {
         return safeApiCall {
             userApi.createAccount(request)
         }

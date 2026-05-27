@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.user
 
+import android.util.Log
 import org.e2ee.crypto.Crypto
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.user.LocalUserRepository
@@ -9,6 +10,7 @@ import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.repository.keys.KeyManagerRepository
+import org.e2ee.domain.model.DomainResult
 import javax.inject.Inject
 
 class UserLoginRepository @Inject constructor(
@@ -21,8 +23,9 @@ class UserLoginRepository @Inject constructor(
     private val crypto: Crypto
 ) {
 
-    suspend fun login(request: LoginRequestDto): Boolean {
+    suspend fun login(request: LoginRequestDto): DomainResult<Boolean> {
         return try {
+            Log.d("Login", "Login request started")
             when (val response = remoteUser.login(request)) {
                 is ApiResult.Success -> {
                     val loginResponse = response.data
@@ -36,19 +39,23 @@ class UserLoginRepository @Inject constructor(
                         loginResponse.user.toUser()
                     )
 
-                    ensureLocalKeysExist() ?: return false
+                    ensureLocalKeysExist()
+                        ?: return DomainResult
+                            .Error(
+                                "Local Keys initialization failed. Please try logging in again."
+                            )
 
                     val localKeys = keysRepository.getUserKeys()
-                        ?: return false
+                        ?: return DomainResult
+                            .Error("Failed to retrieve local keys after login")
 
                     val localSpk = spkRepository.getActiveSignedPreKeyBundle()
-                        ?: return false
+                        ?: return DomainResult
+                            .Error(
+                                "Failed to retrieve local signed pre-key bundle after login"
+                            )
 
                     val serverVerification = loginResponse.preKeyVerification
-
-                    if (serverVerification == null) {
-                        return uploadFullPreKeyBundle()
-                    }
 
                     val result = keyManagerRepository.verifyOwnServerPreKeys(
                         server = serverVerification,
@@ -64,27 +71,32 @@ class UserLoginRepository @Inject constructor(
                     )
 
                     if (!result.isValid) {
-                        return uploadFullPreKeyBundle()
+                        val success = uploadFullPreKeyBundle()
+                        return if (success) {
+                            DomainResult.Success(true)
+                        } else {
+                            DomainResult.Error("Failed to upload pre-key bundle. Please try logging in again.")
+                        }
                     }
 
-                    true
+                    DomainResult.Success(true)
                 }
 
-                is ApiResult.Error -> false
-                is ApiResult.NetworkError -> false
-                is ApiResult.UnknownError -> false
+                is ApiResult.Error -> DomainResult.Error(response.message)
+                is ApiResult.NetworkError -> DomainResult.Error("Network error. Please check your connection and try again.")
+                is ApiResult.UnknownError -> DomainResult.Error(response.message )
             }
         } catch (e: Exception) {
-            false
+            DomainResult.Error(e.message ?: "An unexpected error occurred. Please try again.")
         }
     }
 
-    private suspend fun ensureLocalKeysExist(): Boolean? {
+    private suspend fun ensureLocalKeysExist(): DomainResult<Boolean>? {
         var localKeys = keysRepository.getUserKeys()
         var localSpk = spkRepository.getActiveSignedPreKeyBundle()
 
         if (localKeys != null && localSpk != null) {
-            return true
+            return DomainResult.Success(true)
         }
 
         val initialized = keyManagerRepository.initUserPreKeys()
@@ -97,12 +109,16 @@ class UserLoginRepository @Inject constructor(
         localSpk = spkRepository.getActiveSignedPreKeyBundle()
 
         if (localKeys == null || localSpk == null) {
-            return null
+            return DomainResult.Error("Failed to initialize local keys. Please try logging in again.")
         }
 
         val uploaded = uploadFullPreKeyBundle()
 
-        return if (uploaded) true else null
+        return if (uploaded) {
+            DomainResult.Success(true)
+        } else {
+            DomainResult.Error("Failed to upload pre-key bundle. Please try logging in again.")
+        }
     }
 
     private suspend fun uploadFullPreKeyBundle(): Boolean {

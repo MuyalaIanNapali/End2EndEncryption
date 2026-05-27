@@ -194,12 +194,8 @@ class Crypto {
     }
 
     fun generateIKAndIKsPairs():Pair<Pair<ByteArray, ByteArray>, Pair<ByteArray, ByteArray>> {
-        println("CreateAccountDebug: Crypto: generateIKAndIKsPairs started")
         val identityKeyPair = ecdh.generateEllipticCurveKeyPair()
-        println("CreateAccountDebug: Crypto: generateIKAndIKsPairs generated identity key pair")
         val signingKeyPair = sig.generateSigningKeyPair()
-        println("CreateAccountDebug: Crypto: generateIKAndIKsPairs generated signing key pair")
-
 
         return Pair(
             Pair(identityKeyPair.public.encoded, identityKeyPair.private.encoded),

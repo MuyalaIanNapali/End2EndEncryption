@@ -3,16 +3,20 @@ package org.e2ee.client.auth.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.e2ee.client.models.CreateAccountUiState
+import org.e2ee.domain.model.DomainResult
+import org.e2ee.domain.model.RegistrationRequest
+import org.e2ee.domain.usecase.CreateAccountUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateAccountViewModel @Inject constructor() : ViewModel() {
+class CreateAccountViewModel @Inject constructor(
+    private val createAccountUseCase: CreateAccountUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateAccountUiState())
     val uiState: StateFlow<CreateAccountUiState> = _uiState.asStateFlow()
@@ -86,16 +90,62 @@ class CreateAccountViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _uiState.value = currentState.copy(
                 isLoading = true,
-                errorMessage = null
+                errorMessage = null,
+                isAccountCreationSuccessful = false
             )
 
-            // Temporary until you connect your register use case/API
-            delay(800)
+            try {
+                val request = RegistrationRequest(
+                    email = currentState.email.trim(),
+                    username = currentState.username.trim(),
+                    password = currentState.password
+                )
 
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                isAccountCreationSuccessful = true
-            )
+                when (val result = createAccountUseCase(request)) {
+                    is DomainResult.Success -> {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            isAccountCreationSuccessful = result.data,
+                            errorMessage = if (result.data) {
+                                null
+                            } else {
+                                "Account creation failed"
+                            }
+                        )
+                    }
+
+                    is DomainResult.Error -> {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            isAccountCreationSuccessful = false,
+                            errorMessage = result.message
+                        )
+                    }
+
+                    DomainResult.NetworkError -> {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            isAccountCreationSuccessful = false,
+                            errorMessage = "Network error. Please check your connection."
+                        )
+                    }
+
+                    is DomainResult.UnknownError -> {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            isAccountCreationSuccessful = false,
+                            errorMessage = result.message ?: "Something went wrong"
+                        )
+                    }
+                }
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isAccountCreationSuccessful = false,
+                    errorMessage = e.message ?: "Something went wrong"
+                )
+            }
         }
     }
 }

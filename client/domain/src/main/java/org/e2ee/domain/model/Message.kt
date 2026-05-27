@@ -1,7 +1,5 @@
 package org.e2ee.domain.model
 
-import java.time.LocalDateTime
-
 data class Message(
     val remoteId: String,
     val sessionId: String,

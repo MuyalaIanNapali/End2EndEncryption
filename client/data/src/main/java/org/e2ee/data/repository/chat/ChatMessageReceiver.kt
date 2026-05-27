@@ -7,6 +7,7 @@ import org.e2ee.data.local.user.LocalUserRepository
 import org.e2ee.data.remote.websocket.ChatMessage
 import org.e2ee.data.remote.websocket.ChatStompClient
 import org.e2ee.data.remote.websocket.DeliveryReceiptRequest
+import org.e2ee.domain.notifications.MessageNotifier
 import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
@@ -78,7 +79,7 @@ class ChatMessageReceiver @Inject constructor(
 
             messageNotifier.showMessageNotification(
                 senderId = encryptedMessage.senderId,
-                message = decryptedBody
+                messageBody = decryptedBody
             )
         } catch (e: Exception) {
             println("Error processing incoming message: ${e.message}")

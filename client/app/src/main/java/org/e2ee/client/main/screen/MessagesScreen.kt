@@ -31,6 +31,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.e2ee.client.R
 import org.e2ee.client.main.viewmodel.MessagesScreenViewModel
+import org.e2ee.client.ui.elements.AppLoadingIndicator
 import org.e2ee.client.ui.elements.MainTopAppBar
 import org.e2ee.client.ui.elements.MessageCard
 
@@ -136,10 +137,4 @@ fun MessagesScreen(
             onSettingsClick = onSettingsClick
         )
     }
-}
-
-@Composable
-@Preview
-fun MessagesScreenPreview() {
-    MessagesScreen()
 }

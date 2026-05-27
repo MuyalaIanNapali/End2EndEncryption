@@ -31,5 +31,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     implementation(libs.hilt.android)
+    implementation(libs.kotlinx.datetime)
     ksp(libs.hilt.android.compiler)
 }

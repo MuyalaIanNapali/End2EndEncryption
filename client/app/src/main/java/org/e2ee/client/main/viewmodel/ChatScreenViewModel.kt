@@ -2,6 +2,7 @@ package org.e2ee.client.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,8 +19,11 @@ class ChatScreenViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(ChatScreenUiState())
     val uiState: StateFlow<ChatScreenUiState> = _uiState.asStateFlow()
 
-    fun loadMessages(sessionId: String) {
+    suspend fun loadMessages(sessionId: String) {
         _uiState.value = _uiState.value.copy(isLoading = true)
+
+        //delay
+        delay(1600)
 
         _uiState.value = ChatScreenUiState(
             isLoading = false,

@@ -94,9 +94,6 @@ fun AuthNavigation(
                 entryProvider = entryProvider {
                     entry<Route.Auth.Login> {
                         LoginScreen(
-                            onRegisterClick = {
-                                switchAuthTab(Route.Auth.Register)
-                            },
                             onLoginSuccess = {
                                 onAuthSuccess()
                             }

@@ -14,6 +14,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.e2ee.client.main.content.ScrollContent
 import org.e2ee.client.main.viewmodel.ChatScreenViewModel
+import org.e2ee.client.ui.elements.AppLoadingIndicator
 import org.e2ee.client.ui.elements.ChatBottomBar
 import org.e2ee.client.ui.elements.ChatTopAppBar
 
@@ -61,10 +62,7 @@ fun ChatScreen(
     ) { innerPadding ->
         when {
             uiState.isLoading -> {
-                Text(
-                    text = "Loading messages...",
-                    modifier = Modifier.padding(innerPadding)
-                )
+                AppLoadingIndicator()
             }
 
             uiState.errorMessage != null -> {
@@ -83,3 +81,5 @@ fun ChatScreen(
         }
     }
 }
+
+

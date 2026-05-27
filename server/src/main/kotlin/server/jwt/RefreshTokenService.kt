@@ -1,6 +1,8 @@
 package server.jwt
 
 import org.springframework.stereotype.Service
+import server.exceptionHandler.InvalidRefreshTokenException
+import server.exceptionHandler.TokenExpiredException
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -25,10 +27,10 @@ class RefreshTokenService(
 
     fun validate(token: String): RefreshToken {
         val refreshToken = repo.findByToken(token)
-            ?: throw RuntimeException("Invalid refresh token")
+            ?: throw InvalidRefreshTokenException()
 
         if (refreshToken.expiresAt.isBefore(LocalDateTime.now())) {
-            throw RuntimeException("Refresh token expired")
+            throw TokenExpiredException()
         }
 
         return refreshToken

@@ -1,14 +1,45 @@
 server:
   port: 5000
 
-#logging:
-#  file:
-#    path: logs
-#  structured:
-#    format:
-#      console: ecs
-#      file: ecs
+logging:
+  file:
+    path: logs
+    name: logs/server.log
 
+  level:
+    root: INFO
+
+    # Your own backend package
+    server: DEBUG
+
+    # Spring Web request handling
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+
+    # Spring Security debugging
+    org.springframework.security: DEBUG
+
+    # Shows request mappings and controller activity
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor: DEBUG
+
+    # JSON serialization/deserialization
+    org.springframework.http.converter.json: DEBUG
+
+    # Hibernate / database debugging
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+    # Redis
+    org.springframework.data.redis: DEBUG
+
+    # Kafka
+    org.springframework.kafka: INFO
+    org.apache.kafka: WARN
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n"
 
 spring:
   application:
@@ -18,11 +49,13 @@ spring:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
+
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   security:
     user:
       name: admin
@@ -35,6 +68,7 @@ spring:
     properties:
       hibernate:
         physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        format_sql: true
     open-in-view: false
 
   data:
@@ -44,6 +78,7 @@ spring:
       password: ${REDIS_PASSWORD}
       repositories:
         enabled: false
+
   Kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
@@ -59,3 +94,8 @@ spring:
       properties:
         spring.json.trusted.packages: "server.chat,server.message"
         spring.json.value.default.type: "server.chat.ChatMessage"
+  web:
+    error:
+      include-message: always
+      include-binding-errors: always
+      include-stacktrace: always

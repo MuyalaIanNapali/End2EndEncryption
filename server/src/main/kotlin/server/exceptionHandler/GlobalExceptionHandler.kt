@@ -146,6 +146,30 @@ class GlobalExceptionHandler {
         )
     }
 
+    @ExceptionHandler(InvalidRefreshTokenException::class)
+    fun handleInvalidRefreshToken(
+        ex: InvalidRefreshTokenException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return buildErrorResponse(
+            status = HttpStatus.UNAUTHORIZED,
+            message = ex.message ?: "Invalid refresh token",
+            request = request
+        )
+    }
+
+    @ExceptionHandler(TokenExpiredException::class)
+    fun handleTokenExpired(
+        ex: TokenExpiredException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return buildErrorResponse(
+            status = HttpStatus.UNAUTHORIZED,
+            message = ex.message ?: "Token expired",
+            request = request
+        )
+    }
+
     private fun buildErrorResponse(
         status: HttpStatus,
         message: String,

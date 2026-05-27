@@ -1,50 +1,40 @@
 package org.e2ee.client.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.ui.NavDisplay
-import kotlin.collections.listOf
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.e2ee.client.auth.viewmodel.SessionViewModel
+import org.e2ee.client.models.SessionUiState
+import org.e2ee.client.ui.elements.AppLoadingIndicator
 
 @Composable
 fun NavigationRoot(
-    modifier: Modifier = Modifier
-){
-    val rootBackStack = rememberNavBackStack(Route.Auth)
+    modifier: Modifier = Modifier,
+    sessionViewModel: SessionViewModel = hiltViewModel()
+) {
+    val sessionState by sessionViewModel.sessionState.collectAsStateWithLifecycle()
 
-    NavDisplay(
-        backStack = rootBackStack,
-        entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator()
-        ),
-        entryProvider = entryProvider {
-            entry<Route.Auth> {
-                AuthNavigation(
-                    onAuthSuccess = {
-                        rootBackStack.add(Route.Main)
-                    }
-                )
-            }
-
-            entry<Route.Main> {
-                MainNavigation(
-                    onLogOut = {
-                        rootBackStack.clear()
-                        rootBackStack.add(Route.Auth)
-                    }
-                )
-            }
+    when (sessionState) {
+        SessionUiState.Checking -> {
+            AppLoadingIndicator()
         }
-    )
-}
 
-@Preview
-@Composable
-fun NavigationRootPreview() {
-    NavigationRoot()
+        SessionUiState.Unauthenticated -> {
+            AuthNavigation(
+                onAuthSuccess = {
+                    sessionViewModel.onAuthSuccess()
+                }
+            )
+        }
+
+        SessionUiState.Authenticated -> {
+            MainNavigation(
+                onLogOut = {
+                    sessionViewModel.logout()
+                }
+            )
+        }
+    }
 }

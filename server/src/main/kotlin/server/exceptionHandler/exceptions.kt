@@ -11,3 +11,7 @@ class InvalidCredentialsException(message: String = "Invalid username or passwor
 class UserPublicKeyNotFoundException(message: String = "User public key not found") : RuntimeException(message)
 
 class PreKeyBundlesNotFoundException(message: String = "Pre-key-bundle not found") : RuntimeException(message)
+
+class InvalidRefreshTokenException(message: String = "Invalid refresh token") : RuntimeException(message)
+
+class TokenExpiredException(message: String = "Token expired") : RuntimeException(message)

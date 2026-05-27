@@ -65,9 +65,3 @@ fun MainNavigation(
         }
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun MainNavigationPreview() {
-    MainNavigation()
-}

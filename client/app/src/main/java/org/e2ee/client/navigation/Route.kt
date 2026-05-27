@@ -21,10 +21,13 @@ sealed interface Route: NavKey {
     data object Main : Route {
 
         @Serializable
-        data object Chats : Route
+        data object Messages : Route
 
         @Serializable
-        data class Chat(val chatId: String) : Route
+        data class Chat(
+            val sessionId: String,
+            val username: String
+        ) : Route
 
         @Serializable
         data object Search : Route

@@ -1,76 +1,48 @@
 package org.e2ee.client.auth.screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import org.e2ee.client.R
-import org.e2ee.client.ui.elements.AppButton
-import org.e2ee.client.ui.elements.AppTextField
-import org.e2ee.client.ui.elements.PasswordTextField
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.e2ee.client.auth.content.LoginScreenContent
+import org.e2ee.client.auth.viewmodel.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    onRegisterClick: () -> Unit
+    viewModel: LoginViewModel = hiltViewModel(),
+    onRegisterClick: () -> Unit,
+    onLoginSuccess: () -> Unit = {}
 ) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize()
-    ) {
-        AppTextField(
-            value = email.value,
-            onValueChange = { email.value = it },
-            placeholder = stringResource(R.string.email_or_username_placeholder),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = null
-                )
-            }
-        )
-        PasswordTextField(
-            value = password.value,
-            onValueChange = { password.value = it }
-        )
-
-        AppButton(
-            onClick = { /* Handle login logic here */ },
-            buttonText =stringResource(R.string.login_button) ,
-            modifier = Modifier
-                .width(200.dp)
-                .align (CenterHorizontally)
-        ) { }
-
-
-
+    LaunchedEffect(uiState.isLoginSuccessful) {
+        if (uiState.isLoginSuccessful) {
+            onLoginSuccess()
+        }
     }
 
+    LoginScreenContent(
+        emailOrUsername = uiState.emailOrUsername,
+        password = uiState.password,
+        isLoading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
+        onEmailOrUsernameChange = viewModel::onEmailOrUsernameChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onLoginClick = viewModel::login
+    )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(
-        onRegisterClick = {},
+    LoginScreenContent(
+        emailOrUsername = "",
+        password = "",
+        isLoading = false,
+        errorMessage = null,
+        onEmailOrUsernameChange = {},
+        onPasswordChange = {},
+        onLoginClick = {}
     )
 }

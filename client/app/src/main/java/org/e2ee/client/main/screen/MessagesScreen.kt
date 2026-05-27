@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +27,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.e2ee.client.R
+import org.e2ee.client.main.viewmodel.MessagesScreenViewModel
 import org.e2ee.client.ui.elements.MainTopAppBar
 import org.e2ee.client.ui.elements.MessageCard
 
@@ -34,9 +38,16 @@ import org.e2ee.client.ui.elements.MessageCard
 @Composable
 fun MessagesScreen(
     modifier: Modifier = Modifier,
+    viewModel: MessagesScreenViewModel = hiltViewModel(),
     onSettingsClick: () -> Unit = {},
-    onChatCardClick: (otherUserName: String) -> Unit = { _ -> }
+    onChatCardClick: (sessionId: String, contactName: String) -> Unit = { _, _ -> }
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.loadChatPreviews()
+    }
+
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
 
@@ -71,7 +82,6 @@ fun MessagesScreen(
                 source: NestedScrollSource
             ): Offset {
                 val delta = available.y
-
                 val newOffset = headerOffsetPx - delta
                 headerOffsetPx = newOffset.coerceIn(0f, maxOffset)
 
@@ -79,33 +89,6 @@ fun MessagesScreen(
             }
         }
     }
-
-    val chats = listOf(
-        ChatPreview(
-            otherUserName = "Alice",
-            lastMessage = "Hey, how are you?",
-            timestamp = "10:30 AM",
-            unreadMessageCount = 2
-        ),
-        ChatPreview(
-            otherUserName = "Bob",
-            lastMessage = "Let's catch up later.",
-            timestamp = "9:15 AM",
-            unreadMessageCount = 0
-        ),
-        ChatPreview(
-            otherUserName = "Charlie",
-            lastMessage = "Did you finish the encryption module?",
-            timestamp = "Yesterday",
-            unreadMessageCount = 4
-        ),
-        ChatPreview(
-            otherUserName = "Diana",
-            lastMessage = "Okay, noted.",
-            timestamp = "Mon",
-            unreadMessageCount = 0
-        )
-    )
 
     Box(
         modifier = modifier
@@ -123,28 +106,25 @@ fun MessagesScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(chats) { chat ->
+            items(
+                items = uiState.chatCards,
+                key = { it.sessionId }
+            ) { chat ->
                 MessageCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 4.dp),
-                    otherUserName = chat.otherUserName,
+                    otherUserName = chat.contactName,
                     lastMessage = chat.lastMessage,
                     timestamp = chat.timestamp,
                     unreadMessageCount = chat.unreadMessageCount,
-                    onClick = { onChatCardClick(chat.otherUserName) }
-                )
-            }
-
-            items(20) { index ->
-                MessageCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 4.dp),
-                    otherUserName = "User ${index + 1}",
-                    lastMessage = "This is a sample chat message",
-                    timestamp = "12:${index.toString().padStart(2, '0')}",
-                    unreadMessageCount = if (index % 3 == 0) index + 1 else 0
+                    onClick = {
+                        viewModel.markChatAsRead(chat.sessionId)
+                        onChatCardClick(
+                            chat.sessionId,
+                            chat.contactName
+                        )
+                    }
                 )
             }
         }
@@ -158,16 +138,8 @@ fun MessagesScreen(
     }
 }
 
-private data class ChatPreview(
-    val otherUserName: String,
-    val lastMessage: String,
-    val timestamp: String,
-    val unreadMessageCount: Int
-)
-
-
 @Composable
 @Preview
-fun ChatsScreenPreview() {
-    MessagesScreen ()
+fun MessagesScreenPreview() {
+    MessagesScreen()
 }

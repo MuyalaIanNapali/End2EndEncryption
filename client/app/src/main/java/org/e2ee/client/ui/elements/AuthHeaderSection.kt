@@ -33,7 +33,7 @@ fun HeaderSection(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
+            .height(220.dp)
             .background(Color(0xFF172237))
     ) {
         Box(

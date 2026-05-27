@@ -1,21 +1,28 @@
 package org.e2ee.client.ui.elements
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.e2ee.client.R
 
 @Composable
 fun MessageCard(
@@ -28,36 +35,86 @@ fun MessageCard(
 ) {
     Row(
         modifier = modifier
-            .clickable {
-                onClick()
-            }
-            .padding(vertical = 8.dp)
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.medium)
+            .clickable { onClick() }
+            .padding(vertical = 10.dp, horizontal = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(R.drawable.outline_person_24),
-            contentDescription = "Contact profile picture",
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-        )
+        Surface(
+            modifier = Modifier.size(44.dp),
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = otherUserName.firstOrNull()?.uppercase() ?: "?",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
 
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.width(12.dp))
 
-        Column {
-            Text(text = otherUserName)
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = otherUserName,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(text = lastMessage)
+            Text(
+                text = lastMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.width(8.dp))
 
-        Column {
-            Text(text = timestamp)
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = timestamp,
+                style = MaterialTheme.typography.labelSmall,
+                color = if (unreadMessageCount > 0) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            )
 
             if (unreadMessageCount > 0) {
-                Text(text = unreadMessageCount.toString())
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 7.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = unreadMessageCount.toString(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
     }

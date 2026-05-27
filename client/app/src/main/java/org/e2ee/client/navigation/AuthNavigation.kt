@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -19,14 +22,15 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.e2ee.client.R
+import org.e2ee.client.auth.screen.CreateAccountScreen
 import org.e2ee.client.auth.screen.LoginScreen
-import org.e2ee.client.auth.screen.RegisterScreen
 import org.e2ee.client.ui.elements.AuthTabSwitcher
 import org.e2ee.client.ui.elements.HeaderSection
 
 @Composable
 fun AuthNavigation(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAuthSuccess: () -> Unit = {}
 ) {
     val authBackStack = rememberNavBackStack(Route.Auth.Login)
 
@@ -47,7 +51,10 @@ fun AuthNavigation(
     val isRegister = currentRoute == Route.Auth.Register
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
     ) {
         HeaderSection(
             title = when {
@@ -55,9 +62,7 @@ fun AuthNavigation(
                 isRegister -> stringResource(R.string.register_title)
                 else -> ""
             },
-            subtitle = when {
-                else -> stringResource(R.string.header_subtitle)
-            },
+            subtitle = stringResource(R.string.header_subtitle),
             onBackClick = {
                 authBackStack.removeLastOrNull()
             }
@@ -80,7 +85,6 @@ fun AuthNavigation(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-
             NavDisplay(
                 backStack = authBackStack,
                 entryDecorators = listOf(
@@ -92,26 +96,22 @@ fun AuthNavigation(
                         LoginScreen(
                             onRegisterClick = {
                                 switchAuthTab(Route.Auth.Register)
+                            },
+                            onLoginSuccess = {
+                                onAuthSuccess()
                             }
                         )
                     }
 
                     entry<Route.Auth.Register> {
-                        RegisterScreen(
-                            onLoginClick = {
-                                switchAuthTab(Route.Auth.Login)
+                        CreateAccountScreen(
+                            onCreateAccountSuccess = {
+                                onAuthSuccess()
                             }
                         )
                     }
-
                 }
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AuthNavigationPreview() {
-    AuthNavigation()
 }

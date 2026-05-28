@@ -8,4 +8,5 @@ interface UserRepository: JpaRepository<User, Long> {
     fun findByEmail(email: String): User?
 
     //override fun findById(userId: Long): Optional<User?>
+    fun findByUsernameContainingIgnoreCase(username: String): List<User>
 }

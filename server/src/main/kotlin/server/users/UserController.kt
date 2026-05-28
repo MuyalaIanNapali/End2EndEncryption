@@ -47,6 +47,11 @@ class UserController(
         return ResponseEntity.ok(userService.findUserByUsername(username))
     }
 
+    @GetMapping(value = ["/search/{username}"])
+    fun getUsersByUsername(@PathVariable username: String): ResponseEntity<List<UserResponse>> {
+        return ResponseEntity.ok(userService.searchUsersByUsername(username))
+    }
+
     @GetMapping(value = ["/id/{userId}"], produces = ["application/json"])
     fun getUserByUserId(@PathVariable userId: Long): ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.findUserByUserId(userId))

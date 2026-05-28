@@ -1,5 +1,6 @@
 package org.e2ee.data.remote.users
 
+import android.util.Log
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleResponse
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.network.safeApiCall
@@ -55,5 +56,10 @@ class RemoteUserRepository @Inject constructor(
 
     suspend fun getUserPreKeys(username: String): ApiResult<PreKeyBundleResponse> {
         return safeApiCall { userApi.getUserPublicKeys(username) }
+    }
+
+    suspend fun searchByUsername(username: String): ApiResult<List<UserResponse>> {
+        Log.d("search", "RemoteUserRepository: Searching for users with username: $username")
+        return safeApiCall { userApi.searchByUsername(username) }
     }
 }

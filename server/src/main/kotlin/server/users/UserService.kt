@@ -113,6 +113,14 @@ class UserService(
         return user.toResponse(LocalDateTime.now())
     }
 
+    fun searchUsersByUsername(
+        username: String
+    ): List<UserResponse> {
+        val users = userRepository.findByUsernameContainingIgnoreCase(username)
+
+        return users.map { it.toResponse(LocalDateTime.now()) }
+    }
+
     fun findUserByUserId(
         userId: Long
     ): UserResponse{

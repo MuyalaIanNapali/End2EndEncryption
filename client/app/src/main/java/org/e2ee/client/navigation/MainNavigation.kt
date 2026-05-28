@@ -2,7 +2,6 @@ package org.e2ee.client.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -10,6 +9,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import org.e2ee.client.main.screen.ChatScreen
 import org.e2ee.client.main.screen.MessagesScreen
+import org.e2ee.client.main.screen.SearchScreen
 
 @Composable
 fun MainNavigation(
@@ -38,6 +38,9 @@ fun MainNavigation(
                     },
                     onSettingsClick = {
                         mainBackStack.add(Route.Main.Settings)
+                    },
+                    onFabClick = {
+                        mainBackStack.add(Route.Main.Search)
                     }
                 )
             }
@@ -56,7 +59,16 @@ fun MainNavigation(
             }
 
             entry<Route.Main.Search> {
-                // TODO
+                SearchScreen(
+                    onUserClick = { userDetails ->
+                        mainBackStack.add(
+                            Route.Main.Chat(
+                                sessionId = null, // will be created during sending of the first message
+                                username = userDetails.username
+                            )
+                        )
+                    }
+                )
             }
 
             entry<Route.Main.Settings> {

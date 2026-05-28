@@ -22,7 +22,7 @@ import org.e2ee.client.ui.elements.ChatTopAppBar
 fun ChatScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatScreenViewModel = hiltViewModel(),
-    sessionId: String,
+    sessionId: String?,
     username: String,
     onBackClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {}

@@ -1,6 +1,7 @@
 package org.e2ee.data.remote.users.dto
 
 import org.e2ee.data.local.user.User
+import org.e2ee.domain.model.RemoteUserDetails
 import java.time.LocalDateTime
 
 data class UserResponse(
@@ -19,4 +20,12 @@ data class UserResponse(
             avatarUrl = avatarUrl
         )
     }
+    fun toRemoteUserDetails(): RemoteUserDetails {
+        return RemoteUserDetails(
+            id = id,
+            username = username,
+            email = email
+        )
+    }
 }
+

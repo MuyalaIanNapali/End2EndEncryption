@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -25,13 +30,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.e2ee.client.R
 import org.e2ee.client.main.viewmodel.MessagesScreenViewModel
-import org.e2ee.client.ui.elements.AppLoadingIndicator
 import org.e2ee.client.ui.elements.MainTopAppBar
 import org.e2ee.client.ui.elements.MessageCard
 
@@ -41,6 +44,7 @@ fun MessagesScreen(
     modifier: Modifier = Modifier,
     viewModel: MessagesScreenViewModel = hiltViewModel(),
     onSettingsClick: () -> Unit = {},
+    onFabClick : () -> Unit = {},
     onChatCardClick: (sessionId: String, contactName: String) -> Unit = { _, _ -> }
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -98,7 +102,8 @@ fun MessagesScreen(
             .nestedScroll(nestedScrollConnection)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             contentPadding = PaddingValues(
                 top = currentHeaderHeightDp + 16.dp,
                 start = 16.dp,
@@ -136,5 +141,17 @@ fun MessagesScreen(
             collapseProgress = collapseProgress,
             onSettingsClick = onSettingsClick
         )
+
+        FloatingActionButton(
+            onClick = onFabClick,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(24.dp)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Message,
+                contentDescription = "New chat"
+            )
+        }
     }
 }

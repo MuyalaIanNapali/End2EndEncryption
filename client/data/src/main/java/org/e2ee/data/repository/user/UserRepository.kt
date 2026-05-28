@@ -1,5 +1,8 @@
 package org.e2ee.data.repository.user
 
+import android.util.Log
+import org.e2ee.data.local.friends.FriendsRepository
+import org.e2ee.data.local.friends.toFriends
 import org.e2ee.data.repository.mapper.toDomainResult
 import org.e2ee.data.repository.mapper.toLoginRequestDto
 import org.e2ee.data.repository.mapper.toUpdateUserRequest
@@ -7,6 +10,7 @@ import org.e2ee.data.repository.mapper.toUserRequest
 import org.e2ee.domain.model.DomainResult
 import org.e2ee.domain.model.LoginRequest
 import org.e2ee.domain.model.RegistrationRequest
+import org.e2ee.domain.model.RemoteUserDetails
 import org.e2ee.domain.model.UpdateAccountInfoRequest
 import org.e2ee.domain.repository.AuthRepository
 import org.e2ee.domain.repository.UserRepository as UserRepositoryContract
@@ -17,7 +21,8 @@ class UserRepository @Inject constructor(
     private val userLoginRepository: UserLoginRepository,
     private val userAccountRepository: UserAccountRepository,
     private val userLogoutRepository: UserLogoutRepository,
-    private val userSearchRepository: UserSearchRepository
+    private val userSearchRepository: UserSearchRepository,
+    private val friendsRepository: FriendsRepository
 ): AuthRepository, UserRepositoryContract{
 
     override suspend fun register(request: RegistrationRequest): DomainResult<Boolean> {
@@ -42,15 +47,26 @@ class UserRepository @Inject constructor(
         userLogoutRepository.logout()
     }
 
-    override suspend fun searchAllUsers(): DomainResult<List<String>> {
+    override suspend fun searchAllUsers(): DomainResult<List<RemoteUserDetails>> {
         return userSearchRepository
             .searchAllUsers()
             .toDomainResult()
     }
 
-    override suspend fun searchByUsername(username: String): DomainResult<String> {
+    override suspend fun searchByUsername(username: String): DomainResult<RemoteUserDetails> {
         return userSearchRepository
             .searchByUsername(username)
             .toDomainResult()
+    }
+
+    override suspend fun searchUsersByUsername(username: String): DomainResult<List<RemoteUserDetails>> {
+        Log.d("search", "Searching for users with username: $username in UserRepository")
+        return userSearchRepository
+            .searchUsersByUsername(username)
+            .toDomainResult()
+    }
+
+    override suspend fun addContact(details: RemoteUserDetails){
+        friendsRepository.addFriend(details.toFriends())
     }
 }

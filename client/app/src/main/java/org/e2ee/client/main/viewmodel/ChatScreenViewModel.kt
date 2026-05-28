@@ -19,7 +19,7 @@ class ChatScreenViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(ChatScreenUiState())
     val uiState: StateFlow<ChatScreenUiState> = _uiState.asStateFlow()
 
-    suspend fun loadMessages(sessionId: String) {
+    suspend fun loadMessages(sessionId: String?) {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         //delay
@@ -53,7 +53,7 @@ class ChatScreenViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun sendMessage(sessionId: String, messageText: String) {
+    fun sendMessage(sessionId: String?, messageText: String) {
         val trimmedMessage = messageText.trim()
 
         if (trimmedMessage.isBlank()) return

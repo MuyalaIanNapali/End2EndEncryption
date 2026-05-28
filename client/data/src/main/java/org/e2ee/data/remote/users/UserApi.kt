@@ -51,5 +51,10 @@ interface UserApi {
         @Path("username") username: String
     ): Response<PreKeyBundleResponse>
 
+    @GET("/api/v1/users/search/{username}")
+    suspend fun searchByUsername(
+        @Path("username") username: String
+    ): Response<List<UserResponse>>
+
 
 }

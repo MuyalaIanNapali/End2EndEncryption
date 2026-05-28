@@ -16,5 +16,6 @@
     <string name="password_placeholder">Enter your password</string>
     <string name="confirm_password_placeholder">Confirm your password</string>
     <string name="email_or_username_placeholder">Enter your email or username</string>
+    <string name="search_placeholder">Search for friends</string>
 
 </resources>

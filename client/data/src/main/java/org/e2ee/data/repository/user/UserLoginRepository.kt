@@ -9,6 +9,7 @@ import org.e2ee.data.remote.auth.TokenManager
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.data.remote.users.dto.LoginRequestDto
+import org.e2ee.data.remote.users.dto.LoginResponse
 import org.e2ee.data.repository.keys.KeyManagerRepository
 import org.e2ee.data.repository.keys.UserPreKeyInitializer
 import org.e2ee.domain.model.DomainResult
@@ -26,6 +27,8 @@ class UserLoginRepository @Inject constructor(
 ) {
 
     suspend fun login(request: LoginRequestDto): DomainResult<Boolean> {
+        tokenManager.clearTokens()
+
         return try {
             when (val response = remoteUser.login(request)) {
                 is ApiResult.Success -> {
@@ -36,57 +39,26 @@ class UserLoginRepository @Inject constructor(
                         refreshToken = loginResponse.refreshToken
                     )
 
-                    localUser.insertUser(
-                        loginResponse.user.toUser()
-                    )
+                    val setupResult = completeLoginSetup(loginResponse)
 
-                    when(ensureLocalKeysExist()) {
-                        is DomainResult.Success ->{
-                            val localKeys = keysRepository.getUserKeys()
-                                ?: return DomainResult
-                                    .Error("Failed to retrieve local keys after login")
-
-                            val localSpk = spkRepository.getActiveSignedPreKeyBundle()
-                                ?: return DomainResult
-                                    .Error(
-                                        "Failed to retrieve local signed pre-key bundle after login"
-                                    )
-
-                            val serverVerification = loginResponse.preKeyVerification
-
-                            val result = keyManagerRepository.verifyOwnServerPreKeys(
-                                server = serverVerification,
-                                localIdentitySigningPublicKey = localKeys.identitySigningKeyPublic,
-                                localSignedPreKeyBundle = localSpk,
-                                verifySignature = { publicKey, message, signature ->
-                                    crypto.verifySignature(
-                                        publicKey = publicKey,
-                                        message = message,
-                                        signature = signature
-                                    )
-                                }
-                            )
-                            if (!result.isValid) {
-                                val success = uploadFullPreKeyBundle()
-                                return if (success) {
-                                    DomainResult.Success(true)
-                                } else {
-                                    DomainResult.Error("Failed to upload pre-key bundle. Please try logging in again.")
-                                }
-                            }
-                        }
-                        is DomainResult.Error -> Log.e("Login", "Error ensuring local keys: ${(ensureLocalKeysExist() as DomainResult.Error).message}")
-                        else -> DomainResult.Error("Unexpected result while ensuring local keys exist during login.")
+                    if (setupResult is DomainResult.Success) {
+                        DomainResult.Success(true)
+                    } else {
+                        tokenManager.clearTokens()
+                        setupResult
                     }
-
-                    DomainResult.Success(true)
                 }
 
                 is ApiResult.Error -> DomainResult.Error(response.message)
-                is ApiResult.NetworkError -> DomainResult.Error("Network error. Please check your connection and try again.")
-                is ApiResult.UnknownError -> DomainResult.Error(response.message )
+
+                is ApiResult.NetworkError -> DomainResult.Error(
+                    "Network error. Please check your connection and try again."
+                )
+
+                is ApiResult.UnknownError -> DomainResult.Error(response.message)
             }
         } catch (e: Exception) {
+            tokenManager.clearTokens()
             DomainResult.Error(e.message ?: "An unexpected error occurred. Please try again.")
         }
     }
@@ -143,6 +115,59 @@ class UserLoginRepository @Inject constructor(
             is ApiResult.Error -> false
             is ApiResult.NetworkError -> false
             is ApiResult.UnknownError -> false
+        }
+    }
+
+    private suspend fun completeLoginSetup(
+        loginResponse: LoginResponse
+    ): DomainResult<Boolean> {
+        localUser.insertUser(loginResponse.user.toUser())
+
+        when (val keyResult = ensureLocalKeysExist()) {
+            is DomainResult.Success -> {
+                val localKeys = keysRepository.getUserKeys()
+                    ?: return DomainResult.Error("Failed to retrieve local keys after login")
+
+                val localSpk = spkRepository.getActiveSignedPreKeyBundle()
+                    ?: return DomainResult.Error(
+                        "Failed to retrieve local signed pre-key bundle after login"
+                    )
+
+                val result = keyManagerRepository.verifyOwnServerPreKeys(
+                    server = loginResponse.preKeyVerification,
+                    localIdentitySigningPublicKey = localKeys.identitySigningKeyPublic,
+                    localSignedPreKeyBundle = localSpk,
+                    verifySignature = { publicKey, message, signature ->
+                        crypto.verifySignature(
+                            publicKey = publicKey,
+                            message = message,
+                            signature = signature
+                        )
+                    }
+                )
+
+                if (!result.isValid) {
+                    val uploaded = uploadFullPreKeyBundle()
+
+                    if (!uploaded) {
+                        return DomainResult.Error(
+                            "Failed to upload pre-key bundle. Please try logging in again."
+                        )
+                    }
+                }
+
+                return DomainResult.Success(true)
+            }
+
+            is DomainResult.Error -> {
+                return DomainResult.Error(keyResult.message)
+            }
+
+            else -> {
+                return DomainResult.Error(
+                    "Unexpected result while ensuring local keys exist during login."
+                )
+            }
         }
     }
 }

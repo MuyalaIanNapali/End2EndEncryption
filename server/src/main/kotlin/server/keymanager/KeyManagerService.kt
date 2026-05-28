@@ -1,7 +1,6 @@
 package server.keymanager
 
 import jakarta.transaction.Transactional
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import server.exceptionHandler.UserNotFoundException
 import server.exceptionHandler.UserPublicKeyNotFoundException
@@ -9,17 +8,18 @@ import server.keymanager.dto.PreKeyBundle
 import server.keymanager.dto.PreKeyBundleResponse
 import server.keymanager.dto.PreKeyVerification
 import server.keymanager.dto.SignedPreKeyBundle
-import server.keymanager.dto.UpdateOpkKeys
 import server.keymanager.dto.UpdateSignedPreKeyBundle
 import server.keymanager.opk.OneTimePreKeys
 import server.keymanager.opk.OneTimePreKeysRepository
+import server.users.UserRepository
 import java.time.LocalDateTime
 
 @Service
 class KeyManagerService(
     private val userPublicKeysRepository: UserPublicKeysRepository,
     private val oneTimePreKeysRepository: OneTimePreKeysRepository,
-    private val opkNotificationRepository: OpkNotificationRepository
+    private val opkNotificationRepository: OpkNotificationRepository,
+    private val userRepository: UserRepository
 ) {
 
     fun getRemainingOpkCount(userId: Long): Long {
@@ -111,13 +111,18 @@ class KeyManagerService(
         userPublicKeysRepository.save(userPublicKeys)
     }
 
-    fun updatePreKeyBundle(preKeyBundle: PreKeyBundle){
-        val userPublicKeys = userPublicKeysRepository.findByUserId(preKeyBundle.userId!!)
+    @Transactional
+    fun updatePreKeyBundle(username: String,preKeyBundle: PreKeyBundle){
+        val user = userRepository.findByUsername(username)
+            ?: throw UserNotFoundException()
+
+        val userPublicKeys = user.id?.let { userPublicKeysRepository.findByUserId(it) }
             ?: throw UserPublicKeyNotFoundException()
 
         userPublicKeys.updateFromPreKeyBundle(preKeyBundle)
 
         userPublicKeysRepository.save(userPublicKeys)
+        oneTimePreKeysRepository.deleteByUserIdAndUsedFalse(user.id!!)
         preKeyBundle.opkMap.forEach { (keyId, keyValue) ->
             val oneTimePreKey = OneTimePreKeys(
                 userId = preKeyBundle.userId!!,

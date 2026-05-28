@@ -8,7 +8,7 @@ data class UserKeys(
     @PrimaryKey
     val id: Int = 1,
 
-    val userId : Long ? = null,
+    val userId : Long? = null,
     val identityKeyPublic: ByteArray,
     val identityKeyPrivate : ByteArray,
     val identitySigningKeyPublic : ByteArray,

@@ -12,6 +12,7 @@ import server.keymanager.dto.PreKeyBundle
 import server.keymanager.dto.UpdateOpkKeys
 import server.keymanager.dto.UpdateSignedPreKeyBundle
 import server.keymanager.opk.OpkService
+import java.security.Principal
 
 @CrossOrigin
 @RestController
@@ -38,9 +39,10 @@ class KeyManagerController (
 
     @PostMapping("/updatePreKeyBundle")
     fun updatePreKeyBundle(
+        principal: Principal,
         @RequestBody preKeyBundle: PreKeyBundle
     ) : ResponseEntity<Void>{
-        keyManagerService.updatePreKeyBundle(preKeyBundle)
+        keyManagerService.updatePreKeyBundle(principal.name, preKeyBundle)
 
         return ResponseEntity.ok().build()
     }

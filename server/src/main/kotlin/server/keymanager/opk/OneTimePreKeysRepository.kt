@@ -18,4 +18,6 @@ interface OneTimePreKeysRepository: JpaRepository<OneTimePreKeys, Long> {
         """
     )
     fun getNextAvailableOPK(userId: Long): OneTimePreKeys?
+
+    fun deleteByUserIdAndUsedFalse(userId: Long)
 }

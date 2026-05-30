@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.chat
 
+import kotlinx.coroutines.flow.Flow
 import org.e2ee.data.local.chatRoom.ChatRoom
 import org.e2ee.data.local.chatRoom.ChatRoomRepository
 import org.e2ee.data.local.user.User
@@ -45,5 +46,9 @@ class ChatRoomManager @Inject constructor(
             ?: throw IllegalStateException(
                 "Chat room was inserted but could not be fetched: $sessionId"
             )
+    }
+
+    fun getAllChatRoomsForUser(): Flow<List<ChatRoom>> {
+        return chatRoomRepository.getAllChatRooms()
     }
 }

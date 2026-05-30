@@ -30,4 +30,9 @@ class MessagesRepository @Inject constructor(
     suspend fun updateStatus(remoteMessageId: String, status: MessageStatus) {
         dao.updateStatus(remoteMessageId, status)
     }
+
+    @WorkerThread
+    suspend fun countUnreadMessages(sessionId: String): Int {
+        return dao.countUnreadMessages(sessionId)
+    }
 }

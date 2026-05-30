@@ -1,9 +1,12 @@
 package org.e2ee.data.repository.chat
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.e2ee.data.local.messages.Messages
+import org.e2ee.data.local.messages.MessagesRepository
+import org.e2ee.data.repository.mapper.toDomain
 import org.e2ee.data.repository.mapper.toMessage
+import org.e2ee.domain.model.ChatRoomDomain
 import javax.inject.Inject
 import org.e2ee.domain.repository.ChatRepository as ChatRepositoryInterface
 import org.e2ee.domain.model.Message
@@ -11,7 +14,9 @@ import org.e2ee.domain.model.Message
 class ChatRepository @Inject constructor(
     private val chatConnectionManager: ChatConnectionManager,
     private val chatMessageSender: ChatMessageSender,
-    private val chatMessageObserver: ChatMessageObserver
+    private val chatMessageObserver: ChatMessageObserver,
+    private val chatRoomManager: ChatRoomManager,
+    private val messagesRepository: MessagesRepository
 ): ChatRepositoryInterface {
 
     override suspend fun observeMessages(
@@ -25,7 +30,9 @@ class ChatRepository @Inject constructor(
     }
 
     override fun connect() {
+        Log.d("ChatRepository", "Connecting to chat server...")
         chatConnectionManager.connect()
+        Log.d("ChatRepository", "Connected to chat server.")
     }
 
     override suspend fun sendMessage(
@@ -41,5 +48,19 @@ class ChatRepository @Inject constructor(
 
     override fun disconnect() {
         chatConnectionManager.disconnect()
+    }
+
+    override fun getChatRooms(): Flow<List<ChatRoomDomain>> {
+        return chatRoomManager.getAllChatRoomsForUser().map { chatRooms ->
+            chatRooms.map { it.toDomain() }
+        }
+    }
+
+    suspend fun getMessagesForSession(sessionId: String): List<Message> {
+        return messagesRepository.getMessagesBySessionId(sessionId).map { it.toMessage() }
+    }
+
+    override suspend fun getUnreadMessageCount(sessionId: String): Int {
+        return messagesRepository.countUnreadMessages(sessionId)
     }
 }

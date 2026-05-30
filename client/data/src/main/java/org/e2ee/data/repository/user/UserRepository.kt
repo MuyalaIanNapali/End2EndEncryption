@@ -7,6 +7,7 @@ import org.e2ee.data.repository.mapper.toDomainResult
 import org.e2ee.data.repository.mapper.toLoginRequestDto
 import org.e2ee.data.repository.mapper.toUpdateUserRequest
 import org.e2ee.data.repository.mapper.toUserRequest
+import org.e2ee.domain.model.ContactDetails
 import org.e2ee.domain.model.DomainResult
 import org.e2ee.domain.model.LoginRequest
 import org.e2ee.domain.model.RegistrationRequest
@@ -60,7 +61,6 @@ class UserRepository @Inject constructor(
     }
 
     override suspend fun searchUsersByUsername(username: String): DomainResult<List<RemoteUserDetails>> {
-        Log.d("search", "Searching for users with username: $username in UserRepository")
         return userSearchRepository
             .searchUsersByUsername(username)
             .toDomainResult()
@@ -68,5 +68,16 @@ class UserRepository @Inject constructor(
 
     override suspend fun addContact(details: RemoteUserDetails){
         friendsRepository.addFriend(details.toFriends())
+    }
+
+    override suspend fun getContactById(id: Long): ContactDetails? {
+        val friend = friendsRepository.getFriendById(id)
+        return friend?.let {
+            ContactDetails(
+                id = it.userId,
+                username = it.username,
+            )
+        }
+
     }
 }

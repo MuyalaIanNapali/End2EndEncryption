@@ -59,7 +59,6 @@ class RemoteUserRepository @Inject constructor(
     }
 
     suspend fun searchByUsername(username: String): ApiResult<List<UserResponse>> {
-        Log.d("search", "RemoteUserRepository: Searching for users with username: $username")
         return safeApiCall { userApi.searchByUsername(username) }
     }
 }

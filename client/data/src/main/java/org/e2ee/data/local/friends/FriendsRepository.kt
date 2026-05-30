@@ -26,4 +26,9 @@ class FriendsRepository @Inject constructor(
     suspend fun getFriendByUsername(username: String): Friends? {
         return dao.getFriendByUsername(username)
     }
+
+    @WorkerThread
+    suspend fun getFriendById(userId: Long): Friends? {
+        return dao.getFriendById(userId)
+    }
 }

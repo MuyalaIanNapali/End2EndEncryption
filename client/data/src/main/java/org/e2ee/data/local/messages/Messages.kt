@@ -38,5 +38,7 @@ enum class MessageStatus {
     EXPIRED,
     FAILED,
     RECEIVED,
-    SENDING
+    SENDING,
+
+    READ_BY_RECEIVER
 }

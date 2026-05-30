@@ -2,10 +2,12 @@ package org.e2ee.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import org.e2ee.data.local.chatRoom.ChatRoom
 import org.e2ee.data.local.chatRoom.ChatRoomDao
 import org.e2ee.data.local.friends.Friends
 import org.e2ee.data.local.friends.FriendsDao
+import org.e2ee.data.local.messages.MessageStatusConverter
 import org.e2ee.data.local.messages.Messages
 import org.e2ee.data.local.messages.MessagesDao
 import org.e2ee.data.local.opk.OneTimePreKeys
@@ -33,6 +35,7 @@ import org.e2ee.data.local.userKeys.UserKeysDao
     version = 1,
     exportSchema = false
 )
+@TypeConverters(MessageStatusConverter::class)
 abstract class ClientDatabase : RoomDatabase() {
 
     abstract fun oneTimePreKeysDao(): OneTimePreKeysDao

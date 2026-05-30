@@ -43,7 +43,6 @@ class UserSearchRepository @Inject constructor(
     }
 
     suspend fun searchUsersByUsername(username: String): ApiResult<List<RemoteUserDetails>> {
-        Log.d("search", "Searching suspend for users with username: $username")
         return try {
             when (val response = remoteUser.searchByUsername(username)) {
                 is ApiResult.Success -> {

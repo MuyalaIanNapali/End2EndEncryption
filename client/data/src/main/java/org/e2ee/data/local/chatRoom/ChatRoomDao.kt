@@ -3,6 +3,7 @@ package org.e2ee.data.local.chatRoom
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ChatRoomDao {
@@ -24,5 +25,5 @@ interface ChatRoomDao {
     suspend fun getChatRoomBySessionId(sessionId: String): ChatRoom?
 
     @Query("SELECT * FROM chat_room")
-    suspend fun getAllChatRooms(): List<ChatRoom>
+    fun getAllChatRooms(): Flow<List<ChatRoom>>
 }

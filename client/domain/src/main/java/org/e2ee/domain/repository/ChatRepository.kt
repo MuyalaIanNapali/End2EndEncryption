@@ -1,6 +1,7 @@
 package org.e2ee.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.e2ee.domain.model.ChatRoomDomain
 import org.e2ee.domain.model.Message
 
 interface ChatRepository {
@@ -16,4 +17,8 @@ interface ChatRepository {
     suspend fun observeMessages(
         sessionId: String
     ): Flow<List<Message>>
+
+    fun getChatRooms(): Flow<List<ChatRoomDomain>>
+
+    suspend fun getUnreadMessageCount(sessionId: String): Int
 }

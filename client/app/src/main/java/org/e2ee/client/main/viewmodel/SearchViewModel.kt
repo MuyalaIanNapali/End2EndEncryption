@@ -53,7 +53,6 @@ class SearchViewModel @Inject constructor(
             isLoading = true,
             errorMessage = null
         )
-        Log.d("search", "Performing search for query: $query")
 
         when (val result = searchUsersByUsernameUseCase(query)) {
             is DomainResult.Success -> {

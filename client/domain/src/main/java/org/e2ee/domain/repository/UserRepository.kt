@@ -1,5 +1,6 @@
 package org.e2ee.domain.repository
 
+import org.e2ee.domain.model.ContactDetails
 import org.e2ee.domain.model.DomainResult
 import org.e2ee.domain.model.RemoteUserDetails
 import org.e2ee.domain.model.UpdateAccountInfoRequest
@@ -16,4 +17,6 @@ interface UserRepository {
     suspend fun searchUsersByUsername(username: String): DomainResult<List<RemoteUserDetails>>
 
     suspend fun addContact(details: RemoteUserDetails)
+
+    suspend fun getContactById(id: Long): ContactDetails?
 }

@@ -1,6 +1,7 @@
 package org.e2ee.data.local.chatRoom
 
 import androidx.annotation.WorkerThread
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ChatRoomRepository @Inject constructor(
@@ -28,7 +29,7 @@ class ChatRoomRepository @Inject constructor(
     }
 
     @WorkerThread
-    suspend fun getAllChatRooms(): List<ChatRoom> {
+    fun getAllChatRooms(): Flow<List<ChatRoom>> {
         return dao.getAllChatRooms()
     }
 

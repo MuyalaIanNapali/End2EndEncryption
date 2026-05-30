@@ -17,4 +17,7 @@ interface FriendsDao {
 
     @Query("SELECT * FROM friends WHERE username =:username LIMIT 1")
     suspend fun getFriendByUsername(username: String): Friends?
+
+    @Query("SELECT * FROM friends WHERE userId = :userId LIMIT 1")
+    suspend fun getFriendById(userId: Long): Friends?
 }

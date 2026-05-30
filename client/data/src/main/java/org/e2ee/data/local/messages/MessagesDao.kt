@@ -38,4 +38,16 @@ interface MessagesDao {
         remoteMessageId: String,
         status: MessageStatus
     )
+
+    @Query("""
+    SELECT COUNT(*) 
+    FROM messages
+    WHERE sessionId = :sessionId
+    AND isSentByUser = 0
+    AND status != :readStatus
+""")
+    suspend fun countUnreadMessages(
+        sessionId: String,
+        readStatus: MessageStatus = MessageStatus.READ_BY_RECEIVER
+    ): Int
 }

@@ -2,9 +2,9 @@ package org.e2ee.crypto.entities
 
 import org.e2ee.common.Message
 import org.e2ee.crypto.doubleRatchet.RatchetStateHE
-import org.e2ee.common.UserKeysDecodedDto
 import org.e2ee.common.PreKeyBundle
 import org.e2ee.common.RatchetStateDto
+import org.e2ee.common.UserKeysDecodedEncDto
 
 data class EncryptionResult(
     val message: Message,
@@ -16,7 +16,7 @@ data class EncryptPreKeyMessageDto(
     val plainText: String,
     val receiverPreKeyBundle: PreKeyBundle,
     val senderPreKeyBundle: Pair<ByteArray, String>,
-    val senderKeyManager : UserKeysDecodedDto
+    val senderKeyManager : UserKeysDecodedEncDto
 )
 
 data class EncryptMessageDto(

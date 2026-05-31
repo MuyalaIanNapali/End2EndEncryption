@@ -7,6 +7,7 @@ import java.nio.ByteBuffer
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.PublicKey
+import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 internal class EncryptionAndDecryptionUtility {
@@ -54,7 +55,7 @@ internal class EncryptionAndDecryptionUtility {
 
     fun decodePrivateKey(privateKeyBytes: ByteArray): PrivateKey {
         val keyFactory = KeyFactory.getInstance("X25519")
-        return keyFactory.generatePrivate(X509EncodedKeySpec(privateKeyBytes))
+        return keyFactory.generatePrivate(PKCS8EncodedKeySpec(privateKeyBytes))
     }
 
     fun decodeHeader(bytes: ByteArray): HEADER {

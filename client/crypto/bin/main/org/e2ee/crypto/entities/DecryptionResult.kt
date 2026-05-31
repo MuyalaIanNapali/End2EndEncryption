@@ -3,8 +3,7 @@ package org.e2ee.crypto.entities
 import org.e2ee.common.PreKeyMessage
 import org.e2ee.common.RatchetMessage
 import org.e2ee.common.RatchetStateDto
-import org.e2ee.crypto.doubleRatchet.RatchetStateHE
-import org.e2ee.common.UserKeysDecodedDto
+import org.e2ee.common.UserKeysDecodedDecDto
 
 data class DecryptionResult(
     val plaintext: String,
@@ -14,7 +13,7 @@ data class DecryptionResult(
 data class DecryptPreKeyMessageDto(
     val message: PreKeyMessage,
     val associatedData: ByteArray,
-    val receiverKeyManager : UserKeysDecodedDto
+    val receiverKeyManager : UserKeysDecodedDecDto
 )
 
 data class DecryptMessageDto(

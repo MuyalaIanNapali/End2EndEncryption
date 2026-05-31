@@ -3,7 +3,7 @@ package org.e2ee.client.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -40,11 +40,13 @@ fun MainNavigation(
         entryProvider = entryProvider {
             entry<Route.Main.Messages> {
                 MessagesScreen(
-                    onChatCardClick = { sessionId, contactName ->
+                    onChatCardClick = { sessionId,contactId, contactName,contactEmail ->
                         mainBackStack.add(
                             Route.Main.Chat(
                                 sessionId = sessionId,
-                                username = contactName
+                                receiverId = contactId,
+                                username = contactName,
+                                email = contactEmail
                             )
                         )
                     },
@@ -60,7 +62,9 @@ fun MainNavigation(
             entry<Route.Main.Chat> { chatRoute ->
                 ChatScreen(
                     sessionId = chatRoute.sessionId,
+                    receiverId = chatRoute.receiverId,
                     username = chatRoute.username,
+                    email = chatRoute.email,
                     onBackClick = {
                         mainBackStack.removeLastOrNull()
                     },
@@ -76,7 +80,9 @@ fun MainNavigation(
                         mainBackStack.add(
                             Route.Main.Chat(
                                 sessionId = null,
-                                username = userDetails.username
+                                receiverId = userDetails.id.toString(),
+                                username = userDetails.username,
+                                email = userDetails.email
                             )
                         )
                     }

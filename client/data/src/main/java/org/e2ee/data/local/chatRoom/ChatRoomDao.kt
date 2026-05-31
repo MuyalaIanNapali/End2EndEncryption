@@ -26,4 +26,7 @@ interface ChatRoomDao {
 
     @Query("SELECT * FROM chat_room")
     fun getAllChatRooms(): Flow<List<ChatRoom>>
+
+    @Query("SELECT * FROM chat_room WHERE recipientId = :otherUserId LIMIT 1")
+    suspend fun getChatRoomByRecipientId(otherUserId: Long): ChatRoom?
 }

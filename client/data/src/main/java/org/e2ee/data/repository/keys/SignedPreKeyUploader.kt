@@ -5,7 +5,7 @@ import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.keyManagerApi.RemoteKeyManagerRepository
 import org.e2ee.data.remote.keyManagerApi.dto.UpdateSignedPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
-import org.e2ee.data.remote.util.fromBase64
+import org.e2ee.data.remote.util.toBase64
 import javax.inject.Inject
 
 class SignedPreKeyUploader @Inject constructor(

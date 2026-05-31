@@ -76,6 +76,7 @@ class UserRepository @Inject constructor(
             ContactDetails(
                 id = it.userId,
                 username = it.username,
+                email = it.email
             )
         }
 

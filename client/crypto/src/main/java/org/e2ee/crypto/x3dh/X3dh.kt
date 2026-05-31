@@ -2,7 +2,8 @@ package org.e2ee.crypto.x3dh
 
 
 import org.e2ee.common.PreKeyBundle
-import org.e2ee.common.UserKeysDecodedDto
+import org.e2ee.common.UserKeysDecodedDecDto
+import org.e2ee.common.UserKeysDecodedEncDto
 import org.e2ee.crypto.encryptDecrypt.EllipticCurveDiffieHellman
 import org.e2ee.crypto.encryptDecrypt.EncryptionAndDecryptionUtility
 import org.e2ee.crypto.kdf.KDFChain
@@ -17,7 +18,7 @@ internal class X3dh(
     private val util = EncryptionAndDecryptionUtility()
 
     fun initSenderX3DH(
-        userKeys: UserKeysDecodedDto,
+        userKeys: UserKeysDecodedEncDto,
         preKeyBundle: PreKeyBundle
     ) : Triple<ByteArray, KeyPair,String ?> {
         val IKpub = util.decodePublicKey(preKeyBundle.IKpub)
@@ -83,7 +84,7 @@ internal class X3dh(
     }
 
     fun initReceiverX3DH(
-        userKeys: UserKeysDecodedDto,
+        userKeys: UserKeysDecodedDecDto,
         IKs: PublicKey,
         EKs: PublicKey,
         opkId:String?

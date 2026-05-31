@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.chat
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -64,15 +65,18 @@ class ChatConnectionManager @Inject constructor(
     }
 
     suspend fun sendMessage(
+        username: String,
         receiverId: String,
         content: String,
         sender: ChatMessageSender
-    ) {
+    ) : String {
         val client = stompClient
             ?: throw IllegalStateException("Chat WebSocket is not connected")
+        Log.d("send","Sending message to $username: $content")
 
-        sender.sendMessage(
+        return sender.sendMessage(
             receiverId = receiverId,
+            username = username,
             content = content,
             stompClient = client
         )

@@ -23,7 +23,9 @@ fun ChatScreen(
     modifier: Modifier = Modifier,
     viewModel: ChatScreenViewModel = hiltViewModel(),
     sessionId: String?,
+    receiverId: String,
     username: String,
+    email: String,
     onBackClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {}
 ) {
@@ -49,7 +51,9 @@ fun ChatScreen(
                     .imePadding(),
                 onSendClick = { message ->
                     viewModel.sendMessage(
-                        sessionId = sessionId,
+                        receiverId = receiverId,
+                        username = username,
+                        email = email,
                         messageText = message
                     )
                 },
@@ -81,5 +85,3 @@ fun ChatScreen(
         }
     }
 }
-
-

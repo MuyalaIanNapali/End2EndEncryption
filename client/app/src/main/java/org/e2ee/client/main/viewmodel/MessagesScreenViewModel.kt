@@ -47,6 +47,8 @@ class MessagesScreenViewModel @Inject constructor(
                         ChatPreviewCard(
                             sessionId = room.sessionId,
                             contactName = room.otherUsername,
+                            contactEmail = room.otherUserEmail,
+                            contactId = room.otherUserId,
                             lastMessage = room.lastMessage,
                             timestamp = formatTimestamp(room.lastMessageTimestamp),
                             unreadMessageCount = room.unreadMessageCount

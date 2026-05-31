@@ -3,92 +3,107 @@ package org.e2ee.client.main.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import org.e2ee.client.models.ChatMessageUi
 import org.e2ee.client.models.ChatScreenUiState
 import org.e2ee.client.models.toChatMessageUi
+import org.e2ee.domain.model.RemoteUserDetails
 import org.e2ee.domain.usecase.ObserveMessagesUseCase
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import org.e2ee.domain.usecase.SendMessageUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatScreenViewModel @Inject constructor(
-    private val observeMessagesUseCase: ObserveMessagesUseCase
+    private val observeMessagesUseCase: ObserveMessagesUseCase,
+    private val sendMessageUseCase: SendMessageUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChatScreenUiState())
     val uiState: StateFlow<ChatScreenUiState> = _uiState.asStateFlow()
 
-    fun observeChatMessages(sessionId: String) {
-        viewModelScope.launch {
-            observeMessagesUseCase(sessionId).collect { messages ->
-                _uiState.value = _uiState.value.copy(
-                    messages = messages.map { it.toChatMessageUi() }
-                )
-            }
+    private var observeMessagesJob: Job? = null
+
+    fun loadMessages(sessionId: String?) {
+        _uiState.value = _uiState.value.copy(
+            sessionId = sessionId,
+            isLoading = false,
+            errorMessage = null
+        )
+
+        if (sessionId == null) {
+            return
+        }
+
+        observeChatMessages(sessionId)
+    }
+
+    private fun observeChatMessages(sessionId: String) {
+        observeMessagesJob?.cancel()
+
+        observeMessagesJob = viewModelScope.launch {
+            observeMessagesUseCase(sessionId)
+                .catch { error ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = error.message ?: "Failed to load messages"
+                    )
+                }
+                .collect { messages ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        messages = messages.map { it.toChatMessageUi() },
+                        errorMessage = null
+                    )
+                }
         }
     }
 
-    suspend fun loadMessages(sessionId: String?) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-
-        //delay
-        delay(1600)
-
-        _uiState.value = ChatScreenUiState(
-            isLoading = false,
-            messages = listOf(
-                ChatMessageUi(
-                    id = "1",
-                    sessionId = sessionId,
-                    text = "Hey, how are you?",
-                    timestamp = "10:30 AM",
-                    isSentByUser = false
-                ),
-                ChatMessageUi(
-                    id = "2",
-                    sessionId = sessionId,
-                    text = "I'm good, thanks! How about you?",
-                    timestamp = "10:32 AM",
-                    isSentByUser = true
-                ),
-                ChatMessageUi(
-                    id = "3",
-                    sessionId = sessionId,
-                    text = "Doing well! Just wanted to check in.",
-                    timestamp = "10:35 AM",
-                    isSentByUser = false
-                )
-            )
-        )
-    }
-
-    fun sendMessage(sessionId: String?, messageText: String) {
+    fun sendMessage(
+        receiverId: String,
+        username: String,
+        email: String,
+        messageText: String
+    ) {
         val trimmedMessage = messageText.trim()
-
         if (trimmedMessage.isBlank()) return
 
-        val newMessage = ChatMessageUi(
-            id = System.currentTimeMillis().toString(),
-            sessionId = sessionId,
-            text = trimmedMessage,
-            timestamp = getCurrentTime(),
-            isSentByUser = true
-        )
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isSending = true,
+                errorMessage = null
+            )
 
-        _uiState.value = _uiState.value.copy(
-            messages = _uiState.value.messages + newMessage
-        )
-    }
+            try {
+                val newSessionId = sendMessageUseCase(
+                    details = RemoteUserDetails(
+                        id = receiverId.toLong(),
+                        username = username,
+                        email = email
+                    ),
+                    content = trimmedMessage
+                )
 
+                val previousSessionId = _uiState.value.sessionId
 
-    private fun getCurrentTime(): String {
-        return SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
+                _uiState.value = _uiState.value.copy(
+                    sessionId = newSessionId,
+                    isSending = false
+                )
+
+                if (previousSessionId == null || previousSessionId != newSessionId) {
+                    observeChatMessages(newSessionId)
+                }
+
+            } catch (error: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isSending = false,
+                    errorMessage = error.message ?: "Failed to send message"
+                )
+            }
+        }
     }
 }

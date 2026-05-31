@@ -2,6 +2,7 @@ package org.e2ee.common
 
 import java.security.KeyPair
 import java.security.PrivateKey
+import java.security.PublicKey
 
 data class UserKeysDto(
     val userId: Long,
@@ -10,7 +11,7 @@ data class UserKeysDto(
     val oneTimePreKeys: ByteArray?= null
 )
 
-data class UserKeysDecodedDto(
+data class UserKeysDecodedDecDto(
     val userId: Long,
     val identityKey: PrivateKey,
     val signedPreKey: KeyPair,
@@ -18,4 +19,9 @@ data class UserKeysDecodedDto(
 )
 
 
-
+data class UserKeysDecodedEncDto(
+    val userId: Long,
+    val identityKey: PrivateKey,
+    val signedPreKey: KeyPair,
+    val oneTimePreKeys: PublicKey?=null
+)

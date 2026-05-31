@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.chat
 
+import android.util.Log
 import org.e2ee.common.PreKeyMessage
 import org.e2ee.common.RatchetMessage
 import org.e2ee.data.local.messages.MessageStatus
@@ -24,24 +25,28 @@ class ChatMessageSender @Inject constructor(
 
     suspend fun sendMessage(
         receiverId: String,
+        username: String,
         content: String,
         stompClient: ChatStompClient
-    ) {
+    ) :String {
         val localUser = userRepository.getUser()
             ?: throw IllegalStateException("No local user found")
 
+
         val senderId = localUser.userId.toString()
         val messageId = UUID.randomUUID().toString()
+
 
         val sessionId = sessionIdFactory.createSessionId(
             localUserId = senderId,
             otherUserId = receiverId
         )
 
+
         val encryptedOutgoingMessage = chatCryptoManager.encryptOutgoingMessage(
             sessionId = sessionId,
             senderId = senderId,
-            receiverId = receiverId,
+            receiverUsername = username,
             content = content
         )
 
@@ -63,6 +68,7 @@ class ChatMessageSender @Inject constructor(
             )
         )
 
+
         val messageType = when (encryptedOutgoingMessage) {
             is PreKeyMessage -> MessageType.PRE_KEY_MESSAGE
             is RatchetMessage -> MessageType.RATCHET_MESSAGE
@@ -82,5 +88,7 @@ class ChatMessageSender @Inject constructor(
                 createdAt = LocalDateTime.now().toString()
             )
         )
+
+        return chatRoom.sessionId
     }
 }

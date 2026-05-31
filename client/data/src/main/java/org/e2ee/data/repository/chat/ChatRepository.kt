@@ -19,7 +19,7 @@ class ChatRepository @Inject constructor(
     private val messagesRepository: MessagesRepository
 ): ChatRepositoryInterface {
 
-    override suspend fun observeMessages(
+    override fun observeMessages(
         sessionId: String
     ): Flow<List<Message>> {
         return chatMessageObserver
@@ -30,17 +30,17 @@ class ChatRepository @Inject constructor(
     }
 
     override fun connect() {
-        Log.d("ChatRepository", "Connecting to chat server...")
         chatConnectionManager.connect()
-        Log.d("ChatRepository", "Connected to chat server.")
     }
 
     override suspend fun sendMessage(
         receiverId: String,
+        username: String,
         content: String
-    ) {
-        chatConnectionManager.sendMessage(
+    ) : String {
+        return chatConnectionManager.sendMessage(
             receiverId = receiverId,
+            username = username,
             content = content,
             sender = chatMessageSender
         )
@@ -62,5 +62,10 @@ class ChatRepository @Inject constructor(
 
     override suspend fun getUnreadMessageCount(sessionId: String): Int {
         return messagesRepository.countUnreadMessages(sessionId)
+    }
+
+    override suspend fun getChatRoomByReceiverId(receiverId: String): ChatRoomDomain? {
+        val chatRoom = chatRoomManager.getChatRoomByOtherUserId(receiverId)
+        return chatRoom?.toDomain()
     }
 }

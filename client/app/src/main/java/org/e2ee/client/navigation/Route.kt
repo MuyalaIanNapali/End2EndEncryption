@@ -29,7 +29,9 @@ sealed interface Route: NavKey {
         @Serializable
         data class Chat(
             val sessionId: String?,
-            val username: String
+            val receiverId: String,
+            val username: String,
+            val email: String
         ) : Route
 
         @Serializable

@@ -1,0 +1,1 @@
+cd /home/ian-muyala/IdeaProjects/End2EndEncryption/server && ./mvnw -q -DskipTests compile

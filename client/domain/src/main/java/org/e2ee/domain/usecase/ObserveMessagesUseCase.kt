@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ObserveMessagesUseCase @Inject constructor(
     private val chatRepository: ChatRepository
 ) {
-    suspend operator fun invoke(sessionId: String): Flow<List<Message>> {
+    operator fun invoke(sessionId: String): Flow<List<Message>> {
         return chatRepository.observeMessages(sessionId)
     }
 }

@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.chat
 
+import android.util.Log
 import org.e2ee.common.Message
 import org.e2ee.common.PreKeyMessage
 import org.e2ee.common.RatchetMessage
@@ -14,6 +15,7 @@ import org.e2ee.data.local.userKeys.UserKeysRepository
 import org.e2ee.data.remote.keyManagerApi.dto.toPreKeyBundle
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
+import org.e2ee.data.remote.util.toBase64
 import org.e2ee.data.remote.websocket.ChatMessage
 import org.e2ee.data.remote.websocket.MessagePayloadCodec
 import org.e2ee.data.remote.websocket.MessageType
@@ -67,7 +69,7 @@ class ChatCryptoManager @Inject constructor(
     suspend fun encryptOutgoingMessage(
         sessionId: String,
         senderId: String,
-        receiverId: String,
+        receiverUsername: String,
         content: String
     ): Message {
         val existingRatchetState = ratchetStatesRepository
@@ -93,7 +95,7 @@ class ChatCryptoManager @Inject constructor(
             createPreKeyMessageAndSession(
                 sessionId = sessionId,
                 senderId = senderId,
-                receiverId = receiverId,
+                receiverUsername = receiverUsername,
                 content = content
             )
         }
@@ -170,10 +172,10 @@ class ChatCryptoManager @Inject constructor(
     private suspend fun createPreKeyMessageAndSession(
         sessionId: String,
         senderId: String,
-        receiverId: String,
+        receiverUsername: String,
         content: String
     ): Message {
-        val preKeyBundleResult = remoteUserRepository.getUserPreKeys(receiverId)
+        val preKeyBundleResult = remoteUserRepository.getUserPreKeys(receiverUsername)
 
         val spk = spkRepository.getFullActiveSignedPreKey()
         val userKeys = userKeysRepository.getUserKeys()
@@ -190,7 +192,7 @@ class ChatCryptoManager @Inject constructor(
             userId = senderId.toLong(),
             identityKey = userKeys.identityKeyPrivate,
             signedPreKey = Pair(spk.publicKey, spk.privateKey),
-            oneTimePreKeys = preKeyBundleResult.data.opkPair?.second
+            oneTimePreKeys = preKeyBundleResult.data.opkPair?.second?.toBase64()
         )
 
         val encryptedMessage = crypto.encryptPreKeyMessage(

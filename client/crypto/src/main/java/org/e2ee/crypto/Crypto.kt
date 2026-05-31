@@ -135,7 +135,6 @@ class Crypto {
             )
         )
 
-
         val senderState = doubleRatchet.ratchetInitSenderHE(
             sKSender,
             util.decodePublicKey(encryptionDto.receiverPreKeyBundle.SPKpub.second),
@@ -221,7 +220,7 @@ class Crypto {
         userKeysDto: UserKeysDto
     ): DecryptPreKeyMessageDto {
 
-        val receiverKeyManager = userKeysDto.toDecodedDto()
+        val receiverKeyManager = userKeysDto.toDecodedDecDto()
         return DecryptPreKeyMessageDto(
             message = message,
             associatedData = associatedData,
@@ -253,7 +252,7 @@ class Crypto {
             plainText = plainText,
             receiverPreKeyBundle = receiverPreKeyBundle,
             senderPreKeyBundle = senderPreKeyBundle,
-            senderKeyManager = senderKeyManager.toDecodedDto()
+            senderKeyManager = senderKeyManager.toDecodedEncDto()
         )
     }
 

@@ -21,6 +21,7 @@ class LoadChatRoomsUseCase @Inject constructor(
                     sessionId = room.sessionId,
                     otherUserId = room.receiverId,
                     otherUsername = contact?.username ?: "Unknown",
+                    otherUserEmail = contact?.email ?: "Unknown",
                     lastMessage = room.lastMessage ?: "",
                     unreadMessageCount = unreadCount,
                     lastMessageTimestamp = room.lastMessageTimestamp

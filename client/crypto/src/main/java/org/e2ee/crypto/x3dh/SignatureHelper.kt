@@ -56,5 +56,6 @@ internal class SignatureHelper {
     fun decodeEdPrivateKey(privateKeyBytes: ByteArray): PrivateKey {
         val keyFactory = KeyFactory.getInstance("Ed25519", "BC")
         return keyFactory.generatePrivate(PKCS8EncodedKeySpec(privateKeyBytes))
+        //return keyFactory.generatePrivate(X509EncodedKeySpec(privateKeyBytes))
     }
 }

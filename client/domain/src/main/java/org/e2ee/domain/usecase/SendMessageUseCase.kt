@@ -12,9 +12,12 @@ class SendMessageUseCase @Inject constructor(
     suspend operator fun invoke(
         details: RemoteUserDetails,
         content: String
-    ) {
-        userRepository.addContact(details)
+    ) : String {
+        if(userRepository.getContactById(details.id) == null) {
+            userRepository.addContact(details)
+        }
+        val sessionId = chatRepository.sendMessage(details.id.toString(),details.username, content)
 
-        chatRepository.sendMessage(details.id.toString(), content)
+        return sessionId
     }
 }

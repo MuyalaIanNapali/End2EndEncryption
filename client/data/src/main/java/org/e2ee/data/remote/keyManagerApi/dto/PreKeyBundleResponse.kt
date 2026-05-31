@@ -2,24 +2,24 @@ package org.e2ee.data.remote.keyManagerApi.dto
 
 import org.e2ee.common.PreKeyBundle
 import org.e2ee.data.local.signedPreKeys.SignedPreKeyBundle
-import org.e2ee.data.remote.util.fromBase64
+import org.e2ee.data.remote.util.toBase64
 
 data class PreKeyBundleResponse(
-    val identityKey: ByteArray,
+    val identityKey: String,
 
-    val signedPreKeyBundle: SignedPreKeyBundle,
+    val signedPreKeyBundle: SignedPreKeyBundleDto,
 
-    val identityKeySigning: ByteArray,
+    val identityKeySigning: String,
 
-    val opkPair: Pair<String, ByteArray>?
+    val opkPair: Pair<String, String>?
 )
 
 fun PreKeyBundleResponse.toPreKeyBundle(): PreKeyBundle {
     return PreKeyBundle(
-        IKpub = identityKey,
-        SPKpub = Pair(signedPreKeyBundle.keyId, signedPreKeyBundle.signedPreKey),
-        OPKpub = opkPair?.let { mapOf(it.first to it.second) },
-        signature = signedPreKeyBundle.signature,
-        IKsigPub = identityKeySigning
+        IKpub = identityKey.toBase64(),
+        SPKpub = Pair(signedPreKeyBundle.keyId, signedPreKeyBundle.signedPreKey.toBase64()),
+        OPKpub = opkPair?.let { mapOf(it.first to it.second.toBase64()) },
+        signature = signedPreKeyBundle.signature.toBase64(),
+        IKsigPub = identityKeySigning.toBase64()
     )
 }

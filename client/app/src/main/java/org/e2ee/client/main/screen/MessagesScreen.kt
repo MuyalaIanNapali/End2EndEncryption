@@ -45,7 +45,7 @@ fun MessagesScreen(
     viewModel: MessagesScreenViewModel = hiltViewModel(),
     onSettingsClick: () -> Unit = {},
     onFabClick : () -> Unit = {},
-    onChatCardClick: (sessionId: String, contactName: String) -> Unit = { _, _ -> }
+    onChatCardClick: (sessionId: String,contactId:String , contactName: String,contactEmail : String) -> Unit = { _,_, _ , _-> }
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -128,7 +128,9 @@ fun MessagesScreen(
                         viewModel.markChatAsRead(chat.sessionId)
                         onChatCardClick(
                             chat.sessionId,
-                            chat.contactName
+                            chat.contactId.toString(),
+                            chat.contactName,
+                            chat.contactEmail
                         )
                     }
                 )

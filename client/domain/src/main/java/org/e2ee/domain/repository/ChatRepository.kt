@@ -11,14 +11,17 @@ interface ChatRepository {
 
     suspend fun sendMessage(
         receiverId: String,
+        username: String,
         content: String
-    )
+    ): String
 
-    suspend fun observeMessages(
+    fun observeMessages(
         sessionId: String
     ): Flow<List<Message>>
 
     fun getChatRooms(): Flow<List<ChatRoomDomain>>
 
     suspend fun getUnreadMessageCount(sessionId: String): Int
+
+    suspend fun getChatRoomByReceiverId(receiverId: String): ChatRoomDomain?
 }

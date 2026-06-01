@@ -43,7 +43,7 @@ import org.e2ee.client.ui.elements.MessageCard
 fun MessagesScreen(
     modifier: Modifier = Modifier,
     viewModel: MessagesScreenViewModel = hiltViewModel(),
-    onSettingsClick: () -> Unit = {},
+    onLogoutClick : () -> Unit = {},
     onFabClick : () -> Unit = {},
     onChatCardClick: (sessionId: String,contactId:String , contactName: String,contactEmail : String) -> Unit = { _,_, _ , _-> }
 ) {
@@ -141,7 +141,7 @@ fun MessagesScreen(
             title = stringResource(R.string.app_name),
             height = currentHeaderHeightDp,
             collapseProgress = collapseProgress,
-            onSettingsClick = onSettingsClick
+            onLogOutClicked = onLogoutClick
         )
 
         FloatingActionButton(

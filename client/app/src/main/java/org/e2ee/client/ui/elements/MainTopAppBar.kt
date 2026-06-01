@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +30,7 @@ fun MainTopAppBar(
     title: String,
     height: Dp,
     collapseProgress: Float,
-    onSettingsClick: () -> Unit
+    onLogOutClicked: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -65,17 +68,28 @@ fun MainTopAppBar(
         )
 
         IconButton(
-            onClick = onSettingsClick,
+            onClick = onLogOutClicked,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 34.dp, end = 20.dp)
         ) {
             Icon(
-                imageVector = Icons.Outlined.Settings,
-                contentDescription = "Settings",
+                imageVector = Icons.AutoMirrored.Outlined.Logout,
+                contentDescription = "Logout",
                 tint = Color(0xFF356DF3),
                 modifier = Modifier.size(24.dp)
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun MainTopAppBarPreview() {
+    MainTopAppBar(
+        title = "E2EE Messenger",
+        height = 200.dp,
+        collapseProgress = 0.3f,
+        onLogOutClicked = {}
+    )
 }

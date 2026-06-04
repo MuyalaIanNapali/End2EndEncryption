@@ -83,5 +83,10 @@ class SignedPreKeysRepository @Inject constructor(
         return dao.getActiveSignedPreKey()
     }
 
+    @WorkerThread
+    suspend fun getAllSignedPreKeys(): List<SignedPreKeys> {
+        return dao.getAllSignedPreKeys()
+    }
+
 
 }

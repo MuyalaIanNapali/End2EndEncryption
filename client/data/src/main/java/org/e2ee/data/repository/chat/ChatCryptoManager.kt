@@ -37,13 +37,18 @@ class ChatCryptoManager @Inject constructor(
         sessionId: String,
         localUserId: Long
     ): String {
+        Log.d("ChatCryptoManager", "Decrypting message with sessionId: $sessionId for localUserId: $localUserId, messageType: ${encryptedMessage.messageType}")
         val decodedMessage = MessagePayloadCodec.decodeFromBase64(
             messageType = encryptedMessage.messageType,
             encodedMessage = encryptedMessage.encodedMessage
         )
 
+        Log.d("ChatCryptoManager", "Decoded message: $decodedMessage for sessionId: $sessionId")
+
         return when (encryptedMessage.messageType) {
             MessageType.PRE_KEY_MESSAGE -> {
+                Log.d("ChatCryptoManager", "Processing PreKeyMessage for sessionId: $sessionId")
+
                 val message = decodedMessage as? PreKeyMessage
                     ?: throw IllegalStateException("Expected PreKeyMessage")
 
@@ -55,6 +60,7 @@ class ChatCryptoManager @Inject constructor(
             }
 
             MessageType.RATCHET_MESSAGE -> {
+                Log.d("ChatCryptoManager", "Processing RatchetMessage for sessionId: $sessionId")
                 val message = decodedMessage as? RatchetMessage
                     ?: throw IllegalStateException("Expected RatchetMessage")
 
@@ -106,17 +112,25 @@ class ChatCryptoManager @Inject constructor(
         sessionId: String,
         localUserId: Long
     ): String {
+        Log.d("ChatCryptoManager", "Decrypting PreKeyMessage for sessionId: $sessionId, localUserId: $localUserId")
 
+        val localSpk = spkRepository.getAllSignedPreKeys()
+        Log.d("ChatMessageSender", "Local signed pre-keys: ${localSpk.map { it.signedPreKeyId}}")
+
+        Log.d("ChatCryptoManager", "Fetching SPK for sessionId: $sessionId, spkId: ${message.spkId}")
         val spk = spkRepository.getSpkById(message.spkId)
             ?: throw IllegalStateException("Signed pre-key not found: ${message.spkId}")
 
+        Log.d("ChatCryptoManager", "Fetched SPK for sessionId: $sessionId, spkId: ${message.spkId}")
         val userKeys = userKeysRepository.getUserKeys()
             ?: throw IllegalStateException("User keys not found")
 
+        Log.d("ChatCryptoManager", "Fetched user keys for sessionId: $sessionId, localUserId: $localUserId")
         val opk = message.opkId?.let {
             opkRepository.getOneTimePreKeyById(it)
         }
 
+        Log.d("ChatCryptoManager", "Fetched OPK for sessionId: $sessionId, opkId: ${message.opkId}")
         val userKeysDto = UserKeysDto(
             userId = localUserId,
             identityKey = userKeys.identityKeyPrivate,
@@ -124,11 +138,13 @@ class ChatCryptoManager @Inject constructor(
             oneTimePreKeys = opk?.privateKey
         )
 
+        Log.d("ChatCryptoManager", "Constructed UserKeysDto for sessionId: $sessionId, localUserId: $localUserId, userKeysDto: $userKeysDto")
         val decryptDto = crypto.createDecryptedPreKeyMessageDto(
             message,
             associatedData,
             userKeysDto
         )
+        Log.d("ChatCryptoManager", "Created DecryptPreKeyMessageDto for sessionId: $sessionId, localUserId: $localUserId, decryptDto: $decryptDto")
 
         val result = crypto.decryptPreKeyMessage(decryptDto)
 

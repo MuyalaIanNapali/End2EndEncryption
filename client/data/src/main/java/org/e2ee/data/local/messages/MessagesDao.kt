@@ -50,4 +50,16 @@ interface MessagesDao {
         sessionId: String,
         readStatus: MessageStatus = MessageStatus.READ_BY_RECEIVER
     ): Int
+
+    @Query("""
+    UPDATE messages
+    SET status = :readStatus
+    WHERE sessionId = :sessionId
+    AND isSentByUser = 0
+    AND status != :readStatus
+    """)
+    suspend fun markMessagesAsRead(
+        sessionId: String,
+        readStatus: MessageStatus = MessageStatus.READ_BY_RECEIVER
+    )
 }

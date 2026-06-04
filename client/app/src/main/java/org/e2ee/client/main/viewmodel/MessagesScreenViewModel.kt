@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.e2ee.client.models.ChatPreviewCard
 import org.e2ee.client.models.MessagesScreenUiState
 import org.e2ee.domain.usecase.LoadChatRoomsUseCase
+import org.e2ee.domain.usecase.MarkChatsAsReadUseCase
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MessagesScreenViewModel @Inject constructor(
-    private val loadChatRoomsUseCase: LoadChatRoomsUseCase
+    private val loadChatRoomsUseCase: LoadChatRoomsUseCase,
+    private val markChatsAsReadUseCase: MarkChatsAsReadUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MessagesScreenUiState())
@@ -65,15 +67,25 @@ class MessagesScreenViewModel @Inject constructor(
     }
 
     fun markChatAsRead(sessionId: String) {
-        _uiState.value = _uiState.value.copy(
-            chatCards = _uiState.value.chatCards.map { chat ->
-                if (chat.sessionId == sessionId) {
-                    chat.copy(unreadMessageCount = 0)
-                } else {
-                    chat
-                }
+        viewModelScope.launch {
+            try {
+                markChatsAsReadUseCase(sessionId)
+
+                _uiState.value = _uiState.value.copy(
+                    chatCards = _uiState.value.chatCards.map { chat ->
+                        if (chat.sessionId == sessionId) {
+                            chat.copy(unreadMessageCount = 0)
+                        } else {
+                            chat
+                        }
+                    }
+                )
+            } catch (error: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = error.message ?: "Failed to mark chat as read"
+                )
             }
-        )
+        }
     }
 
     private fun formatTimestamp(timestamp: Long?): String {

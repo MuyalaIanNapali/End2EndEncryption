@@ -6,6 +6,7 @@ import org.e2ee.common.RatchetMessage
 import org.e2ee.data.local.messages.MessageStatus
 import org.e2ee.data.local.messages.Messages
 import org.e2ee.data.local.messages.MessagesRepository
+import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.user.LocalUserRepository
 import org.e2ee.data.remote.websocket.ChatRequest
 import org.e2ee.data.remote.websocket.ChatStompClient
@@ -20,7 +21,8 @@ class ChatMessageSender @Inject constructor(
     private val messagesRepository: MessagesRepository,
     private val chatRoomManager: ChatRoomManager,
     private val chatCryptoManager: ChatCryptoManager,
-    private val sessionIdFactory: ChatSessionIdFactory
+    private val sessionIdFactory: ChatSessionIdFactory,
+    private val spkRepository: SignedPreKeysRepository
 ) {
 
     suspend fun sendMessage(
@@ -68,7 +70,6 @@ class ChatMessageSender @Inject constructor(
             )
         )
 
-
         val messageType = when (encryptedOutgoingMessage) {
             is PreKeyMessage -> MessageType.PRE_KEY_MESSAGE
             is RatchetMessage -> MessageType.RATCHET_MESSAGE
@@ -77,7 +78,6 @@ class ChatMessageSender @Inject constructor(
         val encodedMessage = MessagePayloadCodec.encodeToBase64(
             encryptedOutgoingMessage
         )
-
         stompClient.sendChatMessage(
             ChatRequest(
                 messageId = messageId,

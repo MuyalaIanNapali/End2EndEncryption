@@ -17,6 +17,9 @@ interface SignedPreKeysDao {
      @Query("SELECT * FROM signed_pre_keys WHERE active = 1")
      suspend fun getActiveSignedPreKey(): SignedPreKeys?
 
+     @Query("SELECT * FROM signed_pre_keys")
+     suspend fun getAllSignedPreKeys(): List<SignedPreKeys>
+
      @Query(
             """
            UPDATE signed_pre_keys

@@ -18,6 +18,8 @@ class SendMessageUseCase @Inject constructor(
         }
         val sessionId = chatRepository.sendMessage(details.id.toString(),details.username, content)
 
+        chatRepository.updateLastMessage(sessionId, content, System.currentTimeMillis())
+
         return sessionId
     }
 }

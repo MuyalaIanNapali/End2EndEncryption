@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.chat
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.e2ee.data.local.chatRoom.ChatRoom
@@ -24,6 +25,7 @@ class ChatRoomManager @Inject constructor(
         if (existingRoom != null) {
             return existingRoom
         }
+        Log.d("ChatRoomManager", "No existing chat room for sessionId: $sessionId, creating new one with otherUserId: $otherUserId")
 
         val remoteUserResult = remoteUserRepository.getUserByUserId(
             otherUserId.toLong()
@@ -34,14 +36,17 @@ class ChatRoomManager @Inject constructor(
                 "Failed to fetch remote user for chat room: $otherUserId"
             )
         }
+        Log.d("ChatRoomManager", "Fetched remote user for chat room: ${remoteUserResult.data}")
 
         val newChatRoom = ChatRoom(
             sessionId = sessionId,
             senderId = localUser.userId,
             recipientId = otherUserId.toLong()
         )
+        Log.d("ChatRoomManager", "Inserting new chat room into repository: $newChatRoom")
 
         chatRoomRepository.insertChatRoom(newChatRoom)
+        Log.d("ChatRoomManager", "Inserted new chat room, fetching it back to confirm: sessionId: $sessionId")
 
         return chatRoomRepository.getChatRoomBySessionId(sessionId)
             ?: throw IllegalStateException(
@@ -55,5 +60,9 @@ class ChatRoomManager @Inject constructor(
 
     suspend fun getChatRoomByOtherUserId(otherUserId: String): ChatRoom? {
         return chatRoomRepository.getChatRoomByRecipientId(otherUserId)
+    }
+
+    suspend fun updateLastMessage(sessionId: String, lastMessage: String, lastMessageTime: Long) {
+        chatRoomRepository.updateLastMessage(sessionId, lastMessage, lastMessageTime)
     }
 }

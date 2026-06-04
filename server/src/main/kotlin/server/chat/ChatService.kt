@@ -37,7 +37,7 @@ class ChatService(
             senderId = request.senderId,
             receiverId = request.receiverId,
             messageType = request.messageType,
-            message = request.encodedMessage,
+            encodedMessage = request.encodedMessage,
             createdAt = request.createdAt
         )
 

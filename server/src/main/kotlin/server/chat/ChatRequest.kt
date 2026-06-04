@@ -19,7 +19,7 @@ data class ChatMessage(
     val senderId: String,
     val receiverId: String,
     val messageType: MessageType,
-    val message: String,
+    val encodedMessage: String,
     val createdAt: String
 )
 

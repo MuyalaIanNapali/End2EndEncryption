@@ -35,4 +35,9 @@ class MessagesRepository @Inject constructor(
     suspend fun countUnreadMessages(sessionId: String): Int {
         return dao.countUnreadMessages(sessionId)
     }
+
+    @WorkerThread
+    suspend fun markMessagesAsRead(sessionId: String) {
+        dao.markMessagesAsRead(sessionId)
+    }
 }

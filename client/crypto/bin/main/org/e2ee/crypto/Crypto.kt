@@ -154,7 +154,7 @@ class Crypto {
                 EKs = eKPair.public.encoded,
                 DHs = newState1.DHs.public.encoded,
                 opkId = opkId,
-                spkId = senderKeys.second,
+                spkId =encryptionDto.receiverPreKeyBundle.SPKpub.first ,
                 ciphertext = ct1
             ),
             newState1.toDto()

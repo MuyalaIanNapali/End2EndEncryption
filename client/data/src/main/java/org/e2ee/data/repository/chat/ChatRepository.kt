@@ -68,4 +68,12 @@ class ChatRepository @Inject constructor(
         val chatRoom = chatRoomManager.getChatRoomByOtherUserId(receiverId)
         return chatRoom?.toDomain()
     }
+
+    override suspend fun updateLastMessage(sessionId: String, lastMessage: String, lastMessageTime: Long) {
+        chatRoomManager.updateLastMessage(sessionId, lastMessage, lastMessageTime)
+    }
+
+    override suspend fun markMessagesAsRead(sessionId: String) {
+        messagesRepository.markMessagesAsRead(sessionId)
+    }
 }

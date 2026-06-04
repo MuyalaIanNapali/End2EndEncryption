@@ -24,4 +24,8 @@ interface ChatRepository {
     suspend fun getUnreadMessageCount(sessionId: String): Int
 
     suspend fun getChatRoomByReceiverId(receiverId: String): ChatRoomDomain?
+
+    suspend fun updateLastMessage(sessionId: String, lastMessage: String, lastMessageTime: Long)
+
+    suspend fun markMessagesAsRead(sessionId: String)
 }

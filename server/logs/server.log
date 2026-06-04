@@ -1,43 +1,43 @@
-2026-06-01 10:51:06.514 INFO  [main] server.ServerApplicationKt - Starting ServerApplicationKt using Java 25.0.3 with PID 29440 (/home/ian-muyala/IdeaProjects/End2EndEncryption/server/target/classes started by ian-muyala in /home/ian-muyala/IdeaProjects/End2EndEncryption/server)
-2026-06-01 10:51:06.519 DEBUG [main] server.ServerApplicationKt - Running with Spring Boot v4.0.6, Spring v7.0.7
-2026-06-01 10:51:06.525 INFO  [main] server.ServerApplicationKt - No active profile set, falling back to 1 default profile: "default"
-2026-06-01 10:51:06.584 INFO  [main] o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file /home/ian-muyala/IdeaProjects/End2EndEncryption/server/compose.yaml
-2026-06-01 10:51:07.292 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Starting 
-2026-06-01 10:51:07.292 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Starting 
-2026-06-01 10:51:07.292 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Starting 
-2026-06-01 10:51:07.292 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Starting 
-2026-06-01 10:51:07.673 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Started 
-2026-06-01 10:51:07.719 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Started 
-2026-06-01 10:51:07.752 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Started 
-2026-06-01 10:51:07.782 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Started 
-2026-06-01 10:51:07.783 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Waiting 
-2026-06-01 10:51:07.783 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Waiting 
-2026-06-01 10:51:07.783 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Waiting 
-2026-06-01 10:51:07.783 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Waiting 
-2026-06-01 10:51:08.292 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Healthy 
-2026-06-01 10:51:08.294 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Healthy 
-2026-06-01 10:51:08.299 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Healthy 
-2026-06-01 10:51:38.284 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Healthy 
-2026-06-01 10:51:40.259 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2026-06-01 10:51:40.261 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-06-01 10:51:40.378 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 108 ms. Found 6 JPA repository interfaces.
-2026-06-01 10:51:40.891 INFO  [main] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 5000 (http)
-2026-06-01 10:51:40.900 INFO  [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-06-01 10:51:40.900 INFO  [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.21]
-2026-06-01 10:51:40.977 INFO  [main] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1572 ms
-2026-06-01 10:51:41.180 INFO  [main] i.m.c.i.push.PushMeterRegistry - Publishing metrics for OtlpMeterRegistry every 1m to http://127.0.0.1:32769/v1/metrics with resource attributes {service.name=server}
-2026-06-01 10:51:41.570 INFO  [main] org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://127.0.0.1:5432/e2eeServer?ApplicationName=server (PostgreSQL 18.3)
-2026-06-01 10:51:41.622 INFO  [main] o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.020s)
-2026-06-01 10:51:41.644 INFO  [main] o.f.core.internal.command.DbMigrate - Current version of schema "public": 1
-2026-06-01 10:51:41.647 INFO  [main] o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
-2026-06-01 10:51:41.710 INFO  [main] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-06-01 10:51:41.756 INFO  [main] org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.12.Final
-2026-06-01 10:51:42.101 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-06-01 10:51:42.124 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-06-01 10:51:42.142 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1da2219c
-2026-06-01 10:51:42.143 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-06-01 10:51:42.162 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-06-01 10:51:42.175 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-06-05 00:15:32.860 INFO  [main] server.ServerApplicationKt - Starting ServerApplicationKt using Java 25.0.3 with PID 96266 (/home/ian-muyala/IdeaProjects/End2EndEncryption/server/target/classes started by ian-muyala in /home/ian-muyala/IdeaProjects/End2EndEncryption/server)
+2026-06-05 00:15:32.865 DEBUG [main] server.ServerApplicationKt - Running with Spring Boot v4.0.6, Spring v7.0.7
+2026-06-05 00:15:32.866 INFO  [main] server.ServerApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2026-06-05 00:15:32.924 INFO  [main] o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file /home/ian-muyala/IdeaProjects/End2EndEncryption/server/compose.yaml
+2026-06-05 00:15:33.284 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Starting 
+2026-06-05 00:15:33.284 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Starting 
+2026-06-05 00:15:33.285 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Starting 
+2026-06-05 00:15:33.285 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Starting 
+2026-06-05 00:15:33.533 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Started 
+2026-06-05 00:15:33.590 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Started 
+2026-06-05 00:15:33.627 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Started 
+2026-06-05 00:15:33.656 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Started 
+2026-06-05 00:15:33.657 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Waiting 
+2026-06-05 00:15:33.657 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Waiting 
+2026-06-05 00:15:33.657 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Waiting 
+2026-06-05 00:15:33.657 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Waiting 
+2026-06-05 00:15:34.159 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Healthy 
+2026-06-05 00:15:34.159 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Healthy 
+2026-06-05 00:15:34.159 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Healthy 
+2026-06-05 00:16:04.158 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Healthy 
+2026-06-05 00:16:06.531 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-05 00:16:06.533 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-05 00:16:06.654 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 109 ms. Found 6 JPA repository interfaces.
+2026-06-05 00:16:07.338 INFO  [main] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 5000 (http)
+2026-06-05 00:16:07.350 INFO  [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-05 00:16:07.350 INFO  [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-06-05 00:16:07.434 INFO  [main] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2152 ms
+2026-06-05 00:16:07.743 INFO  [main] i.m.c.i.push.PushMeterRegistry - Publishing metrics for OtlpMeterRegistry every 1m to http://127.0.0.1:32779/v1/metrics with resource attributes {service.name=server}
+2026-06-05 00:16:08.287 INFO  [main] org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://127.0.0.1:5432/e2eeServer?ApplicationName=server (PostgreSQL 18.3)
+2026-06-05 00:16:08.352 INFO  [main] o.f.core.internal.command.DbValidate - Successfully validated 2 migrations (execution time 00:00.023s)
+2026-06-05 00:16:08.377 INFO  [main] o.f.core.internal.command.DbMigrate - Current version of schema "public": 1
+2026-06-05 00:16:08.380 INFO  [main] o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-06-05 00:16:08.476 INFO  [main] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-05 00:16:08.539 INFO  [main] org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-06-05 00:16:08.942 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-05 00:16:08.969 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-05 00:16:08.990 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@753cfae3
+2026-06-05 00:16:08.991 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-05 00:16:09.013 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-05 00:16:09.031 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [jdbc:postgresql://127.0.0.1:5432/e2eeServer?ApplicationName=server]
 	Database driver: PostgreSQL JDBC Driver
 	Database dialect: PostgreSQLDialect
@@ -49,55 +49,55 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-06-01 10:51:42.876 INFO  [main] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-06-01 10:51:42.914 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-06-01 10:51:42.954 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-06-01 10:51:43.274 DEBUG [main] o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
-2026-06-01 10:51:43.274 DEBUG [main] server.jwt.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
-2026-06-01 10:51:43.837 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-06-01 10:51:43.956 DEBUG [main] o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
-2026-06-01 10:51:44.001 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 15 mappings in 'requestMappingHandlerMapping'
-2026-06-01 10:51:44.096 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 2 RequestBodyAdvice, 1 ResponseBodyAdvice
-2026-06-01 10:51:44.249 INFO  [main] c.n.g.d.s.ReloadableGraphQLSource - Rebuilding GraphQLSource
-2026-06-01 10:51:44.256 INFO  [main] c.n.g.dgs.internal.DgsSchemaProvider - No schema files found, but a schema was provided as an TypeDefinitionRegistry
-2026-06-01 10:51:44.470 INFO  [main] c.n.g.d.s.a.DgsSpringGraphQLAutoConfiguration - ***Schema Report***
+2026-06-05 00:16:09.957 INFO  [main] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-05 00:16:10.004 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-05 00:16:10.052 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-05 00:16:10.428 DEBUG [main] o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
+2026-06-05 00:16:10.428 DEBUG [main] server.jwt.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-05 00:16:11.212 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-06-05 00:16:11.361 DEBUG [main] o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
+2026-06-05 00:16:11.436 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 15 mappings in 'requestMappingHandlerMapping'
+2026-06-05 00:16:11.543 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 2 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-06-05 00:16:11.776 INFO  [main] c.n.g.d.s.ReloadableGraphQLSource - Rebuilding GraphQLSource
+2026-06-05 00:16:11.786 INFO  [main] c.n.g.dgs.internal.DgsSchemaProvider - No schema files found, but a schema was provided as an TypeDefinitionRegistry
+2026-06-05 00:16:12.090 INFO  [main] c.n.g.d.s.a.DgsSpringGraphQLAutoConfiguration - ***Schema Report***
 Unmapped fields: [Query._service]
 Unmapped registrations: {}
 Unmapped arguments: []
 Skipped types: []
 
-2026-06-01 10:51:44.496 INFO  [main] o.s.b.g.a.s.GraphQlWebMvcAutoConfiguration - GraphQL endpoint HTTP POST /graphql
-2026-06-01 10:51:44.502 DEBUG [main] o.s.w.s.f.s.RouterFunctionMapping - 1 RouterFunction(s) in 'routerFunctionMapping'
-2026-06-01 10:51:44.512 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
-2026-06-01 10:51:44.901 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
-2026-06-01 10:51:44.913 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-06-01 10:51:44.933 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+2026-06-05 00:16:12.149 INFO  [main] o.s.b.g.a.s.GraphQlWebMvcAutoConfiguration - GraphQL endpoint HTTP POST /graphql
+2026-06-05 00:16:12.160 DEBUG [main] o.s.w.s.f.s.RouterFunctionMapping - 1 RouterFunction(s) in 'routerFunctionMapping'
+2026-06-05 00:16:12.176 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2026-06-05 00:16:12.711 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-06-05 00:16:12.729 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-06-05 00:16:12.759 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
 	s.c.ChatController:
 	{[MESSAGE],[/chat]}: processMessage(ChatRequest,Principal)
 	{[MESSAGE],[/chat/delivered]}: markDelivered(DeliveryReceiptRequest,Principal)
 	{[MESSAGE],[/chat/sync]}: syncPendingMessages(Principal)
-2026-06-01 10:51:44.934 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+2026-06-05 00:16:12.760 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
 	s.k.KeyManagerController:
 	
-2026-06-01 10:51:44.934 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+2026-06-05 00:16:12.761 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
 	s.u.UserController:
 	
-2026-06-01 10:51:44.934 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
+2026-06-05 00:16:12.761 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
 	o.s.b.w.a.e.BasicErrorController:
 	
-2026-06-01 10:51:44.987 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2026-06-01 10:51:45.219 DEBUG [main] org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
-2026-06-01 10:51:45.220 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
-2026-06-01 10:51:45.220 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
-2026-06-01 10:51:45.220 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79895a73]
-2026-06-01 10:51:45.220 DEBUG [main] org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79895a73]
-2026-06-01 10:51:45.221 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79895a73]]
-2026-06-01 10:51:45.222 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - Started.
-2026-06-01 10:51:45.222 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 10:51:45.222 DEBUG [main] org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 10:51:45.232 INFO  [main] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 5000 (http) with context path '/'
-2026-06-01 10:51:45.242 INFO  [main] server.ServerApplicationKt - Started ServerApplicationKt in 39.419 seconds (process running for 39.962)
-2026-06-01 10:51:45.338 DEBUG [MessageBroker-1] org.hibernate.SQL - 
+2026-06-05 00:16:12.844 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-06-05 00:16:13.162 DEBUG [main] org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2026-06-05 00:16:13.162 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2026-06-05 00:16:13.162 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2026-06-05 00:16:13.163 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@a8c0c6d]
+2026-06-05 00:16:13.163 DEBUG [main] org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@a8c0c6d]
+2026-06-05 00:16:13.163 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@a8c0c6d]]
+2026-06-05 00:16:13.164 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2026-06-05 00:16:13.164 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2026-06-05 00:16:13.164 DEBUG [main] org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2026-06-05 00:16:13.176 INFO  [main] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 5000 (http) with context path '/'
+2026-06-05 00:16:13.194 INFO  [main] server.ServerApplicationKt - Started ServerApplicationKt in 41.113 seconds (process running for 41.817)
+2026-06-05 00:16:13.313 DEBUG [MessageBroker-1] org.hibernate.SQL - 
     select
         pm1_0.id,
         pm1_0.created_at,
@@ -111,41 +111,24 @@ Skipped types: []
     where
         pm1_0.status=? 
         and pm1_0.created_at<?
-2026-06-01 10:51:45.339 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 10:51:45.339 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T10:51:45.265253389]
-2026-06-01 10:51:45.713 INFO  [RMI TCP Connection(1)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-06-01 10:51:45.714 INFO  [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-06-01 10:51:45.714 DEBUG [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
-2026-06-01 10:51:45.714 DEBUG [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
-2026-06-01 10:51:45.716 DEBUG [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@122a6bac
-2026-06-01 10:51:45.716 DEBUG [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@54bb5dd0
-2026-06-01 10:51:45.716 DEBUG [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
-2026-06-01 10:51:45.716 INFO  [RMI TCP Connection(1)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2026-06-01 10:52:45.177 INFO  [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 1, completed tasks = 1]
-2026-06-01 10:52:45.243 DEBUG [MessageBroker-1] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 10:52:45.244 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 10:52:45.244 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T10:52:45.241993006]
-2026-06-01 10:53:38.315 DEBUG [http-nio-5000-exec-1] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/refresh
-2026-06-01 10:53:38.324 DEBUG [http-nio-5000-exec-1] o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/v1/users/refresh' (previous null). Performing CorsConfiguration lookup. If there are repeated lookups per request, consider using HandlerMappingIntrospector#createCacheFilter()to create a Servlet Filter to set the cache for the request. This is logged once only at DEBUG level, and every time at TRACE.
-2026-06-01 10:53:38.336 DEBUG [http-nio-5000-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 10:53:38.338 DEBUG [http-nio-5000-exec-1] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/refresh
-2026-06-01 10:53:38.341 DEBUG [http-nio-5000-exec-1] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/refresh", parameters={}
-2026-06-01 10:53:38.342 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#refresh(RefreshRequest)
-2026-06-01 10:53:38.363 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [RefreshRequest(refreshToken=68f2ce28-e9fb-4bcf-a2d4-090fe3ae7699)]
-2026-06-01 10:53:38.395 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+2026-06-05 00:16:13.314 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
+2026-06-05 00:16:13.315 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-29T00:16:13.219274372]
+2026-06-05 00:16:13.378 INFO  [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-05 00:16:13.379 INFO  [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-05 00:16:13.379 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+2026-06-05 00:16:13.379 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+2026-06-05 00:16:13.383 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@6861e61a
+2026-06-05 00:16:13.385 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@3b28695d
+2026-06-05 00:16:13.385 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2026-06-05 00:16:13.385 INFO  [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2026-06-05 00:16:48.363 DEBUG [http-nio-5000-exec-1] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/refresh
+2026-06-05 00:16:48.372 DEBUG [http-nio-5000-exec-1] o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/v1/users/refresh' (previous null). Performing CorsConfiguration lookup. If there are repeated lookups per request, consider using HandlerMappingIntrospector#createCacheFilter()to create a Servlet Filter to set the cache for the request. This is logged once only at DEBUG level, and every time at TRACE.
+2026-06-05 00:16:48.385 DEBUG [http-nio-5000-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-06-05 00:16:48.388 DEBUG [http-nio-5000-exec-1] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/refresh
+2026-06-05 00:16:48.390 DEBUG [http-nio-5000-exec-1] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/refresh", parameters={}
+2026-06-05 00:16:48.392 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#refresh(RefreshRequest)
+2026-06-05 00:16:48.414 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [RefreshRequest(refreshToken=cbcaf5f3-9cd7-425c-be4e-5182933766bb)]
+2026-06-05 00:16:48.446 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
     select
         rt1_0.id,
         rt1_0.created_at,
@@ -157,8 +140,8 @@ Skipped types: []
         refresh_tokens rt1_0 
     where
         rt1_0.token=?
-2026-06-01 10:53:38.395 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [68f2ce28-e9fb-4bcf-a2d4-090fe3ae7699]
-2026-06-01 10:53:38.414 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+2026-06-05 00:16:48.446 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cbcaf5f3-9cd7-425c-be4e-5182933766bb]
+2026-06-05 00:16:48.465 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
     select
         u1_0.id,
         u1_0.avatar_url,
@@ -172,8 +155,8 @@ Skipped types: []
         users u1_0 
     where
         u1_0.id=?
-2026-06-01 10:53:38.414 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [6]
-2026-06-01 10:53:38.418 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+2026-06-05 00:16:48.465 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [2]
+2026-06-05 00:16:48.469 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
     select
         rt1_0.id,
         rt1_0.created_at,
@@ -185,8 +168,8 @@ Skipped types: []
         refresh_tokens rt1_0 
     where
         rt1_0.token=?
-2026-06-01 10:53:38.418 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [68f2ce28-e9fb-4bcf-a2d4-090fe3ae7699]
-2026-06-01 10:53:38.421 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+2026-06-05 00:16:48.469 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cbcaf5f3-9cd7-425c-be4e-5182933766bb]
+2026-06-05 00:16:48.471 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
     select
         rt1_0.id,
         rt1_0.created_at,
@@ -198,43 +181,43 @@ Skipped types: []
         refresh_tokens rt1_0 
     where
         rt1_0.id=?
-2026-06-01 10:53:38.421 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [86]
-2026-06-01 10:53:38.441 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+2026-06-05 00:16:48.471 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [14]
+2026-06-05 00:16:48.489 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
     delete 
     from
         refresh_tokens 
     where
         id=?
-2026-06-01 10:53:38.442 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [86]
-2026-06-01 10:53:38.498 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+2026-06-05 00:16:48.489 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [14]
+2026-06-05 00:16:48.547 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
     insert 
     into
         refresh_tokens
         (created_at, expires_at, token, updated_at, user_id) 
     values
         (?, ?, ?, ?, ?)
-2026-06-01 10:53:38.499 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-01T10:53:38.493850637]
-2026-06-01 10:53:38.499 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-06-08T10:53:38.493827079]
-2026-06-01 10:53:38.499 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [75550510-b0e6-478a-81d6-771590205055]
-2026-06-01 10:53:38.499 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (4:TIMESTAMP) <- [2026-06-01T10:53:38.493857307]
-2026-06-01 10:53:38.499 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (5:BIGINT) <- [6]
-2026-06-01 10:53:38.512 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
-2026-06-01 10:53:38.513 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [RefreshResponse(refreshToken=75550510-b0e6-478a-81d6-771590205055, accessToken=eyJhbGciOiJIUzI1NiJ9. (truncated)...]
-2026-06-01 10:53:38.523 DEBUG [http-nio-5000-exec-1] o.s.web.servlet.DispatcherServlet - Completed 200 OK
-2026-06-01 10:53:40.658 DEBUG [http-nio-5000-exec-2] o.s.security.web.FilterChainProxy - Securing GET /ws
-2026-06-01 10:53:40.660 DEBUG [http-nio-5000-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 10:53:40.661 DEBUG [http-nio-5000-exec-2] o.s.security.web.FilterChainProxy - Secured GET /ws
-2026-06-01 10:53:40.661 DEBUG [http-nio-5000-exec-2] o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
-2026-06-01 10:53:40.661 DEBUG [http-nio-5000-exec-2] o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@69f9ab8a
-2026-06-01 10:53:40.663 DEBUG [http-nio-5000-exec-2] o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
-2026-06-01 10:53:40.682 DEBUG [http-nio-5000-exec-2] o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
-2026-06-01 10:53:40.691 DEBUG [http-nio-5000-exec-2] o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa, uri=ws://46.96.32.74:5000/ws]
-2026-06-01 10:53:40.738 DEBUG [clientInboundChannel-2] org.springframework.web.SimpLogging - Processing CONNECT user=6 session=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa
-2026-06-01 10:53:40.748 DEBUG [clientInboundChannel-6] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/messages-user1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa subscriptionId=sub-messages session=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa user=6 payload=byte[0]
-2026-06-01 10:53:40.792 DEBUG [clientInboundChannel-9] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/message-status-user1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa subscriptionId=sub-status session=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa user=6 payload=byte[0]
-2026-06-01 10:53:40.792 DEBUG [clientInboundChannel-10] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Searching methods to handle SEND /app/chat/sync session=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa, lookupDestination='/chat/sync'
-2026-06-01 10:53:40.795 DEBUG [clientInboundChannel-10] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Invoking ChatController#syncPendingMessages[1 args]
-2026-06-01 10:53:40.802 DEBUG [clientInboundChannel-10] org.hibernate.SQL - 
+2026-06-05 00:16:48.548 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-05T00:16:48.543091509]
+2026-06-05 00:16:48.548 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-06-12T00:16:48.543065650]
+2026-06-05 00:16:48.548 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [c5bd78dd-ce35-4633-a4a0-0a69e75d476e]
+2026-06-05 00:16:48.548 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (4:TIMESTAMP) <- [2026-06-05T00:16:48.543098362]
+2026-06-05 00:16:48.548 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (5:BIGINT) <- [2]
+2026-06-05 00:16:48.561 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
+2026-06-05 00:16:48.562 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [RefreshResponse(refreshToken=c5bd78dd-ce35-4633-a4a0-0a69e75d476e, accessToken=eyJhbGciOiJIUzI1NiJ9. (truncated)...]
+2026-06-05 00:16:48.573 DEBUG [http-nio-5000-exec-1] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+2026-06-05 00:16:49.582 DEBUG [http-nio-5000-exec-2] o.s.security.web.FilterChainProxy - Securing GET /ws
+2026-06-05 00:16:49.584 DEBUG [http-nio-5000-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-06-05 00:16:49.585 DEBUG [http-nio-5000-exec-2] o.s.security.web.FilterChainProxy - Secured GET /ws
+2026-06-05 00:16:49.585 DEBUG [http-nio-5000-exec-2] o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
+2026-06-05 00:16:49.585 DEBUG [http-nio-5000-exec-2] o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@f4c0c33
+2026-06-05 00:16:49.587 DEBUG [http-nio-5000-exec-2] o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
+2026-06-05 00:16:49.605 DEBUG [http-nio-5000-exec-2] o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
+2026-06-05 00:16:49.613 DEBUG [http-nio-5000-exec-2] o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=2aae9479-9d69-41b7-244f-b5d0196696e1, uri=ws://46.96.32.74:5000/ws]
+2026-06-05 00:16:49.649 DEBUG [clientInboundChannel-2] org.springframework.web.SimpLogging - Processing CONNECT user=2 session=2aae9479-9d69-41b7-244f-b5d0196696e1
+2026-06-05 00:16:49.678 DEBUG [clientInboundChannel-6] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/messages-user2aae9479-9d69-41b7-244f-b5d0196696e1 subscriptionId=sub-messages session=2aae9479-9d69-41b7-244f-b5d0196696e1 user=2 payload=byte[0]
+2026-06-05 00:16:49.747 DEBUG [clientInboundChannel-9] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/message-status-user2aae9479-9d69-41b7-244f-b5d0196696e1 subscriptionId=sub-status session=2aae9479-9d69-41b7-244f-b5d0196696e1 user=2 payload=byte[0]
+2026-06-05 00:16:49.747 DEBUG [clientInboundChannel-10] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Searching methods to handle SEND /app/chat/sync session=2aae9479-9d69-41b7-244f-b5d0196696e1, lookupDestination='/chat/sync'
+2026-06-05 00:16:49.750 DEBUG [clientInboundChannel-10] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Invoking ChatController#syncPendingMessages[1 args]
+2026-06-05 00:16:49.756 DEBUG [clientInboundChannel-10] org.hibernate.SQL - 
     select
         pm1_0.id,
         pm1_0.created_at,
@@ -248,83 +231,27 @@ Skipped types: []
     where
         pm1_0.receiver_id=? 
         and pm1_0.status=?
-2026-06-01 10:53:40.802 TRACE [clientInboundChannel-10] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [6]
-2026-06-01 10:53:40.802 TRACE [clientInboundChannel-10] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [SENT]
-2026-06-01 10:53:45.247 DEBUG [MessageBroker-2] org.hibernate.SQL - 
+2026-06-05 00:16:49.757 TRACE [clientInboundChannel-10] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [2]
+2026-06-05 00:16:49.757 TRACE [clientInboundChannel-10] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [SENT]
+2026-06-05 00:17:05.393 DEBUG [clientInboundChannel-13] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Searching methods to handle SEND /app/chat session=2aae9479-9d69-41b7-244f-b5d0196696e1 application/json payload={"messageId":"b1f5919d-f75a-43f1-8c80-43bddbe66114","senderId":"2","receiverId":...(truncated), lookupDestination='/chat'
+2026-06-05 00:17:05.394 DEBUG [clientInboundChannel-13] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Invoking ChatController#processMessage[2 args]
+2026-06-05 00:17:05.416 DEBUG [clientInboundChannel-13] org.hibernate.SQL - 
     select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 10:53:45.247 TRACE [MessageBroker-2] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 10:53:45.247 TRACE [MessageBroker-2] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T10:53:45.246839230]
-2026-06-01 10:53:47.359 DEBUG [clientInboundChannel-14] org.springframework.web.SimpLogging - Processing DISCONNECT session=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa
-2026-06-01 10:53:47.361 DEBUG [clientOutboundChannel-2] o.s.w.s.a.NativeWebSocketSession - Closing StandardWebSocketSession[id=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa, uri=ws://46.96.32.74:5000/ws]
-2026-06-01 10:53:47.361 DEBUG [clientOutboundChannel-2] o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa, uri=ws://46.96.32.74:5000/ws] closed with CloseStatus[code=1002, reason=null]
-2026-06-01 10:53:47.361 DEBUG [clientOutboundChannel-2] o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session 1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa
-2026-06-01 10:53:47.362 DEBUG [clientInboundChannel-17] org.springframework.web.SimpLogging - Processing DISCONNECT session=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa
-2026-06-01 10:53:47.363 DEBUG [clientOutboundChannel-3] o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=server.ws.StompPrincipal@2871b7b8, simpSessionId=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa}], simpUser=server.ws.StompPrincipal@2871b7b8, simpSessionId=1057a81d-d125-4a1c-2a5d-a4fd4c8c68fa}]
-2026-06-01 10:53:47.377 DEBUG [http-nio-5000-exec-8] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/logout
-2026-06-01 10:53:47.382 DEBUG [http-nio-5000-exec-8] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
+        count(*) 
     from
         users u1_0 
     where
-        u1_0.username=?
-2026-06-01 10:53:47.382 TRACE [http-nio-5000-exec-8] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 10:53:47.392 DEBUG [http-nio-5000-exec-8] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/logout
-2026-06-01 10:53:47.392 DEBUG [http-nio-5000-exec-8] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/logout", parameters={}
-2026-06-01 10:53:47.393 DEBUG [http-nio-5000-exec-8] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#logoutUser(Principal)
-2026-06-01 10:53:47.395 DEBUG [http-nio-5000-exec-8] org.hibernate.SQL - 
+        u1_0.id=?
+2026-06-05 00:17:05.417 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [2]
+2026-06-05 00:17:05.418 DEBUG [clientInboundChannel-13] org.hibernate.SQL - 
     select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
+        count(*) 
     from
         users u1_0 
     where
-        u1_0.username=?
-2026-06-01 10:53:47.395 TRACE [http-nio-5000-exec-8] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 10:53:47.398 DEBUG [http-nio-5000-exec-8] org.hibernate.SQL - 
-    select
-        rt1_0.id,
-        rt1_0.created_at,
-        rt1_0.expires_at,
-        rt1_0.token,
-        rt1_0.updated_at,
-        rt1_0.user_id 
-    from
-        refresh_tokens rt1_0 
-    where
-        rt1_0.user_id=?
-2026-06-01 10:53:47.398 TRACE [http-nio-5000-exec-8] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [6]
-2026-06-01 10:53:47.404 DEBUG [http-nio-5000-exec-8] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler server.exceptionHandler.GlobalExceptionHandler#handleGenericException(Exception, HttpServletRequest)
-2026-06-01 10:53:47.412 DEBUG [http-nio-5000-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-06-01 10:53:47.413 DEBUG [http-nio-5000-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ErrorResponse(timestamp=2026-06-01T10:53:47.411836683, status=500, error=Internal Server Error, mess (truncated)...]
-2026-06-01 10:53:47.418 DEBUG [http-nio-5000-exec-8] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call]
-2026-06-01 10:53:47.418 DEBUG [http-nio-5000-exec-8] o.s.web.servlet.DispatcherServlet - Completed 500 INTERNAL_SERVER_ERROR
-2026-06-01 10:54:45.242 DEBUG [MessageBroker-3] org.hibernate.SQL - 
+        u1_0.id=?
+2026-06-05 00:17:05.418 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [3]
+2026-06-05 00:17:05.420 DEBUG [clientInboundChannel-13] org.hibernate.SQL - 
     select
         pm1_0.id,
         pm1_0.created_at,
@@ -336,232 +263,26 @@ Skipped types: []
     from
         pending_messages pm1_0 
     where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 10:54:45.243 TRACE [MessageBroker-3] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 10:54:45.243 TRACE [MessageBroker-3] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T10:54:45.241980757]
-2026-06-01 10:55:45.243 DEBUG [MessageBroker-5] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 10:55:45.243 TRACE [MessageBroker-5] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 10:55:45.243 TRACE [MessageBroker-5] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T10:55:45.242435411]
-2026-06-01 10:56:45.242 DEBUG [MessageBroker-2] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 10:56:45.243 TRACE [MessageBroker-2] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 10:56:45.243 TRACE [MessageBroker-2] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T10:56:45.242139363]
-2026-06-01 10:57:01.857 INFO  [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-06-01 10:57:01.859 INFO  [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
-2026-06-01 10:57:01.860 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
-2026-06-01 10:57:01.860 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
-2026-06-01 10:57:01.860 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
-2026-06-01 10:57:01.860 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79895a73]]
-2026-06-01 10:57:01.860 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79895a73]
-2026-06-01 10:57:01.860 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@79895a73]
-2026-06-01 10:57:01.860 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
-2026-06-01 10:57:01.860 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 10:57:01.860 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 10:57:01.877 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-06-01 10:57:01.879 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-06-01 10:57:01.881 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-06-01 10:59:52.648 INFO  [main] server.ServerApplicationKt - Starting ServerApplicationKt using Java 25.0.3 with PID 35227 (/home/ian-muyala/IdeaProjects/End2EndEncryption/server/target/classes started by ian-muyala in /home/ian-muyala/IdeaProjects/End2EndEncryption/server)
-2026-06-01 10:59:52.650 DEBUG [main] server.ServerApplicationKt - Running with Spring Boot v4.0.6, Spring v7.0.7
-2026-06-01 10:59:52.650 INFO  [main] server.ServerApplicationKt - No active profile set, falling back to 1 default profile: "default"
-2026-06-01 10:59:52.694 INFO  [main] o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file /home/ian-muyala/IdeaProjects/End2EndEncryption/server/compose.yaml
-2026-06-01 10:59:53.014 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Starting 
-2026-06-01 10:59:53.015 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Starting 
-2026-06-01 10:59:53.015 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Starting 
-2026-06-01 10:59:53.015 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Starting 
-2026-06-01 10:59:53.284 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Started 
-2026-06-01 10:59:53.313 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Started 
-2026-06-01 10:59:53.353 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Started 
-2026-06-01 10:59:53.391 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Started 
-2026-06-01 10:59:53.392 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Waiting 
-2026-06-01 10:59:53.392 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Waiting 
-2026-06-01 10:59:53.392 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Waiting 
-2026-06-01 10:59:53.392 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Waiting 
-2026-06-01 10:59:53.911 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-postgres-1 Healthy 
-2026-06-01 10:59:53.911 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-redis-1 Healthy 
-2026-06-01 10:59:53.911 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container kafka Healthy 
-2026-06-01 11:00:23.393 INFO  [OutputReader-stderr] o.s.b.docker.compose.core.DockerCli -  Container server-grafana-lgtm-1 Healthy 
-2026-06-01 11:00:25.406 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2026-06-01 11:00:25.408 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-06-01 11:00:25.515 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 100 ms. Found 6 JPA repository interfaces.
-2026-06-01 11:00:26.072 INFO  [main] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 5000 (http)
-2026-06-01 11:00:26.083 INFO  [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-06-01 11:00:26.083 INFO  [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.21]
-2026-06-01 11:00:26.140 INFO  [main] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1632 ms
-2026-06-01 11:00:26.329 INFO  [main] i.m.c.i.push.PushMeterRegistry - Publishing metrics for OtlpMeterRegistry every 1m to http://127.0.0.1:32771/v1/metrics with resource attributes {service.name=server}
-2026-06-01 11:00:26.731 INFO  [main] org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://127.0.0.1:5432/e2eeServer?ApplicationName=server (PostgreSQL 18.3)
-2026-06-01 11:00:26.775 INFO  [main] o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.016s)
-2026-06-01 11:00:26.795 INFO  [main] o.f.core.internal.command.DbMigrate - Current version of schema "public": 1
-2026-06-01 11:00:26.798 INFO  [main] o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
-2026-06-01 11:00:26.858 INFO  [main] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-06-01 11:00:26.901 INFO  [main] org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.12.Final
-2026-06-01 11:00:27.235 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-06-01 11:00:27.258 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-06-01 11:00:27.276 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5ea24702
-2026-06-01 11:00:27.277 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-06-01 11:00:27.295 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-06-01 11:00:27.308 INFO  [main] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
-	Database JDBC URL [jdbc:postgresql://127.0.0.1:5432/e2eeServer?ApplicationName=server]
-	Database driver: PostgreSQL JDBC Driver
-	Database dialect: PostgreSQLDialect
-	Database version: 18.3
-	Default catalog/schema: e2eeServer/public
-	Autocommit mode: undefined/unknown
-	Isolation level: READ_COMMITTED [default READ_COMMITTED]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-06-01 11:00:28.084 INFO  [main] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-06-01 11:00:28.125 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-06-01 11:00:28.180 INFO  [main] o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-06-01 11:00:28.508 DEBUG [main] o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
-2026-06-01 11:00:28.508 DEBUG [main] server.jwt.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
-2026-06-01 11:00:29.097 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-06-01 11:00:29.238 DEBUG [main] o.s.w.s.s.s.WebSocketHandlerMapping - Patterns [/ws] in 'stompWebSocketHandlerMapping'
-2026-06-01 11:00:29.287 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerMapping - 15 mappings in 'requestMappingHandlerMapping'
-2026-06-01 11:00:29.383 DEBUG [main] o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 2 RequestBodyAdvice, 1 ResponseBodyAdvice
-2026-06-01 11:00:29.525 INFO  [main] c.n.g.d.s.ReloadableGraphQLSource - Rebuilding GraphQLSource
-2026-06-01 11:00:29.532 INFO  [main] c.n.g.dgs.internal.DgsSchemaProvider - No schema files found, but a schema was provided as an TypeDefinitionRegistry
-2026-06-01 11:00:29.755 INFO  [main] c.n.g.d.s.a.DgsSpringGraphQLAutoConfiguration - ***Schema Report***
-Unmapped fields: [Query._service]
-Unmapped registrations: {}
-Unmapped arguments: []
-Skipped types: []
-
-2026-06-01 11:00:29.782 INFO  [main] o.s.b.g.a.s.GraphQlWebMvcAutoConfiguration - GraphQL endpoint HTTP POST /graphql
-2026-06-01 11:00:29.789 DEBUG [main] o.s.w.s.f.s.RouterFunctionMapping - 1 RouterFunction(s) in 'routerFunctionMapping'
-2026-06-01 11:00:29.800 DEBUG [main] o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
-2026-06-01 11:00:30.207 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
-2026-06-01 11:00:30.220 DEBUG [main] o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-06-01 11:00:30.242 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
-	s.c.ChatController:
-	{[MESSAGE],[/chat]}: processMessage(ChatRequest,Principal)
-	{[MESSAGE],[/chat/delivered]}: markDelivered(DeliveryReceiptRequest,Principal)
-	{[MESSAGE],[/chat/sync]}: syncPendingMessages(Principal)
-2026-06-01 11:00:30.242 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
-	s.k.KeyManagerController:
-	
-2026-06-01 11:00:30.242 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
-	s.u.UserController:
-	
-2026-06-01 11:00:30.243 DEBUG [main] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - 
-	o.s.b.w.a.e.BasicErrorController:
-	
-2026-06-01 11:00:30.303 DEBUG [main] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
-2026-06-01 11:00:30.542 DEBUG [main] org.springframework.web.SimpLogging - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
-2026-06-01 11:00:30.543 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
-2026-06-01 11:00:30.543 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
-2026-06-01 11:00:30.543 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7df8d3]
-2026-06-01 11:00:30.543 DEBUG [main] org.springframework.web.SimpLogging - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7df8d3]
-2026-06-01 11:00:30.544 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7df8d3]]
-2026-06-01 11:00:30.545 INFO  [main] o.s.m.s.b.SimpleBrokerMessageHandler - Started.
-2026-06-01 11:00:30.545 DEBUG [main] org.springframework.web.SimpLogging - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 11:00:30.545 DEBUG [main] org.springframework.web.SimpLogging - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 11:00:30.554 INFO  [main] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 5000 (http) with context path '/'
-2026-06-01 11:00:30.564 INFO  [main] server.ServerApplicationKt - Started ServerApplicationKt in 38.504 seconds (process running for 39.134)
-2026-06-01 11:00:30.650 DEBUG [MessageBroker-1] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 11:00:30.651 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 11:00:30.652 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T11:00:30.587681160]
-2026-06-01 11:00:30.709 INFO  [RMI TCP Connection(3)-127.0.0.1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-06-01 11:00:30.709 INFO  [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-06-01 11:00:30.709 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
-2026-06-01 11:00:30.709 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
-2026-06-01 11:00:30.712 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@47312528
-2026-06-01 11:00:30.713 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@2a906344
-2026-06-01 11:00:30.713 DEBUG [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
-2026-06-01 11:00:30.713 INFO  [RMI TCP Connection(3)-127.0.0.1] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
-2026-06-01 11:01:25.073 DEBUG [http-nio-5000-exec-1] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/login
-2026-06-01 11:01:25.079 DEBUG [http-nio-5000-exec-1] o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/api/v1/users/login' (previous null). Performing CorsConfiguration lookup. If there are repeated lookups per request, consider using HandlerMappingIntrospector#createCacheFilter()to create a Servlet Filter to set the cache for the request. This is logged once only at DEBUG level, and every time at TRACE.
-2026-06-01 11:01:25.089 DEBUG [http-nio-5000-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 11:01:25.091 DEBUG [http-nio-5000-exec-1] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/login
-2026-06-01 11:01:25.093 DEBUG [http-nio-5000-exec-1] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/login", parameters={}
-2026-06-01 11:01:25.094 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#loginUser(LoginRequest)
-2026-06-01 11:01:25.115 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(identifier=ivr, password=12345678)]
-2026-06-01 11:01:25.156 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-06-01 11:01:25.156 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [ivr]
-2026-06-01 11:01:25.486 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
+        pm1_0.id=?
+2026-06-05 00:17:05.420 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [b1f5919d-f75a-43f1-8c80-43bddbe66114]
+2026-06-05 00:17:05.480 DEBUG [clientInboundChannel-13] org.hibernate.SQL - 
     insert 
     into
-        refresh_tokens
-        (created_at, expires_at, token, updated_at, user_id) 
+        pending_messages
+        (created_at, delivered_at, payload_json, receiver_id, sender_id, status, id) 
     values
-        (?, ?, ?, ?, ?)
-2026-06-01 11:01:25.487 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-01T11:01:25.472416462]
-2026-06-01 11:01:25.487 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-06-08T11:01:25.472396101]
-2026-06-01 11:01:25.487 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [e84dfa24-29eb-4e27-be84-a001bf818a7e]
-2026-06-01 11:01:25.487 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (4:TIMESTAMP) <- [2026-06-01T11:01:25.472422755]
-2026-06-01 11:01:25.487 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (5:BIGINT) <- [5]
-2026-06-01 11:01:25.502 DEBUG [http-nio-5000-exec-1] org.hibernate.SQL - 
-    select
-        upk1_0.id,
-        upk1_0.IK,
-        upk1_0.IKsig,
-        upk1_0.signature,
-        upk1_0.signed_pre_key,
-        upk1_0.signed_pre_key_id,
-        upk1_0.user_id 
-    from
-        user_public_keys upk1_0 
-    where
-        upk1_0.user_id=?
-2026-06-01 11:01:25.502 TRACE [http-nio-5000-exec-1] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [5]
-2026-06-01 11:01:25.510 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
-2026-06-01 11:01:25.512 DEBUG [http-nio-5000-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdnIiLCJ1c2VySWQiOjUsImlhdCI6MTc4MDMwMDg4N (truncated)...]
-2026-06-01 11:01:25.530 DEBUG [http-nio-5000-exec-1] o.s.web.servlet.DispatcherServlet - Completed 200 OK
-2026-06-01 11:01:30.501 INFO  [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 1, completed tasks = 1]
-2026-06-01 11:01:30.564 DEBUG [MessageBroker-1] org.hibernate.SQL - 
+        (?, ?, ?, ?, ?, ?, ?)
+2026-06-05 00:17:05.481 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-05T00:17:05.419290556]
+2026-06-05 00:17:05.481 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [null]
+2026-06-05 00:17:05.481 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (3:JSON) <- [ChatMessage(messageId=b1f5919d-f75a-43f1-8c80-43bddbe66114, senderId=2, receiverId=3, messageType=RATCHET_MESSAGE, encodedMessage=ClRzCTNjhfrPoMGOlNHdmSMgfANg8TrhFlumM4rAoDJIfzeoy3ZAb8ruo9z7TxLyMIEpn4+AwfYG7E0bzeI8Bisu/tczqg33bNWkyr8lV+oorX5nUu8SIWjyl0DUt2IYhqDM1plInkpEsoOcFF4OUHIGdwKlus3/Pw==, createdAt=2026-06-05T00:17:05.094052)]
+2026-06-05 00:17:05.481 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [3]
+2026-06-05 00:17:05.482 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [2]
+2026-06-05 00:17:05.482 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (6:VARCHAR) <- [SENT]
+2026-06-05 00:17:05.482 TRACE [clientInboundChannel-13] org.hibernate.orm.jdbc.bind - binding parameter (7:VARCHAR) <- [b1f5919d-f75a-43f1-8c80-43bddbe66114]
+2026-06-05 00:17:05.489 DEBUG [clientInboundChannel-13] org.springframework.web.SimpLogging - Processing MESSAGE destination=/queue/message-status-user2aae9479-9d69-41b7-244f-b5d0196696e1 session=null payload={"messageId":"b1f5919d-f75a-43f1-8c80-43bddbe66114","status":"SENT","reason":nul...(truncated)
+2026-06-05 00:17:05.490 DEBUG [clientInboundChannel-13] org.springframework.web.SimpLogging - Broadcasting to 1 sessions.
+2026-06-05 00:17:13.120 INFO  [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[1 current WS(1)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 15, active threads = 0, queued tasks = 0, completed tasks = 15], outboundChannel[pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 1, completed tasks = 1]
+2026-06-05 00:17:13.193 DEBUG [MessageBroker-1] org.hibernate.SQL - 
     select
         pm1_0.id,
         pm1_0.created_at,
@@ -575,341 +296,92 @@ Skipped types: []
     where
         pm1_0.status=? 
         and pm1_0.created_at<?
-2026-06-01 11:01:30.565 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 11:01:30.565 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T11:01:30.563753961]
-2026-06-01 11:01:39.499 DEBUG [http-nio-5000-exec-2] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/login
-2026-06-01 11:01:39.501 DEBUG [http-nio-5000-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 11:01:39.502 DEBUG [http-nio-5000-exec-2] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/login
-2026-06-01 11:01:39.502 DEBUG [http-nio-5000-exec-2] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/login", parameters={}
-2026-06-01 11:01:39.502 DEBUG [http-nio-5000-exec-2] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#loginUser(LoginRequest)
-2026-06-01 11:01:39.503 DEBUG [http-nio-5000-exec-2] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(identifier=cns, password=12345678)]
-2026-06-01 11:01:39.504 DEBUG [http-nio-5000-exec-2] org.hibernate.SQL - 
+2026-06-05 00:17:13.193 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
+2026-06-05 00:17:13.193 TRACE [MessageBroker-1] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-29T00:17:13.192758412]
+2026-06-05 00:17:22.792 DEBUG [clientInboundChannel-16] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Searching methods to handle SEND /app/chat session=2aae9479-9d69-41b7-244f-b5d0196696e1 application/json payload={"messageId":"ff7e68d6-1f68-42ca-a278-4960ec09e202","senderId":"2","receiverId":...(truncated), lookupDestination='/chat'
+2026-06-05 00:17:22.793 DEBUG [clientInboundChannel-16] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Invoking ChatController#processMessage[2 args]
+2026-06-05 00:17:22.795 DEBUG [clientInboundChannel-16] org.hibernate.SQL - 
     select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
+        count(*) 
     from
         users u1_0 
     where
-        u1_0.username=?
-2026-06-01 11:01:39.504 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 11:01:39.756 DEBUG [http-nio-5000-exec-2] org.hibernate.SQL - 
+        u1_0.id=?
+2026-06-05 00:17:22.795 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [2]
+2026-06-05 00:17:22.796 DEBUG [clientInboundChannel-16] org.hibernate.SQL - 
+    select
+        count(*) 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-06-05 00:17:22.796 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [1]
+2026-06-05 00:17:22.797 DEBUG [clientInboundChannel-16] org.hibernate.SQL - 
+    select
+        pm1_0.id,
+        pm1_0.created_at,
+        pm1_0.delivered_at,
+        pm1_0.payload_json,
+        pm1_0.receiver_id,
+        pm1_0.sender_id,
+        pm1_0.status 
+    from
+        pending_messages pm1_0 
+    where
+        pm1_0.id=?
+2026-06-05 00:17:22.797 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [ff7e68d6-1f68-42ca-a278-4960ec09e202]
+2026-06-05 00:17:22.798 DEBUG [clientInboundChannel-16] org.hibernate.SQL - 
     insert 
     into
-        refresh_tokens
-        (created_at, expires_at, token, updated_at, user_id) 
+        pending_messages
+        (created_at, delivered_at, payload_json, receiver_id, sender_id, status, id) 
     values
-        (?, ?, ?, ?, ?)
-2026-06-01 11:01:39.757 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-01T11:01:39.756007372]
-2026-06-01 11:01:39.757 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-06-08T11:01:39.755985087]
-2026-06-01 11:01:39.757 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [810cd54c-3e08-4e26-9e92-c0984acf0292]
-2026-06-01 11:01:39.757 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (4:TIMESTAMP) <- [2026-06-01T11:01:39.756010769]
-2026-06-01 11:01:39.757 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (5:BIGINT) <- [6]
-2026-06-01 11:01:39.779 DEBUG [http-nio-5000-exec-2] org.hibernate.SQL - 
-    select
-        upk1_0.id,
-        upk1_0.IK,
-        upk1_0.IKsig,
-        upk1_0.signature,
-        upk1_0.signed_pre_key,
-        upk1_0.signed_pre_key_id,
-        upk1_0.user_id 
-    from
-        user_public_keys upk1_0 
-    where
-        upk1_0.user_id=?
-2026-06-01 11:01:39.779 TRACE [http-nio-5000-exec-2] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [6]
-2026-06-01 11:01:39.781 DEBUG [http-nio-5000-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
-2026-06-01 11:01:39.782 DEBUG [http-nio-5000-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbnMiLCJ1c2VySWQiOjYsImlhdCI6MTc4MDMwMDg5O (truncated)...]
-2026-06-01 11:01:39.783 DEBUG [http-nio-5000-exec-2] o.s.web.servlet.DispatcherServlet - Completed 200 OK
-2026-06-01 11:01:41.103 DEBUG [http-nio-5000-exec-3] o.s.security.web.FilterChainProxy - Securing GET /ws
-2026-06-01 11:01:41.105 DEBUG [http-nio-5000-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 11:01:41.105 DEBUG [http-nio-5000-exec-3] o.s.security.web.FilterChainProxy - Secured GET /ws
-2026-06-01 11:01:41.105 DEBUG [http-nio-5000-exec-3] o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
-2026-06-01 11:01:41.106 DEBUG [http-nio-5000-exec-3] o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@680f4ae7
-2026-06-01 11:01:41.107 DEBUG [http-nio-5000-exec-3] o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
-2026-06-01 11:01:41.128 DEBUG [http-nio-5000-exec-3] o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
-2026-06-01 11:01:41.135 DEBUG [http-nio-5000-exec-3] o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=cc500ebc-7068-940d-f703-e000ea8f1594, uri=ws://46.96.32.74:5000/ws]
-2026-06-01 11:01:41.160 DEBUG [clientInboundChannel-2] org.springframework.web.SimpLogging - Processing CONNECT user=6 session=cc500ebc-7068-940d-f703-e000ea8f1594
-2026-06-01 11:01:41.172 DEBUG [clientInboundChannel-6] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/messages-usercc500ebc-7068-940d-f703-e000ea8f1594 subscriptionId=sub-messages session=cc500ebc-7068-940d-f703-e000ea8f1594 user=6 payload=byte[0]
-2026-06-01 11:01:41.303 DEBUG [clientInboundChannel-9] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/message-status-usercc500ebc-7068-940d-f703-e000ea8f1594 subscriptionId=sub-status session=cc500ebc-7068-940d-f703-e000ea8f1594 user=6 payload=byte[0]
-2026-06-01 11:01:41.304 DEBUG [clientInboundChannel-10] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Searching methods to handle SEND /app/chat/sync session=cc500ebc-7068-940d-f703-e000ea8f1594, lookupDestination='/chat/sync'
-2026-06-01 11:01:41.308 DEBUG [clientInboundChannel-10] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Invoking ChatController#syncPendingMessages[1 args]
-2026-06-01 11:01:41.316 DEBUG [clientInboundChannel-10] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.receiver_id=? 
-        and pm1_0.status=?
-2026-06-01 11:01:41.316 TRACE [clientInboundChannel-10] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [6]
-2026-06-01 11:01:41.316 TRACE [clientInboundChannel-10] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [SENT]
-2026-06-01 11:01:52.265 DEBUG [clientInboundChannel-14] org.springframework.web.SimpLogging - Processing DISCONNECT session=cc500ebc-7068-940d-f703-e000ea8f1594
-2026-06-01 11:01:52.266 DEBUG [http-nio-5000-exec-6] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/logout
-2026-06-01 11:01:52.267 DEBUG [clientOutboundChannel-2] o.s.w.s.a.NativeWebSocketSession - Closing StandardWebSocketSession[id=cc500ebc-7068-940d-f703-e000ea8f1594, uri=ws://46.96.32.74:5000/ws]
-2026-06-01 11:01:52.267 DEBUG [clientOutboundChannel-2] o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=cc500ebc-7068-940d-f703-e000ea8f1594, uri=ws://46.96.32.74:5000/ws] closed with CloseStatus[code=1002, reason=null]
-2026-06-01 11:01:52.267 DEBUG [clientOutboundChannel-2] o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session cc500ebc-7068-940d-f703-e000ea8f1594
-2026-06-01 11:01:52.268 DEBUG [clientInboundChannel-17] org.springframework.web.SimpLogging - Processing DISCONNECT session=cc500ebc-7068-940d-f703-e000ea8f1594
-2026-06-01 11:01:52.269 DEBUG [clientOutboundChannel-3] o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=server.ws.StompPrincipal@66220fed, simpSessionId=cc500ebc-7068-940d-f703-e000ea8f1594}], simpUser=server.ws.StompPrincipal@66220fed, simpSessionId=cc500ebc-7068-940d-f703-e000ea8f1594}]
-2026-06-01 11:01:52.269 DEBUG [http-nio-5000-exec-6] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-06-01 11:01:52.269 TRACE [http-nio-5000-exec-6] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 11:01:52.275 DEBUG [http-nio-5000-exec-6] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/logout
-2026-06-01 11:01:52.275 DEBUG [http-nio-5000-exec-6] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/logout", parameters={}
-2026-06-01 11:01:52.275 DEBUG [http-nio-5000-exec-6] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#logoutUser(Principal)
-2026-06-01 11:01:52.277 DEBUG [http-nio-5000-exec-6] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-06-01 11:01:52.278 TRACE [http-nio-5000-exec-6] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 11:01:52.281 DEBUG [http-nio-5000-exec-6] org.hibernate.SQL - 
-    select
-        rt1_0.id,
-        rt1_0.created_at,
-        rt1_0.expires_at,
-        rt1_0.token,
-        rt1_0.updated_at,
-        rt1_0.user_id 
-    from
-        refresh_tokens rt1_0 
-    where
-        rt1_0.user_id=?
-2026-06-01 11:01:52.281 TRACE [http-nio-5000-exec-6] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [6]
-2026-06-01 11:01:52.287 DEBUG [http-nio-5000-exec-6] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler server.exceptionHandler.GlobalExceptionHandler#handleGenericException(Exception, HttpServletRequest)
-2026-06-01 11:01:52.296 DEBUG [http-nio-5000-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-06-01 11:01:52.297 DEBUG [http-nio-5000-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ErrorResponse(timestamp=2026-06-01T11:01:52.295486221, status=500, error=Internal Server Error, mess (truncated)...]
-2026-06-01 11:01:52.301 DEBUG [http-nio-5000-exec-6] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call]
-2026-06-01 11:01:52.301 DEBUG [http-nio-5000-exec-6] o.s.web.servlet.DispatcherServlet - Completed 500 INTERNAL_SERVER_ERROR
-2026-06-01 11:02:30.564 DEBUG [MessageBroker-2] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 11:02:30.564 TRACE [MessageBroker-2] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 11:02:30.564 TRACE [MessageBroker-2] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T11:02:30.563741365]
-2026-06-01 11:03:30.564 DEBUG [MessageBroker-3] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 11:03:30.564 TRACE [MessageBroker-3] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 11:03:30.564 TRACE [MessageBroker-3] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T11:03:30.563722057]
-2026-06-01 11:04:27.214 DEBUG [http-nio-5000-exec-9] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/login
-2026-06-01 11:04:27.215 DEBUG [http-nio-5000-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 11:04:27.216 DEBUG [http-nio-5000-exec-9] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/login
-2026-06-01 11:04:27.217 DEBUG [http-nio-5000-exec-9] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/login", parameters={}
-2026-06-01 11:04:27.217 DEBUG [http-nio-5000-exec-9] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#loginUser(LoginRequest)
-2026-06-01 11:04:27.218 DEBUG [http-nio-5000-exec-9] o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [LoginRequest(identifier=cns, password=12345678)]
-2026-06-01 11:04:27.219 DEBUG [http-nio-5000-exec-9] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-06-01 11:04:27.220 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 11:04:27.479 DEBUG [http-nio-5000-exec-9] org.hibernate.SQL - 
-    insert 
-    into
-        refresh_tokens
-        (created_at, expires_at, token, updated_at, user_id) 
-    values
-        (?, ?, ?, ?, ?)
-2026-06-01 11:04:27.479 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-01T11:04:27.478627646]
-2026-06-01 11:04:27.479 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-06-08T11:04:27.478613570]
-2026-06-01 11:04:27.480 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (3:VARCHAR) <- [27b1bdc2-ac46-4f62-8dfd-49c9bad99c18]
-2026-06-01 11:04:27.480 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (4:TIMESTAMP) <- [2026-06-01T11:04:27.478629318]
-2026-06-01 11:04:27.480 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (5:BIGINT) <- [6]
-2026-06-01 11:04:27.484 DEBUG [http-nio-5000-exec-9] org.hibernate.SQL - 
-    select
-        upk1_0.id,
-        upk1_0.IK,
-        upk1_0.IKsig,
-        upk1_0.signature,
-        upk1_0.signed_pre_key,
-        upk1_0.signed_pre_key_id,
-        upk1_0.user_id 
-    from
-        user_public_keys upk1_0 
-    where
-        upk1_0.user_id=?
-2026-06-01 11:04:27.484 TRACE [http-nio-5000-exec-9] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [6]
-2026-06-01 11:04:27.486 DEBUG [http-nio-5000-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json]
-2026-06-01 11:04:27.486 DEBUG [http-nio-5000-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [LoginResponse(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbnMiLCJ1c2VySWQiOjYsImlhdCI6MTc4MDMwMTA2N (truncated)...]
-2026-06-01 11:04:27.487 DEBUG [http-nio-5000-exec-9] o.s.web.servlet.DispatcherServlet - Completed 200 OK
-2026-06-01 11:04:29.369 DEBUG [http-nio-5000-exec-10] o.s.security.web.FilterChainProxy - Securing GET /ws
-2026-06-01 11:04:29.370 DEBUG [http-nio-5000-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-06-01 11:04:29.370 DEBUG [http-nio-5000-exec-10] o.s.security.web.FilterChainProxy - Secured GET /ws
-2026-06-01 11:04:29.371 DEBUG [http-nio-5000-exec-10] o.s.web.servlet.DispatcherServlet - GET "/ws", parameters={}
-2026-06-01 11:04:29.371 DEBUG [http-nio-5000-exec-10] o.s.w.s.s.s.WebSocketHandlerMapping - Mapped to org.springframework.web.socket.server.support.WebSocketHttpRequestHandler@680f4ae7
-2026-06-01 11:04:29.371 DEBUG [http-nio-5000-exec-10] o.s.w.s.s.s.WebSocketHttpRequestHandler - GET /ws
-2026-06-01 11:04:29.372 DEBUG [http-nio-5000-exec-10] o.s.web.servlet.DispatcherServlet - Completed 101 SWITCHING_PROTOCOLS
-2026-06-01 11:04:29.374 DEBUG [http-nio-5000-exec-10] o.s.w.s.h.LoggingWebSocketHandlerDecorator - New StandardWebSocketSession[id=e6f17951-eeee-7c68-4f23-0b2595b1e1bc, uri=ws://46.96.32.74:5000/ws]
-2026-06-01 11:04:29.400 DEBUG [clientInboundChannel-20] org.springframework.web.SimpLogging - Processing CONNECT user=6 session=e6f17951-eeee-7c68-4f23-0b2595b1e1bc
-2026-06-01 11:04:29.464 DEBUG [clientInboundChannel-24] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/messages-usere6f17951-eeee-7c68-4f23-0b2595b1e1bc subscriptionId=sub-messages session=e6f17951-eeee-7c68-4f23-0b2595b1e1bc user=6 payload=byte[0]
-2026-06-01 11:04:29.507 DEBUG [clientInboundChannel-27] org.springframework.web.SimpLogging - Processing SUBSCRIBE destination=/queue/message-status-usere6f17951-eeee-7c68-4f23-0b2595b1e1bc subscriptionId=sub-status session=e6f17951-eeee-7c68-4f23-0b2595b1e1bc user=6 payload=byte[0]
-2026-06-01 11:04:29.507 DEBUG [clientInboundChannel-28] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Searching methods to handle SEND /app/chat/sync session=e6f17951-eeee-7c68-4f23-0b2595b1e1bc, lookupDestination='/chat/sync'
-2026-06-01 11:04:29.508 DEBUG [clientInboundChannel-28] o.s.w.s.m.WebSocketAnnotationMethodMessageHandler - Invoking ChatController#syncPendingMessages[1 args]
-2026-06-01 11:04:29.509 DEBUG [clientInboundChannel-28] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.receiver_id=? 
-        and pm1_0.status=?
-2026-06-01 11:04:29.509 TRACE [clientInboundChannel-28] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [6]
-2026-06-01 11:04:29.509 TRACE [clientInboundChannel-28] org.hibernate.orm.jdbc.bind - binding parameter (2:VARCHAR) <- [SENT]
-2026-06-01 11:04:30.564 DEBUG [MessageBroker-5] org.hibernate.SQL - 
-    select
-        pm1_0.id,
-        pm1_0.created_at,
-        pm1_0.delivered_at,
-        pm1_0.payload_json,
-        pm1_0.receiver_id,
-        pm1_0.sender_id,
-        pm1_0.status 
-    from
-        pending_messages pm1_0 
-    where
-        pm1_0.status=? 
-        and pm1_0.created_at<?
-2026-06-01 11:04:30.564 TRACE [MessageBroker-5] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [SENT]
-2026-06-01 11:04:30.564 TRACE [MessageBroker-5] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [2026-05-25T11:04:30.563734624]
-2026-06-01 11:04:32.122 DEBUG [clientInboundChannel-32] org.springframework.web.SimpLogging - Processing DISCONNECT session=e6f17951-eeee-7c68-4f23-0b2595b1e1bc
-2026-06-01 11:04:32.123 DEBUG [http-nio-5000-exec-5] o.s.security.web.FilterChainProxy - Securing POST /api/v1/users/logout
-2026-06-01 11:04:32.123 DEBUG [clientOutboundChannel-5] o.s.w.s.a.NativeWebSocketSession - Closing StandardWebSocketSession[id=e6f17951-eeee-7c68-4f23-0b2595b1e1bc, uri=ws://46.96.32.74:5000/ws]
-2026-06-01 11:04:32.123 DEBUG [clientOutboundChannel-5] o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=e6f17951-eeee-7c68-4f23-0b2595b1e1bc, uri=ws://46.96.32.74:5000/ws] closed with CloseStatus[code=1002, reason=null]
-2026-06-01 11:04:32.123 DEBUG [clientOutboundChannel-5] o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session e6f17951-eeee-7c68-4f23-0b2595b1e1bc
-2026-06-01 11:04:32.124 DEBUG [clientInboundChannel-35] org.springframework.web.SimpLogging - Processing DISCONNECT session=e6f17951-eeee-7c68-4f23-0b2595b1e1bc
-2026-06-01 11:04:32.124 DEBUG [clientOutboundChannel-6] o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=server.ws.StompPrincipal@2fbc6644, simpSessionId=e6f17951-eeee-7c68-4f23-0b2595b1e1bc}], simpUser=server.ws.StompPrincipal@2fbc6644, simpSessionId=e6f17951-eeee-7c68-4f23-0b2595b1e1bc}]
-2026-06-01 11:04:32.126 DEBUG [http-nio-5000-exec-5] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-06-01 11:04:32.126 TRACE [http-nio-5000-exec-5] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 11:04:32.134 DEBUG [http-nio-5000-exec-5] o.s.security.web.FilterChainProxy - Secured POST /api/v1/users/logout
-2026-06-01 11:04:32.134 DEBUG [http-nio-5000-exec-5] o.s.web.servlet.DispatcherServlet - POST "/api/v1/users/logout", parameters={}
-2026-06-01 11:04:32.134 DEBUG [http-nio-5000-exec-5] o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to server.users.UserController#logoutUser(Principal)
-2026-06-01 11:04:32.135 DEBUG [http-nio-5000-exec-5] org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.avatar_url,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.last_seen,
-        u1_0.password,
-        u1_0.updated_at,
-        u1_0.username 
-    from
-        users u1_0 
-    where
-        u1_0.username=?
-2026-06-01 11:04:32.135 TRACE [http-nio-5000-exec-5] org.hibernate.orm.jdbc.bind - binding parameter (1:VARCHAR) <- [cns]
-2026-06-01 11:04:32.136 DEBUG [http-nio-5000-exec-5] org.hibernate.SQL - 
-    select
-        rt1_0.id,
-        rt1_0.created_at,
-        rt1_0.expires_at,
-        rt1_0.token,
-        rt1_0.updated_at,
-        rt1_0.user_id 
-    from
-        refresh_tokens rt1_0 
-    where
-        rt1_0.user_id=?
-2026-06-01 11:04:32.137 TRACE [http-nio-5000-exec-5] org.hibernate.orm.jdbc.bind - binding parameter (1:BIGINT) <- [6]
-2026-06-01 11:04:32.139 DEBUG [http-nio-5000-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler server.exceptionHandler.GlobalExceptionHandler#handleGenericException(Exception, HttpServletRequest)
-2026-06-01 11:04:32.139 DEBUG [http-nio-5000-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-06-01 11:04:32.139 DEBUG [http-nio-5000-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ErrorResponse(timestamp=2026-06-01T11:04:32.139384052, status=500, error=Internal Server Error, mess (truncated)...]
-2026-06-01 11:04:32.140 DEBUG [http-nio-5000-exec-5] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call]
-2026-06-01 11:04:32.140 DEBUG [http-nio-5000-exec-5] o.s.web.servlet.DispatcherServlet - Completed 500 INTERNAL_SERVER_ERROR
-2026-06-01 11:04:45.946 INFO  [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-06-01 11:04:45.948 INFO  [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
-2026-06-01 11:04:45.949 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
-2026-06-01 11:04:45.949 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
-2026-06-01 11:04:45.949 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
-2026-06-01 11:04:45.949 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7df8d3]]
-2026-06-01 11:04:45.949 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7df8d3]
-2026-06-01 11:04:45.950 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7df8d3]
-2026-06-01 11:04:45.950 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
-2026-06-01 11:04:45.950 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 11:04:45.950 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
-2026-06-01 11:04:45.964 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-06-01 11:04:45.965 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-06-01 11:04:45.966 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+        (?, ?, ?, ?, ?, ?, ?)
+2026-06-05 00:17:22.798 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (1:TIMESTAMP) <- [2026-06-05T00:17:22.796912572]
+2026-06-05 00:17:22.798 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (2:TIMESTAMP) <- [null]
+2026-06-05 00:17:22.798 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (3:JSON) <- [ChatMessage(messageId=ff7e68d6-1f68-42ca-a278-4960ec09e202, senderId=2, receiverId=1, messageType=RATCHET_MESSAGE, encodedMessage=ClSFpdhRLahnMOYhCwc7uOmq7G2o5zplefQx6itm1buBBaDzhaQUYhiqQtWU43nqcIm1MdoYs5KHEG7RoqdZAgIhJPT1qplARx8FQcychkJew2FetnQSIJZpVHW7qEyGfByCRXayHFdS8VxWpgZ5xtXR5yZWM6k3, createdAt=2026-06-05T00:17:22.529177)]
+2026-06-05 00:17:22.799 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (4:VARCHAR) <- [1]
+2026-06-05 00:17:22.799 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (5:VARCHAR) <- [2]
+2026-06-05 00:17:22.799 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (6:VARCHAR) <- [SENT]
+2026-06-05 00:17:22.799 TRACE [clientInboundChannel-16] org.hibernate.orm.jdbc.bind - binding parameter (7:VARCHAR) <- [ff7e68d6-1f68-42ca-a278-4960ec09e202]
+2026-06-05 00:17:22.801 DEBUG [clientInboundChannel-16] org.springframework.web.SimpLogging - Processing MESSAGE destination=/queue/message-status-user2aae9479-9d69-41b7-244f-b5d0196696e1 session=null payload={"messageId":"ff7e68d6-1f68-42ca-a278-4960ec09e202","status":"SENT","reason":nul...(truncated)
+2026-06-05 00:17:22.802 DEBUG [clientInboundChannel-16] org.springframework.web.SimpLogging - Broadcasting to 1 sessions.
+2026-06-05 00:17:52.421 DEBUG [http-nio-5000-exec-9] o.s.w.s.h.LoggingWebSocketHandlerDecorator - Transport error in StandardWebSocketSession[id=2aae9479-9d69-41b7-244f-b5d0196696e1, uri=ws://46.96.32.74:5000/ws]
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.SocketChannelImpl.throwConnectionReset(SocketChannelImpl.java:399)
+	at java.base/sun.nio.ch.SocketChannelImpl.implRead(SocketChannelImpl.java:431)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:489)
+	at org.apache.tomcat.util.net.NioChannel.read(NioChannel.java:154)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1337)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1223)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:74)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:184)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:164)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:152)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:57)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-06-05 00:17:52.430 DEBUG [http-nio-5000-exec-9] o.s.w.s.h.LoggingWebSocketHandlerDecorator - StandardWebSocketSession[id=2aae9479-9d69-41b7-244f-b5d0196696e1, uri=ws://46.96.32.74:5000/ws] closed with CloseStatus[code=1006, reason=Connection reset]
+2026-06-05 00:17:52.430 DEBUG [http-nio-5000-exec-9] o.s.w.s.m.SubProtocolWebSocketHandler - Clearing session 2aae9479-9d69-41b7-244f-b5d0196696e1
+2026-06-05 00:17:52.431 DEBUG [clientInboundChannel-20] org.springframework.web.SimpLogging - Processing DISCONNECT session=2aae9479-9d69-41b7-244f-b5d0196696e1
+2026-06-05 00:17:52.432 DEBUG [clientOutboundChannel-4] o.s.w.s.m.SubProtocolWebSocketHandler - No session for GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT_ACK, simpDisconnectMessage=GenericMessage [payload=byte[0], headers={simpMessageType=DISCONNECT, stompCommand=DISCONNECT, simpSessionAttributes={org.springframework.messaging.simp.SimpAttributes.COMPLETED=true}, simpUser=server.ws.StompPrincipal@308532e5, simpSessionId=2aae9479-9d69-41b7-244f-b5d0196696e1}], simpUser=server.ws.StompPrincipal@308532e5, simpSessionId=2aae9479-9d69-41b7-244f-b5d0196696e1}]
+2026-06-05 00:17:56.374 INFO  [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-05 00:17:56.375 INFO  [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-05 00:17:56.376 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2026-06-05 00:17:56.376 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2026-06-05 00:17:56.376 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2026-06-05 00:17:56.376 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@a8c0c6d]]
+2026-06-05 00:17:56.376 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@a8c0c6d]
+2026-06-05 00:17:56.376 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@a8c0c6d]
+2026-06-05 00:17:56.376 INFO  [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2026-06-05 00:17:56.376 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2026-06-05 00:17:56.377 DEBUG [SpringApplicationShutdownHook] org.springframework.web.SimpLogging - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2026-06-05 00:17:56.401 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-05 00:17:56.403 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-05 00:17:56.406 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

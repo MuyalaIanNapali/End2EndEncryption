@@ -14,6 +14,7 @@ data class User(
     val username: String,
     val email: String,
     val avatarUrl: String? = null,
+    val isLoggedIn: Boolean = true
 )
 
 fun UpdateUserRequest.toUser(existingUser: User): User {

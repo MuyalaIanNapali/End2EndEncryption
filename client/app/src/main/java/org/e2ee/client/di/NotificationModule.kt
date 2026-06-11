@@ -1,20 +1,20 @@
-package org.e2ee.data.di
+package org.e2ee.client.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.e2ee.data.notifications.AndroidMessageNotifier
+import org.e2ee.client.notifications.AndroidMessageNotifier
 import org.e2ee.domain.notifications.MessageNotifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NotifierModule {
+abstract class NotificationModule {
 
     @Binds
     @Singleton
     abstract fun bindMessageNotifier(
-        notifier: AndroidMessageNotifier
+        androidMessageNotifier: AndroidMessageNotifier
     ): MessageNotifier
 }

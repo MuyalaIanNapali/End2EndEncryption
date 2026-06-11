@@ -1,5 +1,5 @@
-package org.e2ee.data.notifications
-/*
+package org.e2ee.client.notifications
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -92,5 +92,3 @@ class AndroidMessageNotifier @Inject constructor(
         }
     }
 }
-
- */

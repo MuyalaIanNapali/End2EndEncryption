@@ -24,6 +24,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    private const val DATABASE_NAME = "client_database"
+
     @Provides
     @Singleton
     fun provideClientDatabase(
@@ -32,17 +34,43 @@ object DatabaseModule {
     ): ClientDatabase {
         System.loadLibrary("sqlcipher")
 
-        val passphrase = databaseKeyManager.getOrCreateDatabaseKey()
-        val factory = SupportOpenHelperFactory(passphrase)
+        return try {
+            buildAndOpenDatabase(context, databaseKeyManager)
+        } catch (e: Exception) {
+            databaseKeyManager.resetDatabaseCompletely()
+            buildAndOpenDatabase(context, databaseKeyManager)
+        }
+    }
 
-        return Room.databaseBuilder(
+    private fun buildAndOpenDatabase(
+        context: Context,
+        databaseKeyManager: DatabaseKeyManager
+    ): ClientDatabase {
+        val passphrase = databaseKeyManager.getOrCreateDatabaseKey()
+
+        val factory = SupportOpenHelperFactory(
+            passphrase,
+            null,
+            false
+        )
+
+        val database = Room.databaseBuilder(
             context,
             ClientDatabase::class.java,
-            "client_database"
+            DATABASE_NAME
         )
             .openHelperFactory(factory)
             .fallbackToDestructiveMigration(false)
             .build()
+
+        try {
+            database.openHelper.writableDatabase.query("SELECT 1").close()
+        } catch (e: Exception) {
+            database.close()
+            throw e
+        }
+
+        return database
     }
 
     @Provides

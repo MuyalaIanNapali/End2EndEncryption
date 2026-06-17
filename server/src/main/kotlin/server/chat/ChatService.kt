@@ -3,6 +3,7 @@ package server.chat
 import tools.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import server.exceptionHandler.UserNotFoundException
 import server.users.UserRepository
 import java.time.LocalDateTime
 import java.util.UUID
@@ -16,11 +17,11 @@ class ChatService(
 
     fun validateUsers(senderId: Long, receiverId: Long) {
         if (!userRepository.existsById(senderId)) {
-            throw IllegalArgumentException("Sender not found")
+            throw UserNotFoundException("Sender not found")
         }
 
         if (!userRepository.existsById(receiverId)) {
-            throw IllegalArgumentException("Receiver not found")
+            throw UserNotFoundException("Receiver not found")
         }
     }
 

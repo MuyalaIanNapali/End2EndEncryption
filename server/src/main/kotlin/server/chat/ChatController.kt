@@ -3,12 +3,13 @@ package server.chat
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import java.security.Principal
 
 @Controller
 class ChatController(
-    private val messagingTemplate: org.springframework.messaging.simp.SimpMessagingTemplate,
+    private val messagingTemplate: SimpMessagingTemplate,
     private val chatService: ChatService,
     private val onlineUserTracker: OnlineUserTracker,
     private val kafkaTemplate: KafkaTemplate<String, ChatMessage>

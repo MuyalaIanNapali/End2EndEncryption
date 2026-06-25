@@ -3,9 +3,10 @@ package org.e2ee.data.local.user
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 import org.e2ee.data.remote.users.dto.UpdateUserRequest
-import org.e2ee.data.remote.users.dto.UserRequest
 
+@Serializable
 @Entity(tableName = "user", indices = [Index(value = ["userId"], unique = true)])
 data class User(
     @PrimaryKey

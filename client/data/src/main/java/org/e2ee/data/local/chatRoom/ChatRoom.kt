@@ -3,9 +3,11 @@ package org.e2ee.data.local.chatRoom
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 import org.e2ee.data.local.friends.Friends
 import org.e2ee.data.local.user.User
 
+@Serializable
 @Entity(
     tableName = "chat_room",
     foreignKeys = [

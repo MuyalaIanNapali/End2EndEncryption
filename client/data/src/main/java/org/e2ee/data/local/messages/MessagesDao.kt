@@ -64,5 +64,5 @@ interface MessagesDao {
     )
 
     @Query("SELECT * FROM messages")
-    suspend fun getAllMessages(): List<Messages?>
+    suspend fun getAllMessages(): List<Messages>
 }

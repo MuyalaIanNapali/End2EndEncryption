@@ -3,8 +3,10 @@ package org.e2ee.data.local.messages
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 import org.e2ee.data.local.chatRoom.ChatRoom
 
+@Serializable
 @Entity(
     tableName = "messages",
     foreignKeys = [
@@ -32,6 +34,7 @@ data class Messages(
     val isSentByUser: Boolean
 )
 
+@Serializable
 enum class MessageStatus {
     SENT,
     DELIVERED,

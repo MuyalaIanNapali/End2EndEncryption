@@ -1,12 +1,13 @@
 package org.e2ee.data.local.database
 
-import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.e2ee.data.local.chatRoom.ChatRoom
 import org.e2ee.data.local.friends.Friends
 import org.e2ee.data.local.messages.Messages
 import org.e2ee.data.local.user.User
 
+@Serializable
 data class DatabaseBackupPayload(
     val users: User?,
     val friends: List<Friends>,

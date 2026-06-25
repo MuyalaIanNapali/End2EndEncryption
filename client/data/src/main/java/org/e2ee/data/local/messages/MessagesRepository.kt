@@ -42,7 +42,7 @@ class MessagesRepository @Inject constructor(
     }
 
     @WorkerThread
-    suspend fun getAllMessages():List<Messages?>{
+    suspend fun getAllMessages(): List<Messages> {
         return dao.getAllMessages()
     }
 }

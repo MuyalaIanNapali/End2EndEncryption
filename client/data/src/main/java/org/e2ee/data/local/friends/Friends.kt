@@ -1,8 +1,10 @@
 package org.e2ee.data.local.friends
 
 import androidx.room.Entity
+import kotlinx.serialization.Serializable
 import org.e2ee.domain.model.RemoteUserDetails
 
+@Serializable
 @Entity(tableName = "friends", primaryKeys = ["userId"])
 data class Friends(
     val userId: Long,

@@ -1,5 +1,6 @@
 package org.e2ee.common
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 
@@ -7,7 +8,7 @@ import kotlinx.serialization.protobuf.ProtoNumber
 sealed class Message
 
 @Serializable
-data class PreKeyMessage(
+data class PreKeyMessage @OptIn(ExperimentalSerializationApi::class) constructor(
     @ProtoNumber(1)
     val IKs: ByteArray,
 

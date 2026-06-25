@@ -1,5 +1,8 @@
 package org.e2ee.common
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Share(
     val index: Int,
     val value: ByteArray

@@ -1,7 +1,7 @@
 package org.e2ee.data.local.opk
 
 import androidx.annotation.WorkerThread
-import org.e2ee.crypto.Crypto
+import org.e2ee.crypto.messaging.Crypto
 import java.util.UUID
 import javax.inject.Inject
 

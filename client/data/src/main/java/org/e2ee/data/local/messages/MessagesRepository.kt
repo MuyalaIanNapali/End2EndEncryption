@@ -40,4 +40,9 @@ class MessagesRepository @Inject constructor(
     suspend fun markMessagesAsRead(sessionId: String) {
         dao.markMessagesAsRead(sessionId)
     }
+
+    @WorkerThread
+    suspend fun getAllMessages():List<Messages?>{
+        return dao.getAllMessages()
+    }
 }

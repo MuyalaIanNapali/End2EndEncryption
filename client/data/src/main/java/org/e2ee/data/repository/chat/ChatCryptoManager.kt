@@ -5,8 +5,8 @@ import org.e2ee.common.Message
 import org.e2ee.common.PreKeyMessage
 import org.e2ee.common.RatchetMessage
 import org.e2ee.common.UserKeysDto
-import org.e2ee.crypto.Crypto
-import org.e2ee.crypto.entities.DecryptMessageDto
+import org.e2ee.crypto.messaging.Crypto
+import org.e2ee.crypto.messaging.entities.DecryptMessageDto
 import org.e2ee.data.local.opk.OneTimePreKeysRepository
 import org.e2ee.data.local.ratchetStates.RatchetStatesRepository
 import org.e2ee.data.local.ratchetStates.toRatchetStateDto

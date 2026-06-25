@@ -15,3 +15,5 @@ class PreKeyBundlesNotFoundException(message: String = "Pre-key-bundle not found
 class InvalidRefreshTokenException(message: String = "Invalid refresh token") : RuntimeException(message)
 
 class TokenExpiredException(message: String = "Token expired") : RuntimeException(message)
+
+class ShareNotFoundException(message: String = "Share not found") : RuntimeException(message)

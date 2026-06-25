@@ -62,4 +62,7 @@ interface MessagesDao {
         sessionId: String,
         readStatus: MessageStatus = MessageStatus.READ_BY_RECEIVER
     )
+
+    @Query("SELECT * FROM messages")
+    suspend fun getAllMessages(): List<Messages?>
 }

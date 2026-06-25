@@ -1,8 +1,7 @@
 package org.e2ee.data.local.userKeys
 
-import android.util.Log
 import androidx.annotation.WorkerThread
-import org.e2ee.crypto.Crypto
+import org.e2ee.crypto.messaging.Crypto
 import javax.inject.Inject
 
 class UserKeysRepository @Inject constructor(

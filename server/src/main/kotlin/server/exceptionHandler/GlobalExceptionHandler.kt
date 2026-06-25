@@ -170,6 +170,18 @@ class GlobalExceptionHandler {
         )
     }
 
+    @ExceptionHandler(ShareNotFoundException::class)
+    fun handleShareNotFound(
+        ex: ShareNotFoundException,
+        request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        return buildErrorResponse(
+            status = HttpStatus.NOT_FOUND,
+            message = ex.message ?: "Share not found",
+            request = request
+        )
+    }
+
     private fun buildErrorResponse(
         status: HttpStatus,
         message: String,

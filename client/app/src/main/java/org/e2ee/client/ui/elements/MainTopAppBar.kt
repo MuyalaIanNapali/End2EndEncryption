@@ -2,15 +2,15 @@ package org.e2ee.client.ui.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,7 +30,8 @@ fun MainTopAppBar(
     title: String,
     height: Dp,
     collapseProgress: Float,
-    onLogOutClicked: () -> Unit
+    onLogOutClicked: () -> Unit,
+    onSettingsClicked: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -67,18 +68,29 @@ fun MainTopAppBar(
                 )
         )
 
-        IconButton(
-            onClick = onLogOutClicked,
+        Row(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 34.dp, end = 20.dp)
+                .padding(top = 28.dp, end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.Logout,
-                contentDescription = "Logout",
-                tint = Color(0xFF356DF3),
-                modifier = Modifier.size(24.dp)
-            )
+            IconButton(onClick = onSettingsClicked) {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = "Settings",
+                    tint = Color.White.copy(alpha = 0.85f),
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+
+            IconButton(onClick = onLogOutClicked) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.Logout,
+                    contentDescription = "Logout",
+                    tint = Color(0xFF356DF3),
+                    modifier = Modifier.size(22.dp)
+                )
+            }
         }
     }
 }
@@ -90,6 +102,7 @@ fun MainTopAppBarPreview() {
         title = "E2EE Messenger",
         height = 200.dp,
         collapseProgress = 0.3f,
-        onLogOutClicked = {}
+        onLogOutClicked = {},
+        onSettingsClicked = {}
     )
 }

@@ -29,4 +29,7 @@ interface ChatRoomDao {
 
     @Query("SELECT * FROM chat_room WHERE recipientId = :otherUserId LIMIT 1")
     suspend fun getChatRoomByRecipientId(otherUserId: Long): ChatRoom?
+
+    @Query("SELECT * FROM chat_room")
+    fun getAllChatRoomsForBackup(): List<ChatRoom>
 }

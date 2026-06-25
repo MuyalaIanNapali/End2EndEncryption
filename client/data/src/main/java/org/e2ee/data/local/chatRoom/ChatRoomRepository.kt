@@ -38,5 +38,10 @@ class ChatRoomRepository @Inject constructor(
         return dao.getChatRoomByRecipientId(otherUserId.toLong())
     }
 
+    @WorkerThread
+    suspend fun getAllChatRoomsForBackup(): List<ChatRoom> {
+        return dao.getAllChatRoomsForBackup()
+    }
+
 
 }

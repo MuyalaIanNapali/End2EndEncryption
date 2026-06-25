@@ -43,9 +43,10 @@ import org.e2ee.client.ui.elements.MessageCard
 fun MessagesScreen(
     modifier: Modifier = Modifier,
     viewModel: MessagesScreenViewModel = hiltViewModel(),
-    onLogoutClick : () -> Unit = {},
-    onFabClick : () -> Unit = {},
-    onChatCardClick: (sessionId: String,contactId:String , contactName: String,contactEmail : String) -> Unit = { _,_, _ , _-> }
+    onLogoutClick: () -> Unit = {},
+    onFabClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
+    onChatCardClick: (sessionId: String, contactId: String, contactName: String, contactEmail: String) -> Unit = { _, _, _, _ -> }
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -141,7 +142,8 @@ fun MessagesScreen(
             title = stringResource(R.string.app_name),
             height = currentHeaderHeightDp,
             collapseProgress = collapseProgress,
-            onLogOutClicked = onLogoutClick
+            onLogOutClicked = onLogoutClick,
+            onSettingsClicked = onSettingsClick
         )
 
         FloatingActionButton(

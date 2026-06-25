@@ -2,7 +2,6 @@ package org.e2ee.data.repository.chat
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import org.e2ee.data.local.chatRoom.ChatRoom
 import org.e2ee.data.local.chatRoom.ChatRoomRepository
 import org.e2ee.data.local.user.User

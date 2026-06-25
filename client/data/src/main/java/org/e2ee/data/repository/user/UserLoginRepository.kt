@@ -1,7 +1,6 @@
 package org.e2ee.data.repository.user
 
-import android.util.Log
-import org.e2ee.crypto.Crypto
+import org.e2ee.crypto.messaging.Crypto
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.user.LocalUserRepository
 import org.e2ee.data.local.userKeys.UserKeysRepository

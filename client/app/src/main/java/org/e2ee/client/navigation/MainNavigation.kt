@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import org.e2ee.client.main.screen.ChatScreen
 import org.e2ee.client.main.screen.MessagesScreen
 import org.e2ee.client.main.screen.SearchScreen
+import org.e2ee.client.main.screen.SettingsScreen
 import org.e2ee.client.main.viewmodel.MainViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -56,7 +57,7 @@ fun MainNavigation(
                 SnackbarHost(hostState = snackbarHostState)
             }
         }
-    ) {_ ->
+    ) { _ ->
 
         NavDisplay(
             modifier = Modifier,
@@ -86,7 +87,6 @@ fun MainNavigation(
                                     actionLabel = "Logout",
                                     withDismissAction = true,
                                     duration = SnackbarDuration.Long,
-
                                 )
 
                                 if (result == SnackbarResult.ActionPerformed) {
@@ -98,6 +98,9 @@ fun MainNavigation(
                         },
                         onFabClick = {
                             mainBackStack.add(Route.Main.Search)
+                        },
+                        onSettingsClick = {
+                            mainBackStack.add(Route.Main.Settings)
                         }
                     )
                 }
@@ -128,6 +131,14 @@ fun MainNavigation(
                                     email = userDetails.email
                                 )
                             )
+                        }
+                    )
+                }
+
+                entry<Route.Main.Settings> {
+                    SettingsScreen(
+                        onBackClick = {
+                            mainBackStack.removeLastOrNull()
                         }
                     )
                 }

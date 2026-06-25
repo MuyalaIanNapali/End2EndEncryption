@@ -15,13 +15,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.e2ee.client.R
 
 @Composable
 fun HeaderSection(
@@ -30,18 +32,22 @@ fun HeaderSection(
     showBackButton: Boolean = false,
     onBackClick: () -> Unit = {}
 ) {
+    // 196 dp tall header — the card below will visually overlap the bottom
+    // 28 dp of it (matching the card's topStart/topEnd corner radius).
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp)
-            .background(Color(0xFF172237))
+            // Add extra height so text isn't too close to the rounded card edge
+            .height(196.dp)
+            .background(MaterialTheme.colorScheme.secondary)
     ) {
+        // Decorative circle accent
         Box(
             modifier = Modifier
                 .size(260.dp)
                 .offset(x = 80.dp, y = (-40).dp)
                 .background(
-                    Color.White.copy(alpha = 0.04f),
+                    MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.04f),
                     CircleShape
                 )
         )
@@ -54,37 +60,38 @@ fun HeaderSection(
                     .size(34.dp)
                     .border(
                         width = 1.dp,
-                        color = Color(0xFF356DF3),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = CircleShape
                     )
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color(0xFF356DF3),
+                    contentDescription = stringResource(R.string.back_content_description),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(18.dp)
                 )
             }
         }
 
+        // Title + subtitle — sits in the upper portion so the card overlaps
+        // the empty space beneath, not the text
         Column(
-            modifier = Modifier
-                .padding(start = 32.dp, top = 118.dp)
+            modifier = Modifier.padding(start = 32.dp, top = 80.dp)
         ) {
             Text(
                 text = title,
-                color = Color.White,
-                fontSize = 24.sp,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
-                lineHeight = 29.sp
+                lineHeight = 31.sp
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = subtitle,
-                color = Color.White.copy(alpha = 0.55f),
-                fontSize = 12.sp
+                color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.55f),
+                fontSize = 13.sp
             )
         }
     }

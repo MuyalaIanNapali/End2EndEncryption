@@ -14,16 +14,18 @@ import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.e2ee.client.R
 
 @Composable
 fun MainTopAppBar(
@@ -37,30 +39,27 @@ fun MainTopAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(height)
-            .background(Color(0xFF172237))
+            .background(MaterialTheme.colorScheme.secondary)
     ) {
+        // Decorative circle — uses theme surface with low alpha
         Box(
             modifier = Modifier
                 .size(260.dp)
                 .offset(x = 90.dp, y = (-40).dp)
                 .background(
-                    Color.White.copy(alpha = 0.04f),
+                    MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.04f),
                     CircleShape
                 )
         )
 
         Text(
             text = title,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = if (collapseProgress < 0.5f) 28.sp else 22.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(
-                    if (collapseProgress < 0.5f) {
-                        Alignment.BottomStart
-                    } else {
-                        Alignment.CenterStart
-                    }
+                    if (collapseProgress < 0.5f) Alignment.BottomStart else Alignment.CenterStart
                 )
                 .padding(
                     start = 32.dp,
@@ -77,8 +76,8 @@ fun MainTopAppBar(
             IconButton(onClick = onSettingsClicked) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = "Settings",
-                    tint = Color.White.copy(alpha = 0.85f),
+                    contentDescription = stringResource(R.string.settings_content_description),
+                    tint = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.85f),
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -86,8 +85,8 @@ fun MainTopAppBar(
             IconButton(onClick = onLogOutClicked) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.Logout,
-                    contentDescription = "Logout",
-                    tint = Color(0xFF356DF3),
+                    contentDescription = stringResource(R.string.logout_icon_content_description),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -99,7 +98,7 @@ fun MainTopAppBar(
 @Composable
 fun MainTopAppBarPreview() {
     MainTopAppBar(
-        title = "E2EE Messenger",
+        title = "Varsity Chat",
         height = 200.dp,
         collapseProgress = 0.3f,
         onLogOutClicked = {},

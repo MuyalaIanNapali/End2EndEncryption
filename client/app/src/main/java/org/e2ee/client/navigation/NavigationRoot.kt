@@ -7,7 +7,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.e2ee.client.auth.viewmodel.SessionViewModel
 import org.e2ee.client.models.SessionUiState
-import org.e2ee.client.ui.elements.AppLoadingIndicator
+import org.e2ee.client.splash.AppSplashScreen
 
 @Composable
 fun NavigationRoot(
@@ -18,11 +18,13 @@ fun NavigationRoot(
 
     when (sessionState) {
         SessionUiState.Checking -> {
-            AppLoadingIndicator()
+            // Branded splash while auto-login runs — no spinner visible to user
+            AppSplashScreen(modifier = modifier)
         }
 
         SessionUiState.Unauthenticated -> {
             AuthNavigation(
+                modifier = modifier,
                 onAuthSuccess = {
                     sessionViewModel.onAuthSuccess()
                 }
@@ -31,6 +33,7 @@ fun NavigationRoot(
 
         SessionUiState.Authenticated -> {
             MainNavigation(
+                modifier = modifier,
                 onLogOut = {
                     sessionViewModel.logout()
                 }

@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base activity theme — uses SplashScreen API -->
     <style name="Theme.Client" parent="Theme.SplashScreen">
-        <!-- Splash screen icon background circle -->
         <item name="windowSplashScreenBackground">#172237</item>
-        <!-- The adaptive icon is used automatically as the splash icon -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <!-- After the splash, hand off to the Compose theme -->
         <item name="postSplashScreenTheme">@style/Theme.Client.Main</item>
     </style>
 
-    <style name="Theme.Client.Main" parent="android:Theme.Material.Light.NoActionBar"/>
+    <style name="Theme.Client.Main" parent="android:Theme.Material.NoActionBar"/>
 </resources>

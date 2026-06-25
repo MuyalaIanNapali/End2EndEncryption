@@ -1,22 +1,23 @@
 package org.e2ee.client.navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
@@ -29,6 +30,9 @@ import org.e2ee.client.auth.screen.LoginScreen
 import org.e2ee.client.ui.elements.AuthTabSwitcher
 import org.e2ee.client.ui.elements.HeaderSection
 
+// How far the white card sheet rises over the dark header
+private val CARD_OVERLAP = 28.dp
+
 @Composable
 fun AuthNavigation(
     modifier: Modifier = Modifier,
@@ -37,9 +41,7 @@ fun AuthNavigation(
     val authBackStack = rememberNavBackStack(Route.Auth.Login)
 
     val currentRoute by remember {
-        derivedStateOf {
-            authBackStack.lastOrNull()
-        }
+        derivedStateOf { authBackStack.lastOrNull() }
     }
 
     fun switchAuthTab(route: Route) {
@@ -56,8 +58,9 @@ fun AuthNavigation(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .imePadding(),
+            .imePadding()
     ) {
+        // ── Dark branded hero header ───────────────────────────────────────
         HeaderSection(
             title = when {
                 isLogin -> stringResource(R.string.login_title)
@@ -65,52 +68,49 @@ fun AuthNavigation(
                 else -> ""
             },
             subtitle = stringResource(R.string.header_subtitle),
-            onBackClick = {
-                authBackStack.removeLastOrNull()
-            }
+            onBackClick = { authBackStack.removeLastOrNull() }
         )
 
-        Column(
+        // ── White rounded card sheet ───────────────────────────────────────
+        // Negative top offset pulls the card up so its rounded corners
+        // overlap the header's bottom edge — identical to Google Messages.
+        Surface(
             modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(top = 24.dp)
+                .fillMaxSize()
+                .offset(y = -CARD_OVERLAP),
+            shape = RoundedCornerShape(topStart = CARD_OVERLAP, topEnd = CARD_OVERLAP),
+            color = MaterialTheme.colorScheme.surface,
+            shadowElevation = 6.dp
         ) {
-            AuthTabSwitcher(
-                selectedRoute = currentRoute as? Route.Auth,
-                onLoginClick = {
-                    switchAuthTab(Route.Auth.Login)
-                },
-                onRegisterClick = {
-                    switchAuthTab(Route.Auth.Register)
-                }
-            )
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 28.dp, bottom = 32.dp)
+            ) {
+                AuthTabSwitcher(
+                    selectedRoute = currentRoute as? Route.Auth,
+                    onLoginClick = { switchAuthTab(Route.Auth.Login) },
+                    onRegisterClick = { switchAuthTab(Route.Auth.Register) }
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            NavDisplay(
-                backStack = authBackStack,
-                entryDecorators = listOf(
-                    rememberSaveableStateHolderNavEntryDecorator(),
-                    rememberViewModelStoreNavEntryDecorator()
-                ),
-                entryProvider = entryProvider {
-                    entry<Route.Auth.Login> {
-                        LoginScreen(
-                            onLoginSuccess = {
-                                onAuthSuccess()
-                            }
-                        )
+                NavDisplay(
+                    backStack = authBackStack,
+                    entryDecorators = listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator()
+                    ),
+                    entryProvider = entryProvider {
+                        entry<Route.Auth.Login> {
+                            LoginScreen(onLoginSuccess = { onAuthSuccess() })
+                        }
+                        entry<Route.Auth.Register> {
+                            CreateAccountScreen(onCreateAccountSuccess = { onAuthSuccess() })
+                        }
                     }
-
-                    entry<Route.Auth.Register> {
-                        CreateAccountScreen(
-                            onCreateAccountSuccess = {
-                                onAuthSuccess()
-                            }
-                        )
-                    }
-                }
-            )
+                )
+            }
         }
     }
 }

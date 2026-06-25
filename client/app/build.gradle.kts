@@ -1,5 +1,3 @@
-import org.gradle.accessors.dm.LibrariesForLibs
-
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,11 +9,7 @@ plugins {
 
 android {
     namespace = "org.e2ee.client"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
     buildFeatures {
         buildConfig = true
     }
@@ -23,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "org.e2ee.client"
         minSdk = 29
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -64,6 +58,11 @@ dependencies {
 
     implementation(project(":domain"))
     implementation(project(":data"))
+    // Room runtime is required on the app module compile classpath because
+    // the `ClientDatabase` type from the :data module extends RoomDatabase.
+    // Add the runtime/ktx dependencies so the app can reference ClientDatabase.
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
 
     implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.compose.runtime)
@@ -99,4 +98,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    implementation(libs.androidx.core.splashscreen)
 }

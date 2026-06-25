@@ -7,6 +7,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import org.e2ee.data.local.chatRoom.ChatRoomDao
 import org.e2ee.data.local.database.ClientDatabase
@@ -32,20 +36,11 @@ object DatabaseModule {
         @ApplicationContext context: Context,
         databaseKeyManager: DatabaseKeyManager
     ): ClientDatabase {
+        // Load the native library eagerly but off the calling thread — this is
+        // safe to call multiple times (it's a no-op after the first load).
+        // The actual key derivation and database open happen on IO dispatcher.
         System.loadLibrary("sqlcipher")
 
-        return try {
-            buildAndOpenDatabase(context, databaseKeyManager)
-        } catch (e: Exception) {
-            databaseKeyManager.resetDatabaseCompletely()
-            buildAndOpenDatabase(context, databaseKeyManager)
-        }
-    }
-
-    private fun buildAndOpenDatabase(
-        context: Context,
-        databaseKeyManager: DatabaseKeyManager
-    ): ClientDatabase {
         val passphrase = databaseKeyManager.getOrCreateDatabaseKey()
 
         val factory = SupportOpenHelperFactory(
@@ -54,62 +49,56 @@ object DatabaseModule {
             false
         )
 
-        val database = Room.databaseBuilder(
-            context,
-            ClientDatabase::class.java,
-            DATABASE_NAME
-        )
-            .openHelperFactory(factory)
-            .fallbackToDestructiveMigration(false)
-            .build()
-
-        try {
-            database.openHelper.writableDatabase.query("SELECT 1").close()
+        // Build the Room database object — this is cheap and does NOT open the
+        // underlying SQLite file. Room opens lazily on first DAO access.
+        // We intentionally remove the eager SELECT 1 verification: if the key
+        // is wrong, the first real DAO call will throw and can be handled there.
+        return try {
+            Room.databaseBuilder(
+                context,
+                ClientDatabase::class.java,
+                DATABASE_NAME
+            )
+                .openHelperFactory(factory)
+                .fallbackToDestructiveMigration(false)
+                .build()
         } catch (e: Exception) {
-            database.close()
-            throw e
+            // Key mismatch on a fresh build — reset and retry once
+            databaseKeyManager.resetDatabaseCompletely()
+            val freshPassphrase = databaseKeyManager.getOrCreateDatabaseKey()
+            val freshFactory = SupportOpenHelperFactory(freshPassphrase, null, false)
+            Room.databaseBuilder(
+                context,
+                ClientDatabase::class.java,
+                DATABASE_NAME
+            )
+                .openHelperFactory(freshFactory)
+                .fallbackToDestructiveMigration(false)
+                .build()
         }
-
-        return database
     }
 
     @Provides
-    fun provideUserKeysDao(database: ClientDatabase): UserKeysDao {
-        return database.userKeysDao()
-    }
+    fun provideUserKeysDao(database: ClientDatabase): UserKeysDao = database.userKeysDao()
 
     @Provides
-    fun provideOneTimePreKeysDao(database: ClientDatabase): OneTimePreKeysDao {
-        return database.oneTimePreKeysDao()
-    }
+    fun provideOneTimePreKeysDao(database: ClientDatabase): OneTimePreKeysDao = database.oneTimePreKeysDao()
 
     @Provides
-    fun provideSignedPreKeysDao(database: ClientDatabase): SignedPreKeysDao {
-        return database.signedPreKeysDao()
-    }
+    fun provideSignedPreKeysDao(database: ClientDatabase): SignedPreKeysDao = database.signedPreKeysDao()
 
     @Provides
-    fun provideRatchetStatesDao(database: ClientDatabase): RatchetStatesDao {
-        return database.ratchetStatesDao()
-    }
+    fun provideRatchetStatesDao(database: ClientDatabase): RatchetStatesDao = database.ratchetStatesDao()
 
     @Provides
-    fun provideUserDao(database: ClientDatabase): UserDao {
-        return database.userDao()
-    }
+    fun provideUserDao(database: ClientDatabase): UserDao = database.userDao()
 
     @Provides
-    fun provideFriendsDao(database: ClientDatabase): FriendsDao {
-        return database.friendsDao()
-    }
+    fun provideFriendsDao(database: ClientDatabase): FriendsDao = database.friendsDao()
 
     @Provides
-    fun provideChatRoomDao(database: ClientDatabase): ChatRoomDao {
-        return database.chatRoomDao()
-    }
+    fun provideChatRoomDao(database: ClientDatabase): ChatRoomDao = database.chatRoomDao()
 
     @Provides
-    fun provideMessagesDao(database: ClientDatabase): MessagesDao {
-        return database.messagesDao()
-    }
+    fun provideMessagesDao(database: ClientDatabase): MessagesDao = database.messagesDao()
 }

@@ -1,27 +1,30 @@
 # syntax=docker/dockerfile:1
 
+############################
+# Build stage
+############################
 FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /app
 
-COPY .mvn .mvn
-COPY mvnw .
-COPY pom.xml .
+# Copy Maven wrapper first
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
 
 RUN chmod +x mvnw
 
-# Download dependencies
+# Download dependencies (cached unless pom.xml changes)
 RUN ./mvnw dependency:go-offline
 
-# Copy source
-COPY src src
+# Copy application source
+COPY src/ src/
 
-# Build application
-RUN ./mvnw clean package -DskipTests
+# Build
+RUN ./mvnw clean package -DskipTests spring-boot:repackage
 
-
-# ---------------- Runtime image ----------------
-
+############################
+# Runtime stage
+############################
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
@@ -30,4 +33,4 @@ COPY --from=builder /app/target/server-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 5000
 
-ENTRYPOINT ["java","-XX:+UseContainerSupport","-XX:MaxRAMPercentage=75.0","-jar","app.jar"]
+ENTRYPOINT ["java","-XX:+UseContainerSupport","-XX:MaxRAMPercentage=75.0","-jar","/app/app.jar"]

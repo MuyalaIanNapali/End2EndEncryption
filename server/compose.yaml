@@ -1,8 +1,6 @@
 services:
   server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ianspringbootimage.azurecr.io/e2ee-server:latest
     container_name: e2ee-server
 
     env_file:

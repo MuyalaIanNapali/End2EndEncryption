@@ -31,3 +31,14 @@ jobs:
         run: |
           docker push \
             ${{ secrets.ACR_LOGIN_SERVER }}/e2ee-server:latest
+
+      - name: Deploy to Azure VM
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            docker compose pull
+            docker compose up -d
+            docker image prune -f

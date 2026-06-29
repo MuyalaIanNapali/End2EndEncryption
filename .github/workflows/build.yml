@@ -1,0 +1,34 @@
+name: Build and Publish Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image
+        run: |
+          docker build \
+            -t ghcr.io/muyalaiannapali/e2ee-server:latest \
+            ./server
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/muyalaiannapali/e2ee-server:latest

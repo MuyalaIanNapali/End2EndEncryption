@@ -1,6 +1,8 @@
 package org.e2ee.data.repository.user
 
-import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.e2ee.data.local.database.ClientDatabase
 import org.e2ee.data.local.opk.OneTimePreKeysRepository
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.user.LocalUserRepository
@@ -9,8 +11,10 @@ import org.e2ee.data.remote.auth.TokenManager
 import org.e2ee.data.remote.keyManagerApi.dto.PreKeyBundleDto
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
+import org.e2ee.data.remote.users.dto.LoginRequestDto
 import org.e2ee.data.remote.users.dto.UserRequest
 import org.e2ee.data.remote.users.dto.UserRequestDto
+import org.e2ee.domain.model.DomainResult
 import javax.inject.Inject
 
 class UserRegistrationRepository @Inject constructor(
@@ -19,7 +23,9 @@ class UserRegistrationRepository @Inject constructor(
     private val tokenManager: TokenManager,
     private val keysRepository: UserKeysRepository,
     private val spkRepository: SignedPreKeysRepository,
-    private val opkRepository: OneTimePreKeysRepository
+    private val opkRepository: OneTimePreKeysRepository,
+    private val clientDatabase: ClientDatabase,
+    private val loginRepository: UserLoginRepository
 ) {
 
     suspend fun register(request: UserRequest): ApiResult<Boolean> {
@@ -72,20 +78,51 @@ class UserRegistrationRepository @Inject constructor(
                 is ApiResult.Success -> {
                     val loginResponse = response.data
 
-                    tokenManager.saveTokens(
-                        accessToken = loginResponse.accessToken,
-                        refreshToken = loginResponse.refreshToken
-                    )
+                    val existingUser = localUser.getUser()
 
-                    localUser.insertUser(
-                        loginResponse.user.toUser()
-                    )
+                    if (existingUser != null && existingUser.userId != loginResponse.user.id) {
+                        // Clear the database if the user ID has changed
+                        withContext(Dispatchers.IO) {
+                            clientDatabase.clearAllTables()
+                        }
 
-                    opkRepository.markAsUploaded(
-                        opks.map { it.opkId }
-                    )
+                        when(val loginResult = loginRepository.login(
+                            LoginRequestDto(
+                                identifier = request.username,
+                                password = request.password
+                            )
+                        )
+                        ) {
+                            is DomainResult.Success -> {
+                                ApiResult.Success(true)
+                            }
 
-                    ApiResult.Success(true)
+                            is DomainResult.Error ->
+                                ApiResult.UnknownError(loginResult.message)
+
+                            is DomainResult.NetworkError ->
+                                ApiResult.NetworkError()
+
+                            is DomainResult.UnknownError ->
+                                ApiResult.UnknownError(loginResult.message
+                                    ?:"Unknown error during login after registration")
+                        }
+
+                    }else{
+                        tokenManager.saveTokens(
+                            accessToken = loginResponse.accessToken,
+                            refreshToken = loginResponse.refreshToken
+                        )
+                        localUser.insertUser(
+                            loginResponse.user.toUser()
+                        )
+
+                        opkRepository.markAsUploaded(
+                            opks.map { it.opkId }
+                        )
+
+                        ApiResult.Success(true)
+                    }
                 }
 
                 is ApiResult.Error -> response

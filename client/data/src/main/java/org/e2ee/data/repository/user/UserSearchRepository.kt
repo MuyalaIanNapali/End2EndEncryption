@@ -1,6 +1,5 @@
 package org.e2ee.data.repository.user
 
-import android.util.Log
 import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.users.RemoteUserRepository
 import org.e2ee.domain.model.RemoteUserDetails

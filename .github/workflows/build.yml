@@ -1,4 +1,4 @@
-name: Build and Publish Backend
+name: Build and Push Docker Image
 
 on:
   push:
@@ -9,26 +9,25 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to Azure Container Registry
+        run: |
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login \
+            ${{ secrets.ACR_LOGIN_SERVER }} \
+            -u ${{ secrets.ACR_USERNAME }} \
+            --password-stdin
 
-      - name: Build image
+      - name: Build Docker image
         run: |
           docker build \
-            -t ghcr.io/muyalaiannapali/e2ee-server:latest \
-            ./server
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/e2ee-server:latest \
+            -f server/Dockerfile \
+            server
 
-      - name: Push image
+      - name: Push Docker image
         run: |
-          docker push ghcr.io/muyalaiannapali/e2ee-server:latest
+          docker push \
+            ${{ secrets.ACR_LOGIN_SERVER }}/e2ee-server:latest

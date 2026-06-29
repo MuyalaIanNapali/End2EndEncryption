@@ -1,6 +1,9 @@
 package org.e2ee.data.repository.user
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.e2ee.crypto.messaging.Crypto
+import org.e2ee.data.local.database.ClientDatabase
 import org.e2ee.data.local.signedPreKeys.SignedPreKeysRepository
 import org.e2ee.data.local.user.LocalUserRepository
 import org.e2ee.data.local.userKeys.UserKeysRepository
@@ -22,7 +25,8 @@ class UserLoginRepository @Inject constructor(
     private val spkRepository: SignedPreKeysRepository,
     private val keyManagerRepository: KeyManagerRepository,
     private val crypto: Crypto,
-    private val userPreKeyInitializer: UserPreKeyInitializer
+    private val userPreKeyInitializer: UserPreKeyInitializer,
+    private val clientDatabase: ClientDatabase,
 ) {
 
     suspend fun login(request: LoginRequestDto): DomainResult<Boolean> {
@@ -117,9 +121,19 @@ class UserLoginRepository @Inject constructor(
         }
     }
 
+    suspend fun clearDatabaseIfDifferentUser(newUserId: Long) = withContext(Dispatchers.IO) {
+        val existingUser = localUser.getUser()
+
+        if (existingUser != null && existingUser.userId != newUserId) {
+            clientDatabase.clearAllTables()
+        }
+    }
+
     private suspend fun completeLoginSetup(
         loginResponse: LoginResponse
     ): DomainResult<Boolean> {
+        //check if user id is same as existing user id, if not clear everything and insert new user
+        clearDatabaseIfDifferentUser(loginResponse.user.id)
         localUser.insertUser(loginResponse.user.toUser())
 
         when (val keyResult = ensureLocalKeysExist()) {

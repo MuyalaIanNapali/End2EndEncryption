@@ -57,7 +57,10 @@ class UserService(
         val user = request.toEntity()
 
         if (userRepository.findByUsername(user.username) != null)
-            throw UsernameAlreadyTakenException()
+            throw UsernameAlreadyTakenException("Username is already taken")
+
+        if(userRepository.findByEmail(user.email) != null)
+            throw EmailAlreadyTakenException("Email is already taken")
 
 
         // hash password

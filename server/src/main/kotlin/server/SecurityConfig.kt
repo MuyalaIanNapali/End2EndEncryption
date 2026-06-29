@@ -35,7 +35,9 @@ class SecurityConfig(
                     "/api/v1/users/login",
                     "/api/v1/users/createUser",
                     "/api/v1/users/refresh",
-                    "/ws/**"
+                    "/ws/**",
+                    "/actuator/health",
+                    "/actuator/prometheus"
                 ).permitAll()
 
                 it.anyRequest().authenticated()

@@ -94,3 +94,9 @@ spring:
       include-message: always
       include-binding-errors: always
       include-stacktrace: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics

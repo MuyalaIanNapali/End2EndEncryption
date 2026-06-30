@@ -39,16 +39,7 @@ fun createAccount(): Pair<X3DHKeyManager,PreKeyBundle>{
 
 
 fun main() {
-    val ecdh = EllipticCurveDiffieHellman()
-    val kdf = KDFChain()
-    val message = Message()
     val e2eeControl = Control()
-    val doubleRatchet = DoubleRatchet(kdf, ecdh)
-    val util = EncryptionAndDecryptionUtility()
-    val enc = Encryption()
-    val dec = Decryption()
-    val enc_HE = HeaderEncryption()
-    val dec_HE = HeaderDecryption()
 
     val (aliceKeyManager,alicePreKeyBundle) = createAccount()
     val (bobKeyManager,bobPreKeyBundle) = createAccount()

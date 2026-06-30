@@ -14,6 +14,7 @@ import org.e2ee.data.remote.auth.TokenAuthenticator
 import org.e2ee.data.remote.auth.TokenManager
 import org.e2ee.data.remote.keyManagerApi.KeyManagerApi
 import org.e2ee.data.remote.network.NetworkConfig
+import org.e2ee.data.remote.shares.RemoteSharesApi
 import org.e2ee.data.remote.users.AuthApi
 import org.e2ee.data.remote.users.UserApi
 import retrofit2.Retrofit
@@ -114,6 +115,14 @@ object NetworkModule {
         retrofit: Retrofit
     ): KeyManagerApi {
         return retrofit.create(KeyManagerApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteSharesApi(
+        retrofit: Retrofit
+    ): RemoteSharesApi {
+        return retrofit.create(RemoteSharesApi::class.java)
     }
 
     @Provides

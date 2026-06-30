@@ -1,5 +1,7 @@
 package org.e2ee.data.repository.backup
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.e2ee.data.local.chatRoom.ChatRoomRepository
 import org.e2ee.data.local.database.DatabaseBackupPayload
 import org.e2ee.data.local.friends.FriendsRepository
@@ -15,9 +17,8 @@ class BackupExporter @Inject constructor(
 
 ) {
 
-    suspend fun export(): DatabaseBackupPayload {
-
-        return DatabaseBackupPayload(
+    suspend fun export(): DatabaseBackupPayload = withContext(Dispatchers.IO) {
+        DatabaseBackupPayload(
             userRepository.getUser(),
             friendsRepository.getAllFriends(),
             chatRoomRepository.getAllChatRoomsForBackup(),

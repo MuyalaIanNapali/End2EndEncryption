@@ -126,7 +126,7 @@ class Control {
 
 
 
-            var senderState= doubleRatchet.ratchetInitSenderHE(
+            val senderState= doubleRatchet.ratchetInitSenderHE(
                 SKsender,
                 util.decodePublicKey(receiverPreKeyBundle.SPKpub),
                 hks,

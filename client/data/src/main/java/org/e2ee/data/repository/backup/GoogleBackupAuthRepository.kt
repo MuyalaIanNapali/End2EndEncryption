@@ -16,6 +16,7 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.e2ee.domain.model.BackupAuthResult
+import org.e2ee.domain.model.DomainResult
 import org.e2ee.domain.model.DriveConsentRequest
 import org.e2ee.domain.repository.BackupAuthRepository
 import java.security.SecureRandom
@@ -24,7 +25,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class GoogleBackupAuthRepository(
-    private val webClientId: String
+    private val webClientId: String,
+    private val backupRepository: BackupRepository
 ) : BackupAuthRepository {
 
     override suspend fun signInAndAuthorize(
@@ -56,6 +58,19 @@ class GoogleBackupAuthRepository(
             is SignInResult.NoCredential -> BackupAuthResult.NoCredential
             is SignInResult.Cancelled -> BackupAuthResult.Cancelled
             is SignInResult.Error -> BackupAuthResult.Error(pickerResult.throwable)
+        }
+    }
+
+    override suspend fun backupNow(activity: Activity): DomainResult<Boolean> {
+        return when (val token = getDriveAccessToken(activity)) {   // the helper from earlier
+            is TokenResult.Success -> {
+                backupRepository.backup(token.accessToken)
+                DomainResult.Success(true)
+            }
+            is TokenResult.ConsentRequired ->
+                DomainResult.Error("Drive authorization required")
+            is TokenResult.Error ->
+                DomainResult.Error(token.throwable.message ?: "Authorization failed")
         }
     }
 
@@ -131,30 +146,13 @@ class GoogleBackupAuthRepository(
         }
     }
 
-    private suspend fun authorizeDrive(
-        activity: Activity
-    ): BackupAuthResult {
-        val authorizationClient = Identity.getAuthorizationClient(activity)
-
-        val authorizationRequest = AuthorizationRequest.builder()
-            .setRequestedScopes(
-                listOf(Scope("https://www.googleapis.com/auth/drive.appdata"))
+    private suspend fun authorizeDrive(activity: Activity): BackupAuthResult {
+        return when (val token = getDriveAccessToken(activity)) {
+            is TokenResult.Success -> BackupAuthResult.Success
+            is TokenResult.ConsentRequired -> BackupAuthResult.ConsentRequired(
+                DriveConsentRequest(pendingIntent = token.pendingIntent)
             )
-            .build()
-
-        val authorizationResult = suspendCancellableCoroutine<AuthorizationResult> { cont ->
-            authorizationClient
-                .authorize(authorizationRequest)
-                .addOnSuccessListener { cont.resume(it) }
-                .addOnFailureListener { cont.resumeWithException(it) }
-        }
-
-        return if (authorizationResult.hasResolution()) {
-            BackupAuthResult.ConsentRequired(
-                DriveConsentRequest(pendingIntent = authorizationResult.pendingIntent!!)
-            )
-        } else {
-            BackupAuthResult.Success
+            is TokenResult.Error -> BackupAuthResult.Error(token.throwable)
         }
     }
 
@@ -175,3 +173,4 @@ class GoogleBackupAuthRepository(
         private const val TAG = "DriveBackup"
     }
 }
+

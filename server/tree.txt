@@ -1,0 +1,576 @@
+.
+├── compose.yaml
+├── Dockerfile
+├── fix command
+├── HELP.md
+├── logs
+│   ├── server.log
+│   ├── server.log.2026-06-25.0.gz
+│   ├── spring.log
+│   └── spring.log.2026-05-12.0.gz
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── prometheus
+│   └── prometheus.yml
+├── src
+│   ├── main
+│   │   ├── kotlin
+│   │   │   └── server
+│   │   │       ├── chat
+│   │   │       │   ├── ChatController.kt
+│   │   │       │   ├── ChatRequest.kt
+│   │   │       │   ├── ChatService.kt
+│   │   │       │   ├── MessageExpiryJob.kt
+│   │   │       │   ├── OnlineUserTracker.kt
+│   │   │       │   ├── PendingMessageRepository.kt
+│   │   │       │   └── PendingMessages.kt
+│   │   │       ├── exceptionHandler
+│   │   │       │   ├── errors.kt
+│   │   │       │   ├── exceptions.kt
+│   │   │       │   └── GlobalExceptionHandler.kt
+│   │   │       ├── jwt
+│   │   │       │   ├── JwtAuthFilter.kt
+│   │   │       │   ├── JWTService.kt
+│   │   │       │   ├── RefreshRequest.kt
+│   │   │       │   ├── RefreshResponse.kt
+│   │   │       │   ├── RefreshToken.kt
+│   │   │       │   ├── RefreshTokenRepository.kt
+│   │   │       │   └── RefreshTokenService.kt
+│   │   │       ├── keymanager
+│   │   │       │   ├── dto
+│   │   │       │   │   ├── PreKeyBundle.kt
+│   │   │       │   │   ├── PreKeyBundleResponse.kt
+│   │   │       │   │   ├── PreKeyVerification.kt
+│   │   │       │   │   ├── SignedPreKeyBundle.kt
+│   │   │       │   │   ├── UpdateOpkKeys.kt
+│   │   │       │   │   └── UpdateSignedPreKeyBundle.kt
+│   │   │       │   ├── KeyManagerController.kt
+│   │   │       │   ├── KeyManagerMapper.kt
+│   │   │       │   ├── KeyManagerService.kt
+│   │   │       │   ├── opk
+│   │   │       │   │   ├── OneTimePreKeys.kt
+│   │   │       │   │   ├── OneTimePreKeysRepository.kt
+│   │   │       │   │   └── OpkService.kt
+│   │   │       │   ├── OpkNotificationRepository.kt
+│   │   │       │   ├── OpkNotificationState.kt
+│   │   │       │   ├── UserPublicKeys.kt
+│   │   │       │   └── UserPublicKeysRepository.kt
+│   │   │       ├── notification
+│   │   │       │   ├── KeyChangeNotificationController.kt
+│   │   │       │   ├── KeyChangeNotification.kt
+│   │   │       │   ├── KeyChangeNotificationRepository.kt
+│   │   │       │   ├── KeyChangeNotificationResponse.kt
+│   │   │       │   └── KeyChangeNotificationService.kt
+│   │   │       ├── SecurityConfig.kt
+│   │   │       ├── ServerApplication.kt
+│   │   │       ├── sharemanager
+│   │   │       │   ├── ShareDto.kt
+│   │   │       │   ├── SharesController.kt
+│   │   │       │   ├── Shares.kt
+│   │   │       │   ├── SharesRepository.kt
+│   │   │       │   ├── SharesResponse.kt
+│   │   │       │   ├── SharesService.kt
+│   │   │       │   └── UpdateSharesRequest.kt
+│   │   │       ├── users
+│   │   │       │   ├── CustomUserDetailsService.kt
+│   │   │       │   ├── dto
+│   │   │       │   │   ├── LoginRequest.kt
+│   │   │       │   │   ├── LoginResponse.kt
+│   │   │       │   │   ├── UpdateUserRequest.kt
+│   │   │       │   │   ├── UserRequest.kt
+│   │   │       │   │   └── UserResponse.kt
+│   │   │       │   ├── UserController.kt
+│   │   │       │   ├── User.kt
+│   │   │       │   ├── UserMapper.kt
+│   │   │       │   ├── UserRepository.kt
+│   │   │       │   └── UserService.kt
+│   │   │       └── ws
+│   │   │           ├── JwtChannelInterceptor.kt
+│   │   │           ├── StompPrincipal.kt
+│   │   │           └── WebSocketConfig.kt
+│   │   └── resources
+│   │       ├── application.yaml
+│   │       ├── db
+│   │       │   └── migration
+│   │       │       └── V1__users_and_refreshtoken_schema.sql
+│   │       ├── graphql
+│   │       ├── static
+│   │       └── templates
+│   └── test
+│       └── kotlin
+│           └── server
+│               └── ServerApplicationTests.kt
+├── target
+│   ├── classes
+│   │   ├── application.yaml
+│   │   ├── db
+│   │   │   └── migration
+│   │   │       └── V1__users_and_refreshtoken_schema.sql
+│   │   ├── META-INF
+│   │   │   └── server.kotlin_module
+│   │   └── server
+│   │       ├── chat
+│   │       │   ├── ChatController.class
+│   │       │   ├── ChatController.kt
+│   │       │   ├── ChatMessage.class
+│   │       │   ├── ChatRequest.class
+│   │       │   ├── ChatRequest.kt
+│   │       │   ├── ChatService.class
+│   │       │   ├── ChatService.kt
+│   │       │   ├── DeliveryReceiptRequest.class
+│   │       │   ├── MessageAck.class
+│   │       │   ├── MessageExpiryJob.class
+│   │       │   ├── MessageExpiryJob.kt
+│   │       │   ├── MessageStatus.class
+│   │       │   ├── MessageType.class
+│   │       │   ├── OnlineUserTracker.class
+│   │       │   ├── OnlineUserTracker.kt
+│   │       │   ├── PendingMessage.class
+│   │       │   ├── PendingMessageRepository.class
+│   │       │   ├── PendingMessageRepository.kt
+│   │       │   └── PendingMessages.kt
+│   │       ├── exceptionHandler
+│   │       │   ├── EmailAlreadyTakenException.class
+│   │       │   ├── ErrorResponse.class
+│   │       │   ├── errors.kt
+│   │       │   ├── exceptions.kt
+│   │       │   ├── GlobalExceptionHandler.class
+│   │       │   ├── GlobalExceptionHandler.kt
+│   │       │   ├── InvalidCredentialsException.class
+│   │       │   ├── InvalidRefreshTokenException.class
+│   │       │   ├── PreKeyBundlesNotFoundException.class
+│   │       │   ├── ShareNotFoundException.class
+│   │       │   ├── TokenExpiredException.class
+│   │       │   ├── UsernameAlreadyTakenException.class
+│   │       │   ├── UserNotFoundException.class
+│   │       │   ├── UserPublicKeyNotFoundException.class
+│   │       │   └── ValidationErrorResponse.class
+│   │       ├── jwt
+│   │       │   ├── JwtAuthFilter.class
+│   │       │   ├── JwtAuthFilter.kt
+│   │       │   ├── JWTService.class
+│   │       │   ├── JWTService.kt
+│   │       │   ├── RefreshRequest.class
+│   │       │   ├── RefreshRequest.kt
+│   │       │   ├── RefreshResponse.class
+│   │       │   ├── RefreshResponse.kt
+│   │       │   ├── RefreshToken.class
+│   │       │   ├── RefreshToken.kt
+│   │       │   ├── RefreshTokenRepository.class
+│   │       │   ├── RefreshTokenRepository.kt
+│   │       │   ├── RefreshTokenService.class
+│   │       │   └── RefreshTokenService.kt
+│   │       ├── keymanager
+│   │       │   ├── dto
+│   │       │   │   ├── PreKeyBundle.class
+│   │       │   │   ├── PreKeyBundle.kt
+│   │       │   │   ├── PreKeyBundleResponse.class
+│   │       │   │   ├── PreKeyBundleResponse.kt
+│   │       │   │   ├── PreKeyVerification.class
+│   │       │   │   ├── PreKeyVerification.kt
+│   │       │   │   ├── SignedPreKeyBundle.class
+│   │       │   │   ├── SignedPreKeyBundle.kt
+│   │       │   │   ├── UpdateOpkKeys.class
+│   │       │   │   ├── UpdateOpkKeys.kt
+│   │       │   │   ├── UpdateSignedPreKeyBundle.class
+│   │       │   │   └── UpdateSignedPreKeyBundle.kt
+│   │       │   ├── KeyManagerController.class
+│   │       │   ├── KeyManagerController.kt
+│   │       │   ├── KeyManagerMapper.kt
+│   │       │   ├── KeyManagerMapperKt.class
+│   │       │   ├── KeyManagerService.class
+│   │       │   ├── KeyManagerService.kt
+│   │       │   ├── opk
+│   │       │   │   ├── OneTimePreKeys.class
+│   │       │   │   ├── OneTimePreKeys.kt
+│   │       │   │   ├── OneTimePreKeysRepository.class
+│   │       │   │   ├── OneTimePreKeysRepository.kt
+│   │       │   │   ├── OpkService.class
+│   │       │   │   └── OpkService.kt
+│   │       │   ├── OpkNotificationRepository.class
+│   │       │   ├── OpkNotificationRepository.kt
+│   │       │   ├── OpkNotificationState.class
+│   │       │   ├── OpkNotificationState.kt
+│   │       │   ├── UserPublicKeys.class
+│   │       │   ├── UserPublicKeys.kt
+│   │       │   ├── UserPublicKeysRepository.class
+│   │       │   └── UserPublicKeysRepository.kt
+│   │       ├── notification
+│   │       │   ├── KeyChangeNotification.class
+│   │       │   ├── KeyChangeNotificationController.class
+│   │       │   ├── KeyChangeNotificationController.kt
+│   │       │   ├── KeyChangeNotification.kt
+│   │       │   ├── KeyChangeNotificationRepository.class
+│   │       │   ├── KeyChangeNotificationRepository.kt
+│   │       │   ├── KeyChangeNotificationResponse.class
+│   │       │   ├── KeyChangeNotificationResponse.kt
+│   │       │   ├── KeyChangeNotificationService.class
+│   │       │   └── KeyChangeNotificationService.kt
+│   │       ├── SecurityConfig.class
+│   │       ├── SecurityConfig.kt
+│   │       ├── ServerApplication.class
+│   │       ├── ServerApplication.kt
+│   │       ├── ServerApplicationKt.class
+│   │       ├── sharemanager
+│   │       │   ├── ShareDto.class
+│   │       │   ├── ShareDto.kt
+│   │       │   ├── Shares.class
+│   │       │   ├── SharesController.class
+│   │       │   ├── SharesController.kt
+│   │       │   ├── Shares.kt
+│   │       │   ├── SharesKt.class
+│   │       │   ├── SharesRepository.class
+│   │       │   ├── SharesRepository.kt
+│   │       │   ├── SharesResponse.class
+│   │       │   ├── SharesResponse.kt
+│   │       │   ├── SharesService.class
+│   │       │   ├── SharesService.kt
+│   │       │   ├── UpdateSharesRequest.class
+│   │       │   └── UpdateSharesRequest.kt
+│   │       ├── users
+│   │       │   ├── CustomUserDetailsService.class
+│   │       │   ├── CustomUserDetailsService.kt
+│   │       │   ├── dto
+│   │       │   │   ├── LoginRequest.class
+│   │       │   │   ├── LoginRequest.kt
+│   │       │   │   ├── LoginResponse.class
+│   │       │   │   ├── LoginResponse.kt
+│   │       │   │   ├── UpdateUserRequest.class
+│   │       │   │   ├── UpdateUserRequest.kt
+│   │       │   │   ├── UserRequest.class
+│   │       │   │   ├── UserRequest.kt
+│   │       │   │   ├── UserResponse.class
+│   │       │   │   └── UserResponse.kt
+│   │       │   ├── User.class
+│   │       │   ├── UserController.class
+│   │       │   ├── UserController.kt
+│   │       │   ├── User.kt
+│   │       │   ├── UserKt.class
+│   │       │   ├── UserMapper.kt
+│   │       │   ├── UserMapperKt.class
+│   │       │   ├── UserRepository.class
+│   │       │   ├── UserRepository.kt
+│   │       │   ├── UserService.class
+│   │       │   └── UserService.kt
+│   │       └── ws
+│   │           ├── JwtChannelInterceptor.kt
+│   │           ├── JwtStompChannelInterceptor.class
+│   │           ├── StompPrincipal.class
+│   │           ├── StompPrincipal.kt
+│   │           ├── WebSocketConfig.class
+│   │           └── WebSocketConfig.kt
+│   ├── generated-sources
+│   │   └── annotations
+│   ├── generated-test-sources
+│   │   └── test-annotations
+│   ├── maven-archiver
+│   │   └── pom.properties
+│   ├── maven-status
+│   │   └── maven-compiler-plugin
+│   │       ├── compile
+│   │       │   └── default-compile
+│   │       │       └── inputFiles.lst
+│   │       └── testCompile
+│   │           └── default-testCompile
+│   │               ├── createdFiles.lst
+│   │               └── inputFiles.lst
+│   ├── server-0.0.1-SNAPSHOT.jar
+│   ├── server-0.0.1-SNAPSHOT.jar.original
+│   ├── surefire-reports
+│   │   ├── server.ServerApplicationTests.txt
+│   │   └── TEST-server.ServerApplicationTests.xml
+│   └── test-classes
+│       └── server
+│           └── ServerApplicationTests.kt
+└── tree.txt
+
+58 directories, 228 files
+.
+├── compose.yaml
+├── Dockerfile
+├── fix command
+├── HELP.md
+├── logs
+│   ├── server.log
+│   ├── server.log.2026-06-25.0.gz
+│   ├── spring.log
+│   └── spring.log.2026-05-12.0.gz
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── prometheus
+│   └── prometheus.yml
+├── src
+│   ├── main
+│   │   ├── kotlin
+│   │   │   └── server
+│   │   │       ├── chat
+│   │   │       │   ├── ChatController.kt
+│   │   │       │   ├── ChatRequest.kt
+│   │   │       │   ├── ChatService.kt
+│   │   │       │   ├── MessageExpiryJob.kt
+│   │   │       │   ├── OnlineUserTracker.kt
+│   │   │       │   ├── PendingMessageRepository.kt
+│   │   │       │   └── PendingMessages.kt
+│   │   │       ├── exceptionHandler
+│   │   │       │   ├── errors.kt
+│   │   │       │   ├── exceptions.kt
+│   │   │       │   └── GlobalExceptionHandler.kt
+│   │   │       ├── jwt
+│   │   │       │   ├── JwtAuthFilter.kt
+│   │   │       │   ├── JWTService.kt
+│   │   │       │   ├── RefreshRequest.kt
+│   │   │       │   ├── RefreshResponse.kt
+│   │   │       │   ├── RefreshToken.kt
+│   │   │       │   ├── RefreshTokenRepository.kt
+│   │   │       │   └── RefreshTokenService.kt
+│   │   │       ├── keymanager
+│   │   │       │   ├── dto
+│   │   │       │   │   ├── PreKeyBundle.kt
+│   │   │       │   │   ├── PreKeyBundleResponse.kt
+│   │   │       │   │   ├── PreKeyVerification.kt
+│   │   │       │   │   ├── SignedPreKeyBundle.kt
+│   │   │       │   │   ├── UpdateOpkKeys.kt
+│   │   │       │   │   └── UpdateSignedPreKeyBundle.kt
+│   │   │       │   ├── KeyManagerController.kt
+│   │   │       │   ├── KeyManagerMapper.kt
+│   │   │       │   ├── KeyManagerService.kt
+│   │   │       │   ├── opk
+│   │   │       │   │   ├── OneTimePreKeys.kt
+│   │   │       │   │   ├── OneTimePreKeysRepository.kt
+│   │   │       │   │   └── OpkService.kt
+│   │   │       │   ├── OpkNotificationRepository.kt
+│   │   │       │   ├── OpkNotificationState.kt
+│   │   │       │   ├── UserPublicKeys.kt
+│   │   │       │   └── UserPublicKeysRepository.kt
+│   │   │       ├── notification
+│   │   │       │   ├── KeyChangeNotificationController.kt
+│   │   │       │   ├── KeyChangeNotification.kt
+│   │   │       │   ├── KeyChangeNotificationRepository.kt
+│   │   │       │   ├── KeyChangeNotificationResponse.kt
+│   │   │       │   └── KeyChangeNotificationService.kt
+│   │   │       ├── SecurityConfig.kt
+│   │   │       ├── ServerApplication.kt
+│   │   │       ├── sharemanager
+│   │   │       │   ├── ShareDto.kt
+│   │   │       │   ├── SharesController.kt
+│   │   │       │   ├── Shares.kt
+│   │   │       │   ├── SharesRepository.kt
+│   │   │       │   ├── SharesResponse.kt
+│   │   │       │   ├── SharesService.kt
+│   │   │       │   └── UpdateSharesRequest.kt
+│   │   │       ├── users
+│   │   │       │   ├── CustomUserDetailsService.kt
+│   │   │       │   ├── dto
+│   │   │       │   │   ├── LoginRequest.kt
+│   │   │       │   │   ├── LoginResponse.kt
+│   │   │       │   │   ├── UpdateUserRequest.kt
+│   │   │       │   │   ├── UserRequest.kt
+│   │   │       │   │   └── UserResponse.kt
+│   │   │       │   ├── UserController.kt
+│   │   │       │   ├── User.kt
+│   │   │       │   ├── UserMapper.kt
+│   │   │       │   ├── UserRepository.kt
+│   │   │       │   └── UserService.kt
+│   │   │       └── ws
+│   │   │           ├── JwtChannelInterceptor.kt
+│   │   │           ├── StompPrincipal.kt
+│   │   │           └── WebSocketConfig.kt
+│   │   └── resources
+│   │       ├── application.yaml
+│   │       ├── db
+│   │       │   └── migration
+│   │       │       └── V1__users_and_refreshtoken_schema.sql
+│   │       ├── graphql
+│   │       ├── static
+│   │       └── templates
+│   └── test
+│       └── kotlin
+│           └── server
+│               └── ServerApplicationTests.kt
+├── target
+│   ├── classes
+│   │   ├── application.yaml
+│   │   ├── db
+│   │   │   └── migration
+│   │   │       └── V1__users_and_refreshtoken_schema.sql
+│   │   ├── META-INF
+│   │   │   └── server.kotlin_module
+│   │   └── server
+│   │       ├── chat
+│   │       │   ├── ChatController.class
+│   │       │   ├── ChatController.kt
+│   │       │   ├── ChatMessage.class
+│   │       │   ├── ChatRequest.class
+│   │       │   ├── ChatRequest.kt
+│   │       │   ├── ChatService.class
+│   │       │   ├── ChatService.kt
+│   │       │   ├── DeliveryReceiptRequest.class
+│   │       │   ├── MessageAck.class
+│   │       │   ├── MessageExpiryJob.class
+│   │       │   ├── MessageExpiryJob.kt
+│   │       │   ├── MessageStatus.class
+│   │       │   ├── MessageType.class
+│   │       │   ├── OnlineUserTracker.class
+│   │       │   ├── OnlineUserTracker.kt
+│   │       │   ├── PendingMessage.class
+│   │       │   ├── PendingMessageRepository.class
+│   │       │   ├── PendingMessageRepository.kt
+│   │       │   └── PendingMessages.kt
+│   │       ├── exceptionHandler
+│   │       │   ├── EmailAlreadyTakenException.class
+│   │       │   ├── ErrorResponse.class
+│   │       │   ├── errors.kt
+│   │       │   ├── exceptions.kt
+│   │       │   ├── GlobalExceptionHandler.class
+│   │       │   ├── GlobalExceptionHandler.kt
+│   │       │   ├── InvalidCredentialsException.class
+│   │       │   ├── InvalidRefreshTokenException.class
+│   │       │   ├── PreKeyBundlesNotFoundException.class
+│   │       │   ├── ShareNotFoundException.class
+│   │       │   ├── TokenExpiredException.class
+│   │       │   ├── UsernameAlreadyTakenException.class
+│   │       │   ├── UserNotFoundException.class
+│   │       │   ├── UserPublicKeyNotFoundException.class
+│   │       │   └── ValidationErrorResponse.class
+│   │       ├── jwt
+│   │       │   ├── JwtAuthFilter.class
+│   │       │   ├── JwtAuthFilter.kt
+│   │       │   ├── JWTService.class
+│   │       │   ├── JWTService.kt
+│   │       │   ├── RefreshRequest.class
+│   │       │   ├── RefreshRequest.kt
+│   │       │   ├── RefreshResponse.class
+│   │       │   ├── RefreshResponse.kt
+│   │       │   ├── RefreshToken.class
+│   │       │   ├── RefreshToken.kt
+│   │       │   ├── RefreshTokenRepository.class
+│   │       │   ├── RefreshTokenRepository.kt
+│   │       │   ├── RefreshTokenService.class
+│   │       │   └── RefreshTokenService.kt
+│   │       ├── keymanager
+│   │       │   ├── dto
+│   │       │   │   ├── PreKeyBundle.class
+│   │       │   │   ├── PreKeyBundle.kt
+│   │       │   │   ├── PreKeyBundleResponse.class
+│   │       │   │   ├── PreKeyBundleResponse.kt
+│   │       │   │   ├── PreKeyVerification.class
+│   │       │   │   ├── PreKeyVerification.kt
+│   │       │   │   ├── SignedPreKeyBundle.class
+│   │       │   │   ├── SignedPreKeyBundle.kt
+│   │       │   │   ├── UpdateOpkKeys.class
+│   │       │   │   ├── UpdateOpkKeys.kt
+│   │       │   │   ├── UpdateSignedPreKeyBundle.class
+│   │       │   │   └── UpdateSignedPreKeyBundle.kt
+│   │       │   ├── KeyManagerController.class
+│   │       │   ├── KeyManagerController.kt
+│   │       │   ├── KeyManagerMapper.kt
+│   │       │   ├── KeyManagerMapperKt.class
+│   │       │   ├── KeyManagerService.class
+│   │       │   ├── KeyManagerService.kt
+│   │       │   ├── opk
+│   │       │   │   ├── OneTimePreKeys.class
+│   │       │   │   ├── OneTimePreKeys.kt
+│   │       │   │   ├── OneTimePreKeysRepository.class
+│   │       │   │   ├── OneTimePreKeysRepository.kt
+│   │       │   │   ├── OpkService.class
+│   │       │   │   └── OpkService.kt
+│   │       │   ├── OpkNotificationRepository.class
+│   │       │   ├── OpkNotificationRepository.kt
+│   │       │   ├── OpkNotificationState.class
+│   │       │   ├── OpkNotificationState.kt
+│   │       │   ├── UserPublicKeys.class
+│   │       │   ├── UserPublicKeys.kt
+│   │       │   ├── UserPublicKeysRepository.class
+│   │       │   └── UserPublicKeysRepository.kt
+│   │       ├── notification
+│   │       │   ├── KeyChangeNotification.class
+│   │       │   ├── KeyChangeNotificationController.class
+│   │       │   ├── KeyChangeNotificationController.kt
+│   │       │   ├── KeyChangeNotification.kt
+│   │       │   ├── KeyChangeNotificationRepository.class
+│   │       │   ├── KeyChangeNotificationRepository.kt
+│   │       │   ├── KeyChangeNotificationResponse.class
+│   │       │   ├── KeyChangeNotificationResponse.kt
+│   │       │   ├── KeyChangeNotificationService.class
+│   │       │   └── KeyChangeNotificationService.kt
+│   │       ├── SecurityConfig.class
+│   │       ├── SecurityConfig.kt
+│   │       ├── ServerApplication.class
+│   │       ├── ServerApplication.kt
+│   │       ├── ServerApplicationKt.class
+│   │       ├── sharemanager
+│   │       │   ├── ShareDto.class
+│   │       │   ├── ShareDto.kt
+│   │       │   ├── Shares.class
+│   │       │   ├── SharesController.class
+│   │       │   ├── SharesController.kt
+│   │       │   ├── Shares.kt
+│   │       │   ├── SharesKt.class
+│   │       │   ├── SharesRepository.class
+│   │       │   ├── SharesRepository.kt
+│   │       │   ├── SharesResponse.class
+│   │       │   ├── SharesResponse.kt
+│   │       │   ├── SharesService.class
+│   │       │   ├── SharesService.kt
+│   │       │   ├── UpdateSharesRequest.class
+│   │       │   └── UpdateSharesRequest.kt
+│   │       ├── users
+│   │       │   ├── CustomUserDetailsService.class
+│   │       │   ├── CustomUserDetailsService.kt
+│   │       │   ├── dto
+│   │       │   │   ├── LoginRequest.class
+│   │       │   │   ├── LoginRequest.kt
+│   │       │   │   ├── LoginResponse.class
+│   │       │   │   ├── LoginResponse.kt
+│   │       │   │   ├── UpdateUserRequest.class
+│   │       │   │   ├── UpdateUserRequest.kt
+│   │       │   │   ├── UserRequest.class
+│   │       │   │   ├── UserRequest.kt
+│   │       │   │   ├── UserResponse.class
+│   │       │   │   └── UserResponse.kt
+│   │       │   ├── User.class
+│   │       │   ├── UserController.class
+│   │       │   ├── UserController.kt
+│   │       │   ├── User.kt
+│   │       │   ├── UserKt.class
+│   │       │   ├── UserMapper.kt
+│   │       │   ├── UserMapperKt.class
+│   │       │   ├── UserRepository.class
+│   │       │   ├── UserRepository.kt
+│   │       │   ├── UserService.class
+│   │       │   └── UserService.kt
+│   │       └── ws
+│   │           ├── JwtChannelInterceptor.kt
+│   │           ├── JwtStompChannelInterceptor.class
+│   │           ├── StompPrincipal.class
+│   │           ├── StompPrincipal.kt
+│   │           ├── WebSocketConfig.class
+│   │           └── WebSocketConfig.kt
+│   ├── generated-sources
+│   │   └── annotations
+│   ├── generated-test-sources
+│   │   └── test-annotations
+│   ├── maven-archiver
+│   │   └── pom.properties
+│   ├── maven-status
+│   │   └── maven-compiler-plugin
+│   │       ├── compile
+│   │       │   └── default-compile
+│   │       │       └── inputFiles.lst
+│   │       └── testCompile
+│   │           └── default-testCompile
+│   │               ├── createdFiles.lst
+│   │               └── inputFiles.lst
+│   ├── server-0.0.1-SNAPSHOT.jar
+│   ├── server-0.0.1-SNAPSHOT.jar.original
+│   ├── surefire-reports
+│   │   ├── server.ServerApplicationTests.txt
+│   │   └── TEST-server.ServerApplicationTests.xml
+│   └── test-classes
+│       └── server
+│           └── ServerApplicationTests.kt
+└── tree.txt
+
+58 directories, 228 files

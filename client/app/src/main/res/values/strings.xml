@@ -60,4 +60,5 @@
     <!-- Notifications -->
     <string name="notification_channel_name">Messages</string>
     <string name="notification_channel_description">Incoming message notifications</string>
+    <string name="backup_now_action">Back up now</string>
 </resources>

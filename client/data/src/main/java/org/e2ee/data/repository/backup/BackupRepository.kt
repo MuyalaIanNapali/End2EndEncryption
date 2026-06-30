@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.backup
 
+import android.util.Log
 import org.e2ee.crypto.backup.BackupDB
 import org.e2ee.common.Share
 import org.e2ee.data.local.database.serializeBackup
@@ -35,10 +36,16 @@ class BackupRepository @Inject constructor(
         googleAccessToken: String
     ) {
         try {
+
+            Log.i("BackupRepository", "Starting backup process")
             val (encryptedBackup, shares) =
                 createEncryptedBackup()
 
+            Log.i("BackupRepository", "Encrypted backup created, size: ${encryptedBackup.size}, shares count: ${shares.size}")
+
             require(shares.size == 3)
+
+            Log.i("BackupRepository", "Uploading encrypted backup to Google Drive")
 
             val driveShare = shares[0]
             val backendShare = shares[1]
@@ -49,18 +56,26 @@ class BackupRepository @Inject constructor(
                 encryptedBackup = encryptedBackup
             )
 
+            Log.i("BackupRepository", "Encrypted backup uploaded to Google Drive")
+
             uploadShareToDrive(
                 accessToken = googleAccessToken,
                 share = driveShare
             )
 
+            Log.i("BackupRepository", "Drive share uploaded to Google Drive")
+
             uploadShareToBackend(
                 share = backendShare.toShareDto()
             )
 
+            Log.i("BackupRepository", "Backend share uploaded to backend")
+
             recoveryShareStore.save(
                 localShare
             )
+
+            Log.i("BackupRepository", "Local share saved to local storage")
         }catch (e: Exception) {
             throw e
         }

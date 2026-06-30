@@ -1,0 +1,121 @@
+.
+├── Basics.ipynb
+├── META-INF
+│   └── main.kotlin_module
+├── org
+│   └── example
+│       └── MainKt.class
+├── out
+│   └── production
+│       └── E2EE
+│           ├── doubleRatchet
+│           │   ├── Control.class
+│           │   ├── DoubleRatchet.class
+│           │   ├── RatchetStateHE.class
+│           │   └── RatchetStateKt.class
+│           ├── encryptDecrypt
+│           │   ├── Decryption.class
+│           │   ├── EllipticCurveDiffieHellman.class
+│           │   ├── EncryptionAndDecryptionUtility.class
+│           │   ├── Encryption.class
+│           │   ├── HEADER.class
+│           │   ├── HeaderDecryption.class
+│           │   └── HeaderEncryption.class
+│           ├── kdf
+│           │   ├── HKDF.class
+│           │   ├── KDFChain.class
+│           │   └── KDF.class
+│           ├── META-INF
+│           │   └── E2EE.kotlin_module
+│           ├── org
+│           │   └── example
+│           │       ├── CryptoUtils.class
+│           │       ├── MainKt.class
+│           │       ├── Message.class
+│           │       ├── PreKeyMessage.class
+│           │       └── RatchetMessage.class
+│           └── x3dh
+│               ├── OPKStore.class
+│               ├── PreKeyBundle.class
+│               ├── SignatureHelper.class
+│               ├── SPKManager.class
+│               ├── X3dh.class
+│               └── X3DHKeyManager.class
+├── pom.xml
+├── src
+│   ├── main
+│   │   ├── kotlin
+│   │   │   ├── doubleRatchet
+│   │   │   │   ├── Control.kt
+│   │   │   │   ├── DoubleRatchet.kt
+│   │   │   │   └── RatchetState.kt
+│   │   │   ├── encryptDecrypt
+│   │   │   │   ├── Decryption.kt
+│   │   │   │   ├── EllipticCurveDiffieHellman.kt
+│   │   │   │   ├── EncryptionAndDecryptionUtility.kt
+│   │   │   │   ├── Encryption.kt
+│   │   │   │   ├── HeaderDecryption.kt
+│   │   │   │   └── HeaderEncryption.kt
+│   │   │   ├── kdf
+│   │   │   │   ├── HKDF.kt
+│   │   │   │   ├── KDFChain.kt
+│   │   │   │   └── KDF.kt
+│   │   │   ├── Main.kt
+│   │   │   ├── Message.kt
+│   │   │   └── x3dh
+│   │   │       ├── OPKStore.kt
+│   │   │       ├── PreKeyBundle.kt
+│   │   │       ├── SignatureHelper.kt
+│   │   │       ├── SPKManager.kt
+│   │   │       ├── X3DHKeyManager.kt
+│   │   │       └── X3dh.kt
+│   │   └── resources
+│   └── test
+│       ├── kotlin
+│       └── resources
+├── target
+│   ├── classes
+│   │   ├── doubleRatchet
+│   │   │   ├── Control.kt
+│   │   │   ├── DoubleRatchet.kt
+│   │   │   └── RatchetState.kt
+│   │   ├── encryptDecrypt
+│   │   │   ├── Decryption.kt
+│   │   │   ├── EllipticCurveDiffieHellman.kt
+│   │   │   ├── EncryptionAndDecryptionUtility.kt
+│   │   │   ├── Encryption.kt
+│   │   │   ├── HeaderDecryption.kt
+│   │   │   └── HeaderEncryption.kt
+│   │   ├── kdf
+│   │   │   ├── HKDF.kt
+│   │   │   ├── KDFChain.kt
+│   │   │   └── KDF.kt
+│   │   ├── Main.kt
+│   │   ├── Message.kt
+│   │   └── x3dh
+│   │       ├── OPKStore.kt
+│   │       ├── PreKeyBundle.kt
+│   │       ├── SignatureHelper.kt
+│   │       ├── SPKManager.kt
+│   │       ├── X3DHKeyManager.kt
+│   │       └── X3dh.kt
+│   ├── E2EE-1.0-SNAPSHOT.jar
+│   ├── generated-sources
+│   │   └── annotations
+│   ├── generated-test-sources
+│   │   └── test-annotations
+│   ├── maven-archiver
+│   │   └── pom.properties
+│   ├── maven-status
+│   │   └── maven-compiler-plugin
+│   │       ├── compile
+│   │       │   └── default-compile
+│   │       │       └── inputFiles.lst
+│   │       └── testCompile
+│   │           └── default-testCompile
+│   │               ├── createdFiles.lst
+│   │               └── inputFiles.lst
+│   └── test-classes
+└── tree.txt
+
+43 directories, 76 files

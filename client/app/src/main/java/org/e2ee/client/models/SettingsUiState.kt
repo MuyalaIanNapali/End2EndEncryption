@@ -5,5 +5,6 @@ data class SettingsUiState(
     val isBackupLoading: Boolean = false,
     val backupError: String? = null,
     val backupSuccess: Boolean = false,
-    val showNoAccountDialog: Boolean = false
+    val showNoAccountDialog: Boolean = false,
+    val isBackupNowRunning: Boolean = false
 )

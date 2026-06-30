@@ -17,13 +17,16 @@ import org.e2ee.data.repository.backup.BackupPreferencesRepository
 import org.e2ee.data.repository.backup.DriveTokenManager
 import org.e2ee.data.worker.BackupWorker
 import org.e2ee.domain.model.BackupAuthResult
+import org.e2ee.domain.model.DomainResult
 import org.e2ee.domain.model.DriveConsentRequest
+import org.e2ee.domain.usecase.BackupNowUseCase
 import org.e2ee.domain.usecase.EnableDriveBackupUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val enableDriveBackupUseCase: EnableDriveBackupUseCase,
+    private val backupNowUseCase: BackupNowUseCase,
     private val backupPreferencesRepository: BackupPreferencesRepository,
     private val driveTokenManager: DriveTokenManager,
     @ApplicationContext private val context: Context
@@ -37,6 +40,11 @@ class SettingsViewModel @Inject constructor(
 
     // Only true while actively waiting for the Drive consent screen result
     private var awaitingDriveConsent = false
+
+    // Set when the user taps "Back up now" while backup is still disabled —
+    // the actual backup runs once enabling completes (sync or post-consent).
+    private var runBackupAfterEnable = false
+
 
     init {
         viewModelScope.launch {
@@ -53,6 +61,50 @@ class SettingsViewModel @Inject constructor(
         if (enabled) initiateBackupAuth(activity) else disableBackup()
     }
 
+    /**
+     * Entry point for the "Back up now" button.
+     * If backup is already enabled, run immediately. Otherwise enable first,
+     * and the backup fires once enabling finishes.
+     */
+    fun onBackupNowClicked(activity: Activity) {
+        if (_uiState.value.isBackupEnabled) {
+            runBackupNow(activity)
+        } else {
+            runBackupAfterEnable = true
+            initiateBackupAuth(activity)
+        }
+    }
+
+    private fun runBackupNow(activity: Activity) {
+        runBackupAfterEnable = false
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isBackupNowRunning = true, backupError = null, backupSuccess = false)
+            }
+            when (val result = backupNowUseCase(activity)) {
+                is DomainResult.Success ->
+                    _uiState.update { it.copy(isBackupNowRunning = false, backupSuccess = true) }
+
+                is DomainResult.Error ->
+                    _uiState.update {
+                        it.copy(
+                            isBackupNowRunning = false,
+                            backupError = result.message
+                        )
+                    }
+
+                else -> {
+                    _uiState.update {
+                        it.copy(
+                            isBackupNowRunning = false,
+                            backupError = "An unexpected error occurred."
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun initiateBackupAuth(activity: Activity) {
         viewModelScope.launch {
             _uiState.update {
@@ -61,10 +113,7 @@ class SettingsViewModel @Inject constructor(
 
             when (val result = enableDriveBackupUseCase(activity)) {
                 is BackupAuthResult.Success -> {
-                    // hasResolution() was false — Drive was already authorized,
-                    // but we still need the access token. Re-authorize to get it.
-                    // (This path is hit when the user previously granted consent.)
-                    // For now treat as needing consent to obtain a fresh token.
+                    // hasResolution() was false — Drive was already authorized.
                     awaitingDriveConsent = false
                     _uiState.update {
                         it.copy(
@@ -75,6 +124,7 @@ class SettingsViewModel @Inject constructor(
                     }
                     backupPreferencesRepository.setBackupEnabled(true)
                     BackupWorker.schedule(context)
+                    if (runBackupAfterEnable) runBackupNow(activity)
                 }
 
                 is BackupAuthResult.ConsentRequired -> {
@@ -85,18 +135,25 @@ class SettingsViewModel @Inject constructor(
 
                 is BackupAuthResult.NoCredential -> {
                     awaitingDriveConsent = false
+                    runBackupAfterEnable = false
                     _uiState.update {
-                        it.copy(isBackupLoading = false, isBackupEnabled = false, showNoAccountDialog = true)
+                        it.copy(
+                            isBackupLoading = false,
+                            isBackupEnabled = false,
+                            showNoAccountDialog = true
+                        )
                     }
                 }
 
                 is BackupAuthResult.Cancelled -> {
                     awaitingDriveConsent = false
+                    runBackupAfterEnable = false
                     _uiState.update { it.copy(isBackupLoading = false, isBackupEnabled = false) }
                 }
 
                 is BackupAuthResult.Error -> {
                     awaitingDriveConsent = false
+                    runBackupAfterEnable = false
                     _uiState.update {
                         it.copy(
                             isBackupLoading = false,
@@ -113,7 +170,7 @@ class SettingsViewModel @Inject constructor(
      * Called by SettingsScreen after the Drive consent intent returns RESULT_OK
      * and the access token has been extracted from the intent data.
      */
-    fun onConsentGranted(driveAccessToken: String) {
+    fun onConsentGranted(driveAccessToken: String, activity: Activity) {
         if (!awaitingDriveConsent) return  // stale launcher result — ignore
         awaitingDriveConsent = false
         driveTokenManager.save(driveAccessToken)
@@ -122,15 +179,18 @@ class SettingsViewModel @Inject constructor(
         _uiState.update {
             it.copy(isBackupEnabled = true, backupSuccess = true, isBackupLoading = false)
         }
+        if (runBackupAfterEnable) runBackupNow(activity)
     }
 
     fun onConsentDenied() {
         awaitingDriveConsent = false
+        runBackupAfterEnable = false
         _uiState.update { it.copy(isBackupLoading = false, isBackupEnabled = false) }
     }
 
     private fun disableBackup() {
         awaitingDriveConsent = false
+        runBackupAfterEnable = false
         backupPreferencesRepository.setBackupEnabled(false)
         driveTokenManager.clear()
         BackupWorker.cancel(context)

@@ -16,8 +16,8 @@ class BackupDB {
 
         val shares = GenerateShares().makeRandomShares(
             key.encoded,
-            minimum = 3,
-            shares = 5
+            minimum = 2,
+            shares = 3
         )
 
         return Pair(encryptedDatabase, shares)

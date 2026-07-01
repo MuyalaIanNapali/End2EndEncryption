@@ -74,6 +74,40 @@ class GoogleBackupAuthRepository(
         }
     }
 
+    override suspend fun restoreBackup(activity: Activity): DomainResult<Boolean> {
+        // Same front door as "enable backup": sign in, then authorize Drive.
+        when (val auth = signInAndAuthorize(activity)) {
+            is BackupAuthResult.Success -> {
+                // Authorized with no UI needed — fetch a fresh token and restore.
+            }
+            is BackupAuthResult.ConsentRequired ->
+                return DomainResult.Error("Drive authorization required")
+            is BackupAuthResult.NoCredential ->
+                return DomainResult.Error("No Google account available")
+            is BackupAuthResult.Cancelled ->
+                return DomainResult.Error("Sign-in cancelled")
+            is BackupAuthResult.Error ->
+                return DomainResult.Error(auth.throwable.message ?: "Authorization failed")
+        }
+
+        return when (val token = getDriveAccessToken(activity)) {
+            is TokenResult.Success -> {
+                try {
+                    backupRepository.restoreBackup(token.accessToken)
+                    DomainResult.Success(true)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Restore failed", e)
+                    DomainResult.Error(e.message ?: "Restore failed")
+                }
+            }
+            is TokenResult.ConsentRequired ->
+                DomainResult.Error("Drive authorization required")
+            is TokenResult.Error ->
+                DomainResult.Error(token.throwable.message ?: "Authorization failed")
+        }
+    }
+
+
     /**
      * Tries to sign in silently using a previously authorized Google account.
      * Uses GetGoogleIdOption with filterByAuthorizedAccounts=true — no UI shown,

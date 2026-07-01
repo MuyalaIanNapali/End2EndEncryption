@@ -29,6 +29,7 @@ import org.e2ee.client.auth.screen.CreateAccountScreen
 import org.e2ee.client.auth.screen.LoginScreen
 import org.e2ee.client.ui.elements.AuthTabSwitcher
 import org.e2ee.client.ui.elements.HeaderSection
+// ...existing imports...
 
 // How far the white card sheet rises over the dark header
 private val CARD_OVERLAP = 28.dp
@@ -36,7 +37,9 @@ private val CARD_OVERLAP = 28.dp
 @Composable
 fun AuthNavigation(
     modifier: Modifier = Modifier,
-    onAuthSuccess: () -> Unit = {}
+    onAuthSuccess: () -> Unit = {},
+    onLoginSuccess: () -> Unit,
+    onRegisterSuccess: () -> Unit
 ) {
     val authBackStack = rememberNavBackStack(Route.Auth.Login)
 
@@ -103,10 +106,10 @@ fun AuthNavigation(
                     ),
                     entryProvider = entryProvider {
                         entry<Route.Auth.Login> {
-                            LoginScreen(onLoginSuccess = { onAuthSuccess() })
+                            LoginScreen(onLoginSuccess = { onLoginSuccess() })
                         }
                         entry<Route.Auth.Register> {
-                            CreateAccountScreen(onCreateAccountSuccess = { onAuthSuccess() })
+                            CreateAccountScreen(onCreateAccountSuccess = { onRegisterSuccess() })
                         }
                     }
                 )

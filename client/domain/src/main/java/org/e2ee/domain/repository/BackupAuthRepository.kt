@@ -13,4 +13,8 @@ interface BackupAuthRepository {
     suspend fun backupNow(
         activity: Activity
     ): DomainResult<Boolean>
+
+    suspend fun restoreBackup(
+        activity: Activity
+    ): DomainResult<Boolean>
 }

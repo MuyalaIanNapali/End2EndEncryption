@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.backup
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
@@ -39,6 +40,16 @@ class GoogleDriveRepositoryImpl @Inject constructor() : GoogleDriveRepository {
             mimeType = "application/json",
             content = bytes
         )
+    }
+
+    override suspend fun downloadBackup(accessToken: String): ByteArray? {
+        return downloadAppDataFile(accessToken, BACKUP_FILE_NAME)
+    }
+
+    override suspend fun downloadShare(accessToken: String): Share? {
+        val bytes = downloadAppDataFile(accessToken, SHARE_FILE_NAME) ?: return null
+        Log.i("GoogleDriveRepositoryImpl", "Downloaded share bytes: ${bytes.size}")
+        return Json.decodeFromString<Share>(bytes.decodeToString())
     }
 
     /**
@@ -142,6 +153,33 @@ class GoogleDriveRepositoryImpl @Inject constructor() : GoogleDriveRepository {
     private fun failWith(conn: HttpURLConnection, code: Int, op: String): Nothing {
         val err = conn.errorStream?.bufferedReader()?.readText().orEmpty()
         throw IOException("Drive $op failed ($code): $err")
+    }
+
+    /**
+     * Finds a file by name in appDataFolder and returns its raw bytes,
+     * or null if no such file exists. Throws on transport/permission errors.
+     */
+    private suspend fun downloadAppDataFile(
+        accessToken: String,
+        fileName: String
+    ): ByteArray? = withContext(Dispatchers.IO) {
+        val fileId = findFileId(accessToken, fileName) ?: return@withContext null
+        downloadFileContent(accessToken, fileId)
+    }
+
+    /** Downloads the media (raw bytes) of a Drive file by id. */
+    private fun downloadFileContent(accessToken: String, fileId: String): ByteArray {
+        val conn = (URL(
+            "https://www.googleapis.com/drive/v3/files/$fileId?alt=media"
+        ).openConnection() as HttpURLConnection).apply {
+            requestMethod = "GET"
+            setRequestProperty("Authorization", "Bearer $accessToken")
+        }
+
+        val code = conn.responseCode
+        if (code !in 200..299) failWith(conn, code, "download")
+
+        return conn.inputStream.use { it.readBytes() }
     }
 
     private companion object {

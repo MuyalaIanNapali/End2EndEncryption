@@ -15,7 +15,7 @@ class RecoverSecret {
         prime: BigInteger = PRIME
     ): ByteArray {
 
-        require(shares.size >= 3)
+        require(shares.size >= 2)
 
         val xs = shares.map {
             BigInteger.valueOf(it.index.toLong())

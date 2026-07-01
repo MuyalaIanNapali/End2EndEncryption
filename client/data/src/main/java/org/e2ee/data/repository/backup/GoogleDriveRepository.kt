@@ -13,4 +13,7 @@ interface GoogleDriveRepository {
         accessToken: String,
         share: Share
     )
+
+    suspend fun downloadBackup(accessToken: String): ByteArray?
+    suspend fun downloadShare(accessToken: String): Share?
 }

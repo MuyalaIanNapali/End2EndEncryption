@@ -14,6 +14,13 @@ class ChatRoomRepository @Inject constructor(
     }
 
     @WorkerThread
+    suspend fun insertChatRooms(chatRooms: List<ChatRoom>) {
+        chatRooms.forEach {
+            dao.insertChatRoom(it)
+        }
+    }
+
+    @WorkerThread
     suspend fun updateLastMessage(sessionId: String, lastMessage: String, lastMessageTime: Long) {
         dao.updateLastMessage(sessionId, lastMessage, lastMessageTime)
     }

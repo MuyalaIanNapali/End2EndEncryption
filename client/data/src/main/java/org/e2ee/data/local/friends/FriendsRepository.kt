@@ -13,6 +13,13 @@ class FriendsRepository @Inject constructor(
     }
 
     @WorkerThread
+    suspend fun addFriends(friends:List<Friends>){
+        friends.forEach {
+            dao.insertFriend(it)
+        }
+    }
+
+    @WorkerThread
     suspend fun getAllFriends(): List<Friends> {
         return dao.getAllFriends()
     }

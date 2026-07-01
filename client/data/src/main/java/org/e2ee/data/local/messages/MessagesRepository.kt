@@ -12,6 +12,13 @@ class MessagesRepository @Inject constructor(
         dao.insertMessage(message)
     }
 
+    @WorkerThread
+    suspend fun insertMessages(messages: List<Messages>) {
+        messages.forEach {
+            dao.insertMessage(it)
+        }
+    }
+
     fun observeMessagesBySessionId(sessionId: String): Flow<List<Messages>> {
         return dao.observeMessagesBySessionId(sessionId)
     }

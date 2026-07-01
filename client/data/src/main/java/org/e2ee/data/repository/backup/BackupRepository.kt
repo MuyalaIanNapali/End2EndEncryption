@@ -5,11 +5,15 @@ import org.e2ee.crypto.backup.BackupDB
 import org.e2ee.common.Share
 import org.e2ee.data.local.database.serializeBackup
 import org.e2ee.data.local.user.share.RecoveryShareStore
+import org.e2ee.data.remote.network.ApiResult
 import org.e2ee.data.remote.shares.RemoteShareRepository
 import org.e2ee.data.remote.shares.dto.ShareDto
+import org.e2ee.data.remote.shares.dto.ShareResponse
 import org.e2ee.data.remote.shares.dto.UpdateSharesRequest
+import org.e2ee.data.remote.shares.dto.toShare
 import org.e2ee.data.remote.shares.dto.toShareDto
 import javax.inject.Inject
+import kotlin.math.log
 
 class BackupRepository @Inject constructor(
     private val backupExporter: BackupExporter,
@@ -81,6 +85,31 @@ class BackupRepository @Inject constructor(
         }
     }
 
+    suspend fun restoreBackup(
+        googleAccessToken: String
+    ) {
+        val encryptedBackup = downloadEncryptedBackupFromDrive(googleAccessToken)
+            ?: throw IllegalStateException("No backup found on Google Drive")
+
+        Log.i("BackupRepository", "Encrypted backup downloaded from Google Drive, size: ${encryptedBackup.size}")
+
+        val shares = buildList {
+            runCatching { recoveryShareStore.load() }.getOrNull()?.let { add(it) }
+            runCatching { downloadShareFromDrive(googleAccessToken) }.getOrNull()?.let { add(it) }
+            runCatching { downloadShareFromBackend().share.toShareDto().toShare() }.getOrNull()?.let { add(it) }
+        }
+
+        Log.i("BackupRepository", "Shares collected for restoration, count: ${shares.size}")
+
+        require(shares.size >= 2) {
+            "Not enough recovery shares to restore (found ${shares.size}, need 2)"
+        }
+
+        val decryptedBackup = BackupDB().decryptDatabaseBackup(encryptedBackup, shares)
+
+        backupExporter.import(decryptedBackup)
+    }
+
     private suspend fun uploadEncryptedBackupToDrive(
         accessToken: String,
         encryptedBackup: ByteArray
@@ -89,6 +118,12 @@ class BackupRepository @Inject constructor(
             accessToken,
             encryptedBackup
         )
+    }
+
+    private suspend fun downloadEncryptedBackupFromDrive(
+        accessToken: String
+    ): ByteArray? {
+        return driveRepository.downloadBackup(accessToken)
     }
 
     private suspend fun uploadShareToDrive(
@@ -100,4 +135,33 @@ class BackupRepository @Inject constructor(
             share
         )
     }
-}
+
+    private suspend fun downloadShareFromDrive(
+        accessToken: String
+    ): Share? {
+        return driveRepository.downloadShare(accessToken)
+    }
+
+    suspend fun downloadShareFromBackend(): ShareResponse {
+        return when (val result = remoteShareRepository.getUserShare()) {
+            is ApiResult.Success ->{
+                Log.i("BackupRepository", "Successfully downloaded share from backend: ${result.data}")
+                result.data
+            }
+            is ApiResult.Error -> {
+                Log.i("BackupRepository", "Error downloading share from backend: ${result.message}")
+                throw IllegalStateException(result.message)
+            }
+            is ApiResult.NetworkError -> {
+                Log.i("BackupRepository", "Network error downloading share from backend: ${result.message}")
+                throw IllegalStateException(result.message)}
+            is ApiResult.UnknownError -> {
+                Log.i(
+                    "BackupRepository",
+                    "Unknown error downloading share from backend: ${result.message}"
+                )
+                throw IllegalStateException(result.message)
+            }
+            }
+        }
+    }

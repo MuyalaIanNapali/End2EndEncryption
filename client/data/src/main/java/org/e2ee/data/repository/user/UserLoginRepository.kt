@@ -1,5 +1,6 @@
 package org.e2ee.data.repository.user
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.e2ee.crypto.messaging.Crypto
@@ -122,9 +123,12 @@ class UserLoginRepository @Inject constructor(
     }
 
     suspend fun clearDatabaseIfDifferentUser(newUserId: Long) = withContext(Dispatchers.IO) {
+        Log.i("UserLoginRepository", "Checking if database needs to be cleared for new user ID: $newUserId")
         val existingUser = localUser.getUser()
 
+        Log.i("UserLoginRepository", "Existing user ID: ${existingUser?.userId}")
         if (existingUser != null && existingUser.userId != newUserId) {
+            Log.i("UserLoginRepository", "Different user ID detected. Clearing database for new user ID: $newUserId")
             clientDatabase.clearAllTables()
         }
     }

@@ -1,10 +1,21 @@
 package org.e2ee.data.remote.websocket
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import org.e2ee.domain.model.ConnectionState
+import java.util.concurrent.TimeUnit
 
 class ChatStompClient(
     private val serverUrl: String,
@@ -15,11 +26,33 @@ class ChatStompClient(
     private val onError: (String) -> Unit = {}
 ) {
 
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .pingInterval(30, TimeUnit.SECONDS)
+        .build()
+
+    private val reconnectScope = CoroutineScope(Dispatchers.IO)
+
+    private var reconnectJob: Job? = null
+
+    private var reconnectDelay = 5_000L
+
+    private val maxReconnectDelay = 60_000L
+
+    @Volatile
+    private var manuallyDisconnected = false
+
+    private val _state = MutableStateFlow(ConnectionState.DISCONNECTED)
+    val state = _state.asStateFlow()
+
+    private var heartbeatJob: Job? = null
 
     private var webSocket: WebSocket? = null
 
     fun connect() {
+        manuallyDisconnected = false
+
+        if (webSocket != null) return
+
         val request = Request.Builder()
             .url(serverUrl)
             .build()
@@ -27,6 +60,7 @@ class ChatStompClient(
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
 
             override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
+                _state.value = ConnectionState.CONNECTING
                 connectStomp()
             }
 
@@ -41,13 +75,35 @@ class ChatStompClient(
             override fun onFailure(
                 webSocket: WebSocket,
                 t: Throwable,
-                response: okhttp3.Response?
+                response: Response?
             ) {
+
+                heartbeatJob?.cancel()
+
+                this@ChatStompClient.webSocket = null
+
+                _state.value = ConnectionState.DISCONNECTED
+
                 onError(t.message ?: "WebSocket error")
+
+                scheduleReconnect()
             }
 
-            override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+            override fun onClosed(
+                webSocket: WebSocket,
+                code: Int,
+                reason: String
+            ) {
+
+                heartbeatJob?.cancel()
+
+                this@ChatStompClient.webSocket = null
+
+                _state.value = ConnectionState.DISCONNECTED
+
                 onError("WebSocket closed: $reason")
+
+                scheduleReconnect()
             }
         })
     }
@@ -68,9 +124,15 @@ class ChatStompClient(
     private fun handleFrame(frame: String) {
         when {
             frame.startsWith("CONNECTED") -> {
+                reconnectDelay = 5_000L
+                reconnectJob?.cancel()
+
                 subscribeToMessages()
                 subscribeToMessageStatus()
                 syncPendingMessages()
+                startHeartbeat()
+
+                _state.value = ConnectionState.CONNECTED
                 onConnected()
             }
 
@@ -164,6 +226,12 @@ class ChatStompClient(
     }
 
     fun disconnect() {
+
+        manuallyDisconnected = true
+
+        reconnectJob?.cancel()
+        heartbeatJob?.cancel()
+
         val frame = buildString {
             append("DISCONNECT\n")
             append("\n")
@@ -172,7 +240,10 @@ class ChatStompClient(
 
         webSocket?.send(frame)
         webSocket?.close(1000, "Client disconnected")
+
         webSocket = null
+
+        _state.value = ConnectionState.DISCONNECTED
     }
 
     private fun extractHeader(frame: String, headerName: String): String? {
@@ -188,5 +259,49 @@ class ChatStompClient(
             .substringAfter("\n\n", "")
             .removeSuffix("\u0000")
             .trim()
+    }
+
+    private fun startHeartbeat() {
+
+        heartbeatJob?.cancel()
+
+        heartbeatJob = CoroutineScope(Dispatchers.IO).launch {
+
+            while (isActive) {
+
+                delay(10_000)
+
+                webSocket?.send("\n")
+            }
+        }
+    }
+
+    private fun scheduleReconnect() {
+
+        if (manuallyDisconnected) return
+
+        // Already trying to reconnect
+        if (reconnectJob?.isActive == true) return
+
+        reconnectJob = reconnectScope.launch {
+
+            while (!manuallyDisconnected &&
+                _state.value != ConnectionState.CONNECTED) {
+
+                delay(reconnectDelay)
+
+                try {
+
+                    webSocket = null
+                    connect()
+
+                } catch (_: Exception) {
+                }
+
+                reconnectDelay =
+                    (reconnectDelay * 2)
+                        .coerceAtMost(maxReconnectDelay)
+            }
+        }
     }
 }

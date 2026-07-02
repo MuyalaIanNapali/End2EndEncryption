@@ -1,10 +1,14 @@
 package org.e2ee.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import org.e2ee.domain.model.ChatRoomDomain
+import org.e2ee.domain.model.ConnectionState
 import org.e2ee.domain.model.Message
 
 interface ChatRepository {
+
+    val connectionState: StateFlow<ConnectionState>
     fun connect()
 
     fun disconnect()

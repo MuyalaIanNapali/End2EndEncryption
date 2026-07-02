@@ -2,11 +2,13 @@ package org.e2ee.data.repository.chat
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import org.e2ee.data.local.messages.MessagesRepository
 import org.e2ee.data.repository.mapper.toDomain
 import org.e2ee.data.repository.mapper.toMessage
 import org.e2ee.domain.model.ChatRoomDomain
+import org.e2ee.domain.model.ConnectionState
 import javax.inject.Inject
 import org.e2ee.domain.repository.ChatRepository as ChatRepositoryInterface
 import org.e2ee.domain.model.Message
@@ -18,6 +20,9 @@ class ChatRepository @Inject constructor(
     private val chatRoomManager: ChatRoomManager,
     private val messagesRepository: MessagesRepository
 ): ChatRepositoryInterface {
+
+    override val connectionState: StateFlow<ConnectionState>
+        get() = chatConnectionManager.connectionState
 
     override fun observeMessages(
         sessionId: String

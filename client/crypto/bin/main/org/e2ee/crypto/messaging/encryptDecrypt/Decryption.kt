@@ -35,7 +35,7 @@ internal class Decryption {
     fun ratchetReceiveKey(
         ratchetState: RatchetStateHE
     ): Pair<RatchetStateHE, ByteArray>{
-         var ratchetState = ratchetState.deepCopy()
+         val ratchetState = ratchetState.deepCopy()
         //val header = EncryptionAndDecryptionUtility().decodeHeader(headerBytes)
 
         val (CKr,mk)= KDFChain().kdfChainKey(requireNotNull(ratchetState.CKr))

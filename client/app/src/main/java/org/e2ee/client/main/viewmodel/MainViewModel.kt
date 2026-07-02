@@ -4,37 +4,40 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.e2ee.domain.model.ConnectionState
 import org.e2ee.domain.usecase.ConnectWebSocketUseCase
 import org.e2ee.domain.usecase.DisconnectWebSocketUseCase
 import org.e2ee.domain.usecase.LogoutUserUseCase
+import org.e2ee.domain.usecase.ObserveWebSocketConnectionUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val connectWebSocketUseCase: ConnectWebSocketUseCase,
     private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
-    private val logoutUserUseCase: LogoutUserUseCase
+    private val logoutUserUseCase: LogoutUserUseCase,
+    observeWebSocketConnectionUseCase: ObserveWebSocketConnectionUseCase
 ) : ViewModel() {
 
-    private var connected = false
+
+    val connectionState = observeWebSocketConnectionUseCase()
+
 
     fun connectWebSocket() {
-        if (!connected) {
+        if (connectionState.value == ConnectionState.DISCONNECTED) {
             connectWebSocketUseCase()
-            connected = true
         }
     }
 
     fun disconnectWebSocket() {
-        if (connected) {
+        if (connectionState.value == ConnectionState.DISCONNECTED) {
             disconnectWebSocketUseCase()
-            connected = false
         }
     }
 
     override fun onCleared() {
         disconnectWebSocket()
-        super.onCleared()
+        //super.onCleared()
     }
 
     fun logout(
@@ -46,4 +49,5 @@ class MainViewModel @Inject constructor(
             onLoggedOut()
         }
     }
+
 }

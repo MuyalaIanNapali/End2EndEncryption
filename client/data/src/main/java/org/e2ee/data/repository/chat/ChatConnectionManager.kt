@@ -4,10 +4,13 @@ import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.e2ee.data.remote.auth.TokenManager
 import org.e2ee.data.remote.network.NetworkConfig
 import org.e2ee.data.remote.websocket.ChatStompClient
+import org.e2ee.domain.model.ConnectionState
 import javax.inject.Inject
 
 class ChatConnectionManager @Inject constructor(
@@ -20,6 +23,11 @@ class ChatConnectionManager @Inject constructor(
     private val connectionScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private var stompClient: ChatStompClient? = null
+
+    private val _connectionState =
+        MutableStateFlow(ConnectionState.DISCONNECTED)
+
+    val connectionState = _connectionState.asStateFlow()
 
     fun connect() {
         if (stompClient != null) return
@@ -59,6 +67,12 @@ class ChatConnectionManager @Inject constructor(
                 println("WebSocket error: $error")
             }
         )
+
+        connectionScope.launch {
+            client.state.collect {
+                _connectionState.value = it
+            }
+        }
 
         stompClient = client
         client.connect()
